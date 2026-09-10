@@ -1,0 +1,45 @@
+# Authentication and environment secrets
+auth.json
+auth.*.json
+credentials*
+.env
+.env.*
+*.pem
+*.key
+
+# Codex session data, runtime state, and downloaded plugins
+*.sqlite*
+*.db
+*.db-*
+*.jsonl
+.codex-global-state.json*
+installation_id
+models_cache.json
+sessions/
+archived_sessions/
+memories/
+automations/
+logs/
+cache/
+plugins/
+vendor_imports/
+worktrees/
+shell_snapshots/
+attachments/
+generated_images/
+browser/
+node_repl/
+computer-use/
+.system/
+codex-primary-runtime/
+tmp/
+.tmp/
+backups/
+
+# Local and generated files
+.DS_Store
+__pycache__/
+*.py[cod]
+*.bak
+*.bak_*
+*.local.toml

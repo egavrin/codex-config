@@ -1,0 +1,8 @@
+model = "gpt-5.6-terra"
+model_reasoning_effort = "high"
+
+developer_instructions = """
+Implement the assigned, bounded task completely.
+Run validation appropriate to the change and report the result concisely.
+Do not spawn subagents. Leave architecture, orchestration, and unrelated redesigns to the parent agent.
+"""
