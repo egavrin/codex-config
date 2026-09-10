@@ -45,8 +45,10 @@ senior_executor        Sol Medium         strictly gated hard implementation
 Small bounded tasks use the Light route without subagents. Substantial work uses
 the Heavy route: the root directs bounded agents, transfers compact context,
 batches independent work, waits without status polling, and synthesizes each
-batch once. The root must not silently take routine production work back from a
-healthy worker.
+batch once. After four completed subagent sessions, an adaptive delegation
+checkpoint requires a concrete reason for every additional wave without imposing
+a hard lifetime cap on genuinely large tasks. The root must not silently take
+routine production work back from a healthy worker.
 
 The Desktop UI currently exposes Medium and Extra High as the practical Astra
 presets. Medium is the configured default. The multi-agent v2 runtime may promote

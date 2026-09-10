@@ -106,6 +106,32 @@ The root may perform a small amount of direct inspection needed to make a
 material architecture, scope, risk, or acceptance decision. Delegate broad or
 routine discovery instead of repeatedly reading the repository in the root.
 
+## Adaptive Delegation Budget
+
+Treat the number of subagents as an adaptive budget, not a target and not an
+absolute lifetime cap. A genuinely large task may use many agents across its
+full lifetime when each one owns a distinct package or supplies justified
+independent verification.
+
+- Start a Heavy task with at most one wave of one or two bounded agents.
+- Integrate the completed wave before opening another dependent wave.
+- After four subagent sessions have completed for one root task, perform a
+  delegation checkpoint before every additional wave. Identify the acceptance
+  criteria still open, the distinct package each new agent will own, why an
+  existing owner cannot complete it, and why delegation is cheaper or more
+  reliable than another root rollout.
+- The checkpoint authorizes more agents when the remaining work is genuinely
+  distinct; it is not a hard limit on large tasks.
+- Do not create an agent merely because concurrency capacity is available.
+- Avoid duplicate exploration, overlapping implementation, and broad repeated
+  review without a new defect, risk, or acceptance criterion.
+- Prefer a focused follow-up to the current owner for clarification, ordinary
+  repair, and revalidation. A follow-up to the same agent is preferable to a
+  replacement because it preserves package context.
+- Create a replacement agent only after the focused retry rules in
+  Implementation and Repair Ownership are satisfied or when ownership must
+  change for a material reason.
+
 ## Context Transfer
 
 Initial subagents should normally start without inherited conversation history.
@@ -237,6 +263,12 @@ Match verification effort to risk.
 - Small reversible changes may rely on focused worker validation.
 - Use `tester` for substantive behavior changes, regressions, important boundary
   cases, cross-component changes, or when independence materially improves trust.
+- Do not create a separate tester for routine, low-risk, or easily reversible
+  changes when deterministic worker-owned checks already cover the acceptance
+  criteria.
+- A justified verification cycle may include explorer, worker, tester, repair by
+  the same worker, and a focused recheck by the same tester. Preserve that cycle
+  when the risk warrants it; remove only duplicate or evidence-free passes.
 - Prefer deterministic tests, compilers, linters, schemas, and other executable
   gates over repeated model review.
 - Do not add a separate model-review cycle when existing automated evidence is
