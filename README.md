@@ -1,47 +1,94 @@
 # Codex config
 
-Личная конфигурация Codex для `egavrin`. Снимок настроек macOS от 10 сентября 2026 года.
+Personal Codex configuration for `egavrin`. This repository contains a macOS
+configuration snapshot updated on September 10, 2026.
 
-## Содержимое
+## Contents
 
-- `codex/config.toml` — исходные настройки модели, MCP, плагинов, доверенных проектов и интерфейса приложения.
-- `codex/AGENTS.md` — глобальные инструкции; на момент снимка файл пустой.
-- `codex/agents/` — профили `worker` и `explorer`.
-- `codex/rules/` — локальные правила выполнения команд.
-- `codex/skills/` — пользовательские skills: `gh-address-comments`, `gh-fix-ci`, `hatch-pet`, `repo-modernizer`, включая скрипты, ресурсы и имеющиеся лицензии.
+- `codex/config.toml` — model, MCP, plugin, trusted-project, application, and
+  multi-agent settings.
+- `codex/AGENTS.md` — the global English-language guide for cost-efficient
+  orchestration, including Light and Heavy routes, compact task capsules,
+  batching, event-driven waits without polling, and separate implementation and
+  verification ownership.
+- `codex/agents/` — `worker` (Terra High), `explorer` (Luna Medium), `tester`
+  (Luna High), and the strictly gated `senior_executor` (Sol Medium).
+- `codex/rules/` — local command-execution rules.
+- `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
+  `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
+  bundled licenses where present.
 
-Настройки скопированы без изменения значений. В частности, сохранены `gpt-6-astra`, reasoning `high`, `approval_policy = "never"` и `sandbox_mode = "danger-full-access"`.
+The snapshot preserves the active values, including `gpt-6-astra` with High
+reasoning, `approval_policy = "never"`, `sandbox_mode = "danger-full-access"`,
+Standard service tier, at most two concurrent subagents, and a maximum subagent
+depth of one. Routine implementation is routed to Terra High. Sol Medium is
+available only through the escalation gate documented in `codex/AGENTS.md`.
 
-В репозиторий не включены авторизация, токены, история задач, базы данных, память, вложения, автоматизации, скачанные плагины и системные skills. Проектные инструкции и skills из других репозиториев также не включены. Ресурсы питомца `custom:rivet` не сохранены; в конфиге осталась только настройка его выбора.
+The repository intentionally excludes authentication data, tokens, task
+history, databases, memories, attachments, automations, downloaded plugins,
+system skills, and project-specific instructions or skills from other
+repositories. The assets for the selected `custom:rivet` pet are not included;
+only its selection remains in the configuration snapshot.
 
-## Восстановление
+## Orchestration model
 
-Общий пользовательский конфиг находится в `~/.codex/config.toml`; подробнее — [официальная документация](https://learn.chatgpt.com/docs/config-file/config-basic).
+The default execution model is:
 
-Сначала установите Codex и необходимые плагины. Для клонирования приватного репозитория нужен доступ к аккаунту GitHub:
+```text
+Root                   GPT-6 Astra High   architecture, decisions, integration
+worker                 Terra High         implementation and ordinary repair
+explorer               Luna Medium        bounded read-only investigation
+tester                 Luna High          independent verification
+senior_executor        Sol Medium         strictly gated hard implementation
+```
+
+Small bounded tasks use the Light route without subagents. Substantial work uses
+the Heavy route: the root directs bounded agents, transfers compact context,
+batches independent work, waits without status polling, and synthesizes each
+batch once. The root must not silently take routine production work back from a
+healthy worker.
+
+## Restore
+
+The active user configuration normally lives at `~/.codex/config.toml`. See the
+[official Codex configuration documentation](https://learn.chatgpt.com/docs/config-file/config-basic)
+for the current platform behavior.
+
+Install Codex and any required plugins first, then clone this repository:
 
 ```sh
 gh repo clone egavrin/codex-config
 cd codex-config
 ```
 
-Это снимок конкретного Mac. Перед восстановлением на другой машине проверьте `codex/config.toml`: абсолютные пути `/Users/egavrin`, расположение `/Applications/ChatGPT.app`, пути и версии встроенных плагинов, список доверенных проектов и настройки MCP. Файлы плагинов, MCP-авторизация и ресурсы питомца устанавливаются отдельно. Наличие записей плагинов в конфиге не заменяет их установку.
+This is a snapshot of one Mac. Before restoring it on another machine, review
+`codex/config.toml` for absolute `/Users/egavrin` paths, the
+`/Applications/ChatGPT.app` location, bundled-plugin paths and versions, trusted
+projects, and MCP settings. Plugin files, MCP authentication, and pet assets must
+be installed separately; a plugin entry in `config.toml` does not install the
+plugin itself.
 
-Закройте Codex перед восстановлением, чтобы приложение не перезаписало настройки. Следующие команды сохраняют резервные копии заменяемых файлов в отдельной временной папке, затем копируют только содержимое `codex/`. Лишние файлы в целевой папке не удаляются:
+Quit Codex before restoring so that the running application cannot overwrite the
+files. The following commands back up replaced files to a temporary directory,
+copy only the contents of `codex/`, and leave unrelated destination files in
+place:
 
 ```sh
 codex_target="${CODEX_HOME:-$HOME/.codex}"
 codex_backup_dir="$(mktemp -d "${TMPDIR:-/tmp}/codex-config-backup.XXXXXX")"
 mkdir -p "$codex_target"
 rsync -av --backup --backup-dir="$codex_backup_dir" codex/ "$codex_target/"
-printf 'Резервная копия заменённых файлов: %s\n' "$codex_backup_dir"
+printf 'Backup of replaced files: %s\n' "$codex_backup_dir"
 ```
 
-Затем снова откройте Codex. Если потребуется, войдите в аккаунт и подключите интеграции.
+Open Codex again after the restore. Sign in and reconnect integrations if
+needed. Start a new task so the new configuration and global instructions are
+loaded into a fresh session.
 
-## Обновление снимка
+## Update the snapshot
 
-Из корня клона скопируйте только перечисленные настройки и skills:
+From the root of this clone, copy only the listed configuration, rules, and
+selected user skills:
 
 ```sh
 codex_source="${CODEX_HOME:-$HOME/.codex}"
@@ -56,12 +103,17 @@ git diff --stat
 git diff
 ```
 
-Команды не удаляют из снимка файлы, удалённые в исходной папке; такие удаления нужно перенести вручную. Перед коммитом проверьте diff, особенно значения MCP `env`, HTTP-заголовков и правил команд. `.gitignore` исключает типовые служебные файлы, но не обнаруживает секреты внутри `config.toml` или других отслеживаемых файлов.
+These commands do not propagate deletions from the active configuration into
+the snapshot. Apply intended deletions manually. Before committing, inspect the
+complete diff, especially MCP environment values, HTTP headers, and command
+rules. `.gitignore` excludes common generated files, but it cannot detect
+secrets embedded inside tracked TOML or other text files.
 
 ```sh
-git add codex
+git add codex README.md
 git commit -m "Update Codex configuration"
 git push
 ```
 
-Синхронизация выполняется вручную: создание этого репозитория не изменяет активные настройки Codex и не настраивает автоматическую отправку на GitHub.
+Synchronization is manual. Creating or cloning this repository does not alter
+the active Codex configuration and does not configure automatic GitHub uploads.

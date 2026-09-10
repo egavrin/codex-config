@@ -27,6 +27,14 @@ nickname_candidates = ["Builder", "Implementer"]
 config_file = "agents/explorer.toml"
 nickname_candidates = ["Scout", "Mapper"]
 
+[agents.tester]
+config_file = "agents/tester.toml"
+nickname_candidates = ["Verifier", "Skeptic"]
+
+[agents.senior_executor]
+config_file = "agents/senior_executor.toml"
+nickname_candidates = ["Specialist"]
+
 [mcp_servers.playwright]
 command = "npx"
 args = ["@playwright/mcp@latest", "--browser", "chrome", "--isolated", "--ignore-https-errors"]
