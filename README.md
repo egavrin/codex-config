@@ -18,7 +18,7 @@ configuration snapshot updated on September 10, 2026.
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
   bundled licenses where present.
 
-The snapshot preserves the active values, including `gpt-6-astra` with High
+The snapshot preserves the active values, including `gpt-6-astra` with Medium
 reasoning, `approval_policy = "never"`, `sandbox_mode = "danger-full-access"`,
 Standard service tier, at most two concurrent subagents, and a maximum subagent
 depth of one. Routine implementation is routed to Terra High. Sol Medium is
@@ -35,7 +35,7 @@ only its selection remains in the configuration snapshot.
 The default execution model is:
 
 ```text
-Root                   GPT-6 Astra High   architecture, decisions, integration
+Root                   GPT-6 Astra Medium architecture, decisions, integration
 worker                 Terra High         implementation and ordinary repair
 explorer               Luna Medium        bounded read-only investigation
 tester                 Luna High          independent verification
@@ -47,6 +47,12 @@ the Heavy route: the root directs bounded agents, transfers compact context,
 batches independent work, waits without status polling, and synthesizes each
 batch once. The root must not silently take routine production work back from a
 healthy worker.
+
+The Desktop UI currently exposes Medium and Extra High as the practical Astra
+presets. Medium is the configured default. The multi-agent v2 runtime may promote
+the root to Extra High automatically; route instructions do not force that
+transition, and Heavy should be selected because delegation is justified rather
+than as a way to obtain a higher reasoning preset.
 
 Because a task name alone does not activate a role profile in every collaboration
 runtime, `codex/AGENTS.md` also defines an explicit runtime routing contract. The

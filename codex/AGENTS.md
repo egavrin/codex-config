@@ -52,6 +52,20 @@ If the route is not obvious, prefer Light for a genuinely small request and
 Heavy for a substantial implementation. Do not use a half-delegated pattern in
 which the root performs all production work while also paying coordination cost.
 
+## Root Reasoning Presets
+
+Use the configured Astra Medium preset as the default for both Light and Heavy
+route entry. Route selection determines whether delegation is justified; it does
+not require the root to change its own reasoning effort.
+
+Codex Desktop may automatically promote the root to Extra High when its
+multi-agent v2 runtime is engaged. Treat that as a runtime-controlled override:
+do not request Extra High merely because a task uses the Heavy route, do not
+enter Heavy solely to obtain Extra High, and do not spend additional root turns
+trying to change the preset from instructions. If the runtime exposes an
+explicit preset choice, keep Medium unless the user selects Extra High or the
+task is exceptionally difficult enough to justify its additional usage.
+
 ## Runtime Routing Contract
 
 Task names do not activate the role profiles in `~/.codex/agents/`. When the
