@@ -48,6 +48,12 @@ batches independent work, waits without status polling, and synthesizes each
 batch once. The root must not silently take routine production work back from a
 healthy worker.
 
+Because a task name alone does not activate a role profile in every collaboration
+runtime, `codex/AGENTS.md` also defines an explicit runtime routing contract. The
+root passes the role's model and reasoning effort when spawning an agent. A
+dependent tester starts only after the relevant worker finishes and never polls
+or waits for sibling agents.
+
 ## Restore
 
 The active user configuration normally lives at `~/.codex/config.toml`. See the

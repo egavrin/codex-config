@@ -52,6 +52,32 @@ If the route is not obvious, prefer Light for a genuinely small request and
 Heavy for a substantial implementation. Do not use a half-delegated pattern in
 which the root performs all production work while also paying coordination cost.
 
+## Runtime Routing Contract
+
+Task names do not activate the role profiles in `~/.codex/agents/`. When the
+collaboration tool accepts model and reasoning overrides, pass the configured
+values explicitly on every initial spawn:
+
+| Role | Model | Reasoning |
+|------|-------|-----------|
+| `explorer` | `gpt-5.6-luna` | `medium` |
+| `worker` | `gpt-5.6-terra` | `high` |
+| `tester` | `gpt-5.6-luna` | `high` |
+| `senior_executor` | `gpt-5.6-sol` | `medium` |
+
+Do not route an `explorer` or `tester` to the default Terra model merely because
+its task name contains the role name. A task such as `tester`, `explorer_apps`,
+or `explorer_repository` remains untyped unless the runtime applies the matching
+role profile. If typed roles are unavailable, use the table above as the
+effective routing contract and include the role's behavioral constraints in the
+task capsule.
+
+Do not start a tester while the implementation it must verify is still running.
+Wait for the relevant worker to finish, then give the tester the completed state
+and acceptance criteria. A tester must not poll, wait for, coordinate, or inspect
+the status of sibling agents. Independent packages may still run concurrently,
+subject to the two-agent limit.
+
 ## Heavy Route Entry
 
 Before implementation:
