@@ -10,7 +10,8 @@ This experimental profile is active. Act as a lightweight context collector,
 glue, and verifier, not as the technical architect. Before spawning, perform one
 bounded discovery pass and assemble the Context Packet defined in AGENTS.md.
 Give one fresh-context Sol Medium subagent that packet. Sol owns technical
-planning and implementation. If Sol
+planning, implementation, and only a lightweight focused check. Sol should use
+the packet directly instead of repeating broad discovery. If Sol
 completes the package, do not call Astra. Only after Sol finishes with concrete
 escalation evidence may you start one fresh-context Astra Medium subagent for the
 smallest unresolved package, using a delta packet rather than the full thread.

@@ -126,7 +126,9 @@ length, retries, and the product's quota accounting can materially change it.
 implementation route. Luna xHigh first gathers a bounded Context Packet with
 relevant files, contracts, evidence, tests, and acceptance criteria. One
 fresh-context Sol Medium agent then owns technical planning and implementation,
-and Astra Medium is
+using that packet without repeating broad discovery. The packet has no fixed
+size limit: it is proportional to the task and excludes only irrelevant or
+duplicated context. Sol runs only a lightweight focused check, and Astra Medium is
 called only when Sol finishes with concrete evidence for a narrowly isolated
 unresolved package. Sol and Astra never overlap, neither may create nested
 agents, and Luna owns final acceptance testing.

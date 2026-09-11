@@ -161,8 +161,10 @@ only for a narrow unresolved package after evidence-based escalation.
 ### Context Packet contract
 
 For both Luna-root experiments, Luna gathers decision-relevant facts before the
-implementation agent starts. The packet is evidence, not a technical design,
-and should normally stay below 1,200 words. Include:
+implementation agent starts. The packet is a task-proportional compaction of the
+relevant context, not a technical design. It has no fixed word limit: include all
+material evidence needed for the implementation agent to work efficiently, but
+exclude noise, duplication, and unrelated history. Include:
 
 1. The user's objective and observable acceptance criteria.
 2. Exact repository root, relevant files, symbols, interfaces, and component
@@ -177,8 +179,18 @@ and should normally stay below 1,200 words. Include:
 Do not include the full conversation, broad file dumps, repeated instructions,
 speculative implementation steps, or an architecture chosen by Luna. Luna may
 use batched read-only searches and focused commands, but must not edit production
-files during collection. The implementer verifies any assumption that would
-materially affect its design rather than trusting the packet blindly.
+files during collection. Treat cited packet facts as the working context. The
+implementer should not repeat Luna's broad discovery or re-read every cited file.
+It may open the exact edit location and directly connected definitions before
+changing them, or investigate further when the packet is incomplete,
+contradictory, stale, or a material design decision cannot safely be made from
+the supplied evidence.
+
+Implementation-owned validation must be lightweight: run the narrowest cheap
+smoke test, syntax/type check, or directly affected test that can catch an
+obvious defect. Do not run the full suite, broad integration tests, or repeated
+model review unless the task cannot be implemented responsibly without them.
+Luna owns the proportionate acceptance suite after implementation.
 
 If Sol supplies justified Astra escalation evidence, Luna sends Astra a delta
 packet containing the unresolved acceptance criterion, relevant original packet
