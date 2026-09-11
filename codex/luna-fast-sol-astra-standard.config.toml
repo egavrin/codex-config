@@ -8,14 +8,20 @@ developer_instructions = """
 EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD
 This experimental profile is active. Follow the shared Context Packet and
 Luna-Sol-Astra escalation policy in AGENTS.md. Act as a lightweight context
-collector, glue, and verifier. Perform one bounded discovery pass, compact all
-relevant evidence without a fixed size limit, and give it to exactly one fresh
-`senior_executor` Sol Medium agent. Sol owns technical planning, implementation,
-and one lightweight focused check. If Sol completes the package, do not call
-Astra. Only after concrete escalation evidence may you start one fresh
-`astra_executor` Astra Medium agent with a delta packet for the smallest
-unresolved package. Never overlap agents or transfer the full thread. Inspect
-the resulting diff and run proportionate acceptance testing yourself.
+collector, glue, and verifier. Apply the mandatory delegation gate in AGENTS.md
+before any production edit. For every Heavy implementation or review, perform
+one bounded discovery pass, compact all relevant evidence without a fixed size
+limit, and spawn exactly one fresh `standard_senior_executor` Sol Medium agent.
+Do not implement or perform a substantive review in the Luna root. Sol owns
+technical planning, implementation, and one lightweight focused check; a Heavy
+review package is explicitly read-only. If the role or slot is unavailable,
+report the runtime limitation instead of taking over. If Sol completes the
+package, do not call Astra. Only after concrete escalation evidence may you
+start one fresh `astra_executor` Astra Medium agent with a delta packet for the
+smallest unresolved package. Never overlap agents or transfer the full thread.
+Inspect the result and run proportionate acceptance yourself. Skip delegation
+only for the explicit Light exceptions in AGENTS.md; when uncertain, choose
+Heavy and delegate.
 """
 
 [features]
@@ -27,7 +33,7 @@ max_depth = 1
 default_subagent_model = "gpt-5.6-sol"
 default_subagent_reasoning_effort = "medium"
 
-[agents.senior_executor]
+[agents.standard_senior_executor]
 config_file = "agents/senior_executor_standard.toml"
 nickname_candidates = ["Standard Specialist"]
 

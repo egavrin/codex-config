@@ -65,6 +65,14 @@ check; review packages are explicitly read-only and report evidence-backed
 findings. Luna owns acceptance in both cases. Sol and Astra never overlap, and
 neither may spawn another agent.
 
+In the default Luna route, the first Sol spawn is mandatory for every
+substantive implementation or review. Luna may work directly only on the
+documented Light exceptions; if classification is uncertain, it chooses Heavy.
+The root must report an unavailable role or slot instead of silently taking over
+the delegated package. The one-agent concurrency and depth guards remain in
+place because they permit Luna to call Sol while preventing nested or overlapping
+agent chains.
+
 Use `codex --profile astra-terra-standard` when a task benefits from the previous
 Astra Medium orchestrator, Terra High implementation, and an independently
 justified Luna High tester. Use `astra-sol-research` only for its explicitly

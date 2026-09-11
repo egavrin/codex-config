@@ -58,6 +58,31 @@ narrow review, and Heavy for a substantial implementation or review. Do not use
 a half-delegated pattern in which the root performs all production work while
 also paying coordination cost.
 
+### Mandatory default-route delegation gate
+
+When `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD` is active, delegation is a
+required workflow step, not a suggestion. Before any production edit, classify
+the task as Light or Heavy. A substantive implementation is Heavy when it needs
+repository discovery plus implementation, changes behavior across an interface
+or component boundary, makes non-mechanical changes across multiple files,
+requires a material design decision, or is likely to need more than a few
+focused root tool calls. The Heavy review criteria above apply unchanged.
+
+For every Heavy implementation or review, the root must build the Context
+Packet and spawn exactly one fresh `standard_senior_executor` before doing the
+delegated work. The Luna root must not start, duplicate, or take over production
+implementation, and must not perform the substantive review itself. A Heavy
+review capsule must be explicitly read-only. If the required role or agent slot
+is unavailable, report the runtime limitation instead of silently doing the
+delegated package in Luna.
+
+Skip delegation only for a question or explanation, a bounded diagnosis when no
+fix was requested, a tiny obviously local and reversible edit, a narrow review
+requiring only a few focused reads, or an explicit user request not to use
+subagents. When uncertain whether an implementation or review is genuinely
+small, choose Heavy and delegate. The single-agent limit controls concurrency;
+it does not make this mandatory first spawn optional.
+
 ## Root Reasoning Presets
 
 Use the configured Luna xHigh Fast preset as the default for both Light and Heavy
