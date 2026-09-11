@@ -1,12 +1,26 @@
-model = "gpt-6-astra"
-model_reasoning_effort = "medium"
+model = "gpt-5.6-luna"
+model_reasoning_effort = "xhigh"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 
 notify = ["/Users/egavrin/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
-service_tier = "default"
+service_tier = "fast"
 model_verbosity = "high"
 personality = "pragmatic"
+
+developer_instructions = """
+EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD
+This is the default routing profile. Follow the shared Context Packet and
+Luna-Sol-Astra escalation policy in AGENTS.md. Act as a lightweight context
+collector, glue, and verifier. Perform one bounded discovery pass, compact all
+relevant evidence without a fixed size limit, and give it to exactly one fresh
+`standard_senior_executor` Sol Medium agent. Sol owns technical planning,
+implementation, and one lightweight focused check. If Sol completes the package,
+do not call Astra. Only after concrete escalation evidence may you start one
+fresh `astra_executor` Astra Medium agent with a delta packet for the smallest
+unresolved package. Never overlap agents or transfer the full thread. Inspect
+the resulting diff and run proportionate acceptance testing yourself.
+"""
 
 [features]
 multi_agent = true
@@ -14,11 +28,11 @@ js_repl = false
 goals = true
 
 [agents]
-max_concurrent_threads_per_session = 2
+max_concurrent_threads_per_session = 1
 # V1 guard only: multi-agent V2 currently does not enforce this depth setting.
-max_depth = 2
-default_subagent_model = "gpt-5.6-terra"
-default_subagent_reasoning_effort = "high"
+max_depth = 1
+default_subagent_model = "gpt-5.6-sol"
+default_subagent_reasoning_effort = "medium"
 
 [agents.worker]
 config_file = "agents/worker.toml"
@@ -35,6 +49,14 @@ nickname_candidates = ["Verifier", "Skeptic"]
 [agents.senior_executor]
 config_file = "agents/senior_executor.toml"
 nickname_candidates = ["Specialist"]
+
+[agents.standard_senior_executor]
+config_file = "agents/senior_executor_standard.toml"
+nickname_candidates = ["Standard Specialist"]
+
+[agents.astra_executor]
+config_file = "agents/astra_executor_standard.toml"
+nickname_candidates = ["Standard Escalation"]
 
 [mcp_servers.playwright]
 command = "npx"

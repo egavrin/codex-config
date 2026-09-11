@@ -1,7 +1,7 @@
 # Codex config
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
-configuration snapshot updated on September 10, 2026.
+configuration snapshot updated on September 11, 2026.
 
 ## Contents
 
@@ -15,6 +15,8 @@ configuration snapshot updated on September 10, 2026.
   (Luna High), and the strictly gated `senior_executor` (Sol Medium).
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
+- `codex/astra-terra-standard.config.toml` — the previous Astra Medium / Terra
+  High default, retained as an explicit fallback and comparison route.
 - `codex/luna-astra-implementer.config.toml` — an opt-in comparison route with
   Luna xHigh as root and one fresh-context Astra Medium implementer.
 - `codex/luna-sol-astra-escalation.config.toml` — an opt-in comparison route
@@ -27,13 +29,13 @@ configuration snapshot updated on September 10, 2026.
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
   bundled licenses where present.
 
-The snapshot preserves the active values, including `gpt-6-astra` with Medium
-reasoning, `approval_policy = "never"`, `sandbox_mode = "danger-full-access"`,
-Standard service tier, at most two concurrent spawned threads, and a V1 maximum
-subagent depth of two. Routine implementation is routed to Terra High. Sol Medium is
-available as a selective fallback through the gate documented in
-`codex/AGENTS.md`; the opt-in research profile makes it primary only for that
-explicit CLI session.
+The active default is `gpt-5.6-luna` with xHigh reasoning on Fast service tier.
+For substantial implementation, Luna compacts relevant evidence into a Context
+Packet and gives it to one fresh Standard-tier Sol Medium agent. Luna owns final
+acceptance; Standard-tier Astra Medium is used only for a narrowly isolated
+remainder after concrete escalation evidence. The default permits one live
+spawned thread and a V1 maximum depth of one. Approval remains `never`, and the
+sandbox remains `danger-full-access`.
 
 The repository intentionally excludes authentication data, tokens, task
 history, databases, memories, attachments, automations, downloaded plugins,
@@ -46,37 +48,50 @@ only its selection remains in the configuration snapshot.
 The default execution model is:
 
 ```text
-Root                   GPT-6 Astra Medium architecture, decisions, integration
-worker                 Terra High         implementation and ordinary repair
-explorer               Luna Medium        bounded read-only investigation
-tester                 Luna High          independent verification
-senior_executor        Sol Medium         selective difficult-work fallback
+Root                     Luna xHigh Fast        context collection and acceptance
+standard_senior_executor Sol Medium Standard   primary implementation owner
+astra_executor           Astra Medium Standard evidence-gated escalation only
 ```
 
-In the base route, Sol is a selective fallback for a high-uncertainty or
-cross-component difficult diagnosis when the task capsule explains why. Terra
-remains the default owner for clear bounded implementation. Sol is not the
-default primary subagent in a normal Desktop session.
+Small bounded tasks use Luna directly without subagents. Substantial tasks use
+one bounded discovery pass, a task-proportional Context Packet without a fixed
+word limit, one fresh Sol implementation context, a lightweight worker-owned
+check, and Luna-owned acceptance. Sol and Astra never overlap, and neither may
+spawn another agent.
 
-Small bounded tasks use the Light route without subagents. Substantial work uses
-the Heavy route: the root directs bounded agents, transfers compact context,
-batches independent work, waits without status polling, and synthesizes each
-batch once. After four completed subagent sessions, an adaptive delegation
-checkpoint requires a concrete reason for every additional wave without imposing
-a hard lifetime cap on genuinely large tasks. The root must not silently take
-routine production work back from a healthy worker.
-
-The Desktop UI currently exposes Medium and Extra High as the practical Astra
-presets. Medium is the configured default. The multi-agent v2 runtime may promote
-the root to Extra High automatically; route instructions do not force that
-transition, and Heavy should be selected because delegation is justified rather
-than as a way to obtain a higher reasoning preset.
+Use `codex --profile astra-terra-standard` when a task benefits from the previous
+Astra Medium orchestrator, Terra High implementation, and an independently
+justified Luna High tester. Use `astra-sol-research` only for its explicitly
+defined research experiment.
 
 Because a task name alone does not activate a role profile in every collaboration
-runtime, `codex/AGENTS.md` also defines an explicit runtime routing contract. The
-root passes the role's model and reasoning effort when spawning an agent. A
-dependent tester starts only after the relevant worker finishes and never polls
-or waits for sibling agents.
+runtime, `codex/AGENTS.md` also defines explicit model, reasoning, service-tier,
+context-transfer, concurrency, and escalation contracts.
+
+## Routing benchmark
+
+On September 11, 2026, five routes were run from the same clean benchmark commit
+against the same deterministic deployment-planner task. Every implementation
+passed the four public tests and seven external acceptance tests. `Model traffic`
+below is the sum of uncached input and output tokens for the root and all spawned
+agents; it is a comparison metric, not a documented Codex quota formula.
+
+| Route | Wall time | Model traffic | Astra used | Spawned agents | Result |
+|---|---:|---:|:---:|---:|:---:|
+| Fast Luna → Context Packet → Standard Sol | **148.12 s** | 84,852 | No | 1 | 11/11 |
+| Luna → Astra | 215.52 s | 83,916 | Yes | 1 | 11/11 |
+| Astra → Terra → Luna tester | 243.13 s | 140,213 | Yes | 2 | 11/11 |
+| Luna → Sol before Context Packet | 247.27 s | 87,863 | No | 1 | 11/11 |
+| Standard Luna → Context Packet → Sol | 291.75 s | **83,486** | No | 1 | 11/11 |
+
+In this single controlled task, the selected default was 39.1% faster than the
+previous Astra orchestrator route and used 39.5% less measured model traffic.
+Compared with the otherwise equivalent Standard-Luna Context Packet route, Fast
+Luna was 49.2% faster with 1.6% more measured traffic. These are preliminary
+single-run observations: model latency varies, the repository was intentionally
+small, and the whole-percent subscription quota display cannot attribute exact
+quota consumption to one run. Repeat the comparison on real medium and large
+tasks before treating the percentages as general performance guarantees.
 
 ## Experimental Astra-Sol profile
 
@@ -209,6 +224,7 @@ selected user skills:
 codex_source="${CODEX_HOME:-$HOME/.codex}"
 cp "$codex_source/config.toml" codex/config.toml
 cp "$codex_source/AGENTS.md" codex/AGENTS.md
+cp "$codex_source/astra-terra-standard.config.toml" codex/astra-terra-standard.config.toml
 cp "$codex_source/astra-sol-research.config.toml" codex/astra-sol-research.config.toml
 cp "$codex_source/luna-astra-implementer.config.toml" codex/luna-astra-implementer.config.toml
 cp "$codex_source/luna-sol-astra-escalation.config.toml" codex/luna-sol-astra-escalation.config.toml

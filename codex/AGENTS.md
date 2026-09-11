@@ -29,29 +29,20 @@ implementation, affects multiple components, benefits from independent work,
 has meaningful verification needs, or is otherwise likely to require many root
 tool/model turns.
 
-In Heavy, the root is the director, not the routine production worker:
+In the default `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD` route, the root is the
+context collector, director, and acceptance owner, not the routine production
+worker:
 
-- The root owns task interpretation, scope, architecture, causal and strategic
-  decisions, package boundaries, integration, acceptance, and user communication.
-- Use `explorer` for bounded read-only repository investigation.
-- Use `worker` (Terra High) for bounded, clear implementation, ordinary
-  debugging, repair, and implementation-owned validation.
-- Use `tester` for independent verification when the change is substantive,
-  risky, cross-cutting, or has important acceptance criteria.
-- Use `senior_executor` (Sol Medium) for one difficult bounded package that
-  requires stronger mathematical, logical, architectural, or cross-component
-  reasoning. In the base route, Sol may be the first choice for a
-  high-uncertainty or cross-component difficult diagnosis when the capsule
-  explains why; a failed Terra attempt is not required. Apply the escalation
-  gate below to other Sol packages.
-- An untyped/default subagent is acceptable only when neither named role fits;
-  it must still receive a bounded task and must not spawn subagents.
-- Do not use Astra as a subagent except under one of the exact experimental
-  markers below. Do not use Sol outside the defined base-route exception or an
-  explicit experimental profile below.
-- Never run more than two spawned threads concurrently, counting nested threads.
-  Subagents may not create agents except for the selected `senior_executor`'s
-  explicit Research Slot under the shared policy below.
+- The root owns task interpretation, scope, evidence collection, package
+  boundaries, escalation, integration, acceptance, and user communication. Sol
+  owns technical planning and implementation inside the supplied contract.
+- Use `standard_senior_executor` (Sol Medium, Standard tier) as the primary
+  implementation owner after Luna builds the Context Packet.
+- Use `astra_executor` only after Sol returns the concrete escalation evidence
+  defined below. Do not create an explorer, tester, Terra, second Sol, untyped
+  agent, or second-opinion agent in the default route.
+- Never run more than one spawned thread concurrently in the default route.
+  Default-route subagents may not create agents.
 
 If the route is not obvious, prefer Light for a genuinely small request and
 Heavy for a substantial implementation. Do not use a half-delegated pattern in
@@ -59,9 +50,11 @@ which the root performs all production work while also paying coordination cost.
 
 ## Root Reasoning Presets
 
-Use the configured Astra Medium preset as the default for both Light and Heavy
-route entry. Route selection determines whether delegation is justified; it does
-not require the root to change its own reasoning effort.
+Use the configured Luna xHigh Fast preset as the default for both Light and Heavy
+route entry. Light tasks stay with Luna. For Heavy tasks, Luna gathers and
+compacts relevant context, delegates implementation to Standard Sol Medium, and
+owns final acceptance. Standard Astra Medium is available only after concrete
+evidence identifies a narrow unresolved package.
 
 Codex Desktop may automatically promote the root to Extra High when its
 multi-agent v2 runtime is engaged. Treat that as a runtime-controlled override:
@@ -84,6 +77,15 @@ unrelated routing, verification, safety, or completion instructions.
 
 `agents.max_depth` is a V1 guard only. Multi-agent V2 currently does not enforce
 it, so these explicit capsule and slot rules are the operative nesting limit.
+
+## Astra-Terra Standard fallback profile
+
+The marker `PROFILE: ASTRA_TERRA_STANDARD`, supplied by
+`astra-terra-standard.config.toml`, restores the previous default: Astra Medium
+root on Standard tier, Terra High for clear bounded implementation, Luna High
+testing only when independently justified, and selective Sol under the Senior
+Executor Escalation Gate. This explicit profile overrides the default Fast Luna
+route while active.
 
 ## Luna-Astra implementer experiment
 
@@ -160,13 +162,15 @@ only for a narrow unresolved package after evidence-based escalation.
 
 ### Luna Fast / implementation Standard variant
 
-The marker `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD`, supplied by the
+The marker `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD`, supplied by the top-level
+default configuration and also available through the
 `luna-fast-sol-astra-standard.config.toml` profile, uses the same Context Packet,
 Sol-first ownership, evidence-gated Astra escalation, single-live-agent limit,
 and Luna acceptance policy. Its only intended experimental difference is service
-tier: the Luna root uses `fast`, while both `senior_executor` Sol and the optional
+tier: the Luna root uses `fast`, while both `standard_senior_executor` Sol and the optional
 `astra_executor` Astra use role configurations with `service_tier = "default"`.
-Do not spawn either implementation model as an untyped/default agent in this
+This is the normal route unless another explicit CLI profile overrides its
+developer instructions. Do not spawn either implementation model as an untyped/default agent in this
 variant, because it could inherit the root's Fast tier. Verify effective service
 tiers from rollout data before drawing conclusions from the experiment.
 
@@ -234,12 +238,14 @@ Task names, nicknames, and role labels do not activate an agent configuration or
 tool profile. When the collaboration tool accepts model and reasoning overrides,
 pass the configured values explicitly on every initial spawn:
 
-| Role | Model | Reasoning |
-|------|-------|-----------|
-| `explorer` | `gpt-5.6-luna` | `medium` |
-| `worker` | `gpt-5.6-terra` | `high` |
-| `tester` | `gpt-5.6-luna` | `high` |
-| `senior_executor` | `gpt-5.6-sol` | `medium` |
+| Role | Model | Reasoning | Service tier |
+|------|-------|-----------|--------------|
+| `standard_senior_executor` | `gpt-5.6-sol` | `medium` | `default` |
+| `astra_executor` | `gpt-6-astra` | `medium` | `default` |
+| `explorer` | `gpt-5.6-luna` | `medium` | inherited |
+| `worker` | `gpt-5.6-terra` | `high` | inherited |
+| `tester` | `gpt-5.6-luna` | `high` | inherited |
+| `senior_executor` | `gpt-5.6-sol` | `medium` | inherited |
 
 Do not route an `explorer` or `tester` to the default Terra model merely because
 its task name contains the role name. A task such as `tester`, `explorer_apps`,

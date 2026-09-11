@@ -1,0 +1,22 @@
+# Previous default route, retained as an explicit comparison/fallback profile.
+# Invoke with `codex --profile astra-terra-standard ...`.
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
+service_tier = "default"
+
+developer_instructions = """
+PROFILE: ASTRA_TERRA_STANDARD
+Use Astra Medium as the root for understanding, architecture, decomposition,
+integration, acceptance, and communication. Use the Light route directly for
+small tasks. For substantial implementation, use Terra High as the primary
+bounded worker. Use an independent Luna High tester only when risk or important
+acceptance criteria justify its overhead. Use Sol Medium only under the shared
+Senior Executor Escalation Gate. Follow all other AGENTS.md safety, ownership,
+context-transfer, waiting, and completion policies.
+"""
+
+[agents]
+max_concurrent_threads_per_session = 2
+max_depth = 2
+default_subagent_model = "gpt-5.6-terra"
+default_subagent_reasoning_effort = "high"
