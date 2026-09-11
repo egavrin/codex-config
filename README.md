@@ -20,6 +20,8 @@ configuration snapshot updated on September 10, 2026.
 - `codex/luna-sol-astra-escalation.config.toml` — an opt-in comparison route
   with Luna xHigh as root, Sol Medium as implementer, and Astra Medium only as
   an evidence-gated escalation.
+- `codex/luna-fast-sol-astra-standard.config.toml` — the same Context Packet
+  route with only Luna on Fast service tier and Sol/Astra forced to Standard.
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
@@ -147,6 +149,20 @@ The preferred outcome is a correct Sol implementation without any Astra call;
 an Astra escalation is successful only when it resolves a documented hard
 remainder without repeating completed Sol work.
 
+### Fast Luna variant
+
+`codex/luna-fast-sol-astra-standard.config.toml` isolates service-tier latency:
+Luna xHigh uses Fast, while the Sol Medium implementer and optional Astra Medium
+escalation use dedicated role files pinned to Standard. Start it with:
+
+```sh
+codex --profile luna-fast-sol-astra-standard -C /absolute/path/to/project \
+  "Implement the bounded task described here."
+```
+
+Verify the effective service tier of every rollout before comparing results;
+otherwise inherited Fast settings could invalidate the experiment.
+
 ## Restore
 
 The active user configuration normally lives at `~/.codex/config.toml`. See the
@@ -196,6 +212,7 @@ cp "$codex_source/AGENTS.md" codex/AGENTS.md
 cp "$codex_source/astra-sol-research.config.toml" codex/astra-sol-research.config.toml
 cp "$codex_source/luna-astra-implementer.config.toml" codex/luna-astra-implementer.config.toml
 cp "$codex_source/luna-sol-astra-escalation.config.toml" codex/luna-sol-astra-escalation.config.toml
+cp "$codex_source/luna-fast-sol-astra-standard.config.toml" codex/luna-fast-sol-astra-standard.config.toml
 for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci skills/hatch-pet skills/repo-modernizer; do
   mkdir -p "codex/$codex_part"
   rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' \

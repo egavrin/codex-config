@@ -158,9 +158,21 @@ only for a narrow unresolved package after evidence-based escalation.
   Astra escalation occurs; avoiding unnecessary Astra calls is a primary success
   criterion.
 
+### Luna Fast / implementation Standard variant
+
+The marker `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD`, supplied by the
+`luna-fast-sol-astra-standard.config.toml` profile, uses the same Context Packet,
+Sol-first ownership, evidence-gated Astra escalation, single-live-agent limit,
+and Luna acceptance policy. Its only intended experimental difference is service
+tier: the Luna root uses `fast`, while both `senior_executor` Sol and the optional
+`astra_executor` Astra use role configurations with `service_tier = "default"`.
+Do not spawn either implementation model as an untyped/default agent in this
+variant, because it could inherit the root's Fast tier. Verify effective service
+tiers from rollout data before drawing conclusions from the experiment.
+
 ### Context Packet contract
 
-For both Luna-root experiments, Luna gathers decision-relevant facts before the
+For all Luna-root experiments above, Luna gathers decision-relevant facts before the
 implementation agent starts. The packet is a task-proportional compaction of the
 relevant context, not a technical design. It has no fixed word limit: include all
 material evidence needed for the implementation agent to work efficiently, but

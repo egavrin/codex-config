@@ -1,0 +1,33 @@
+# Experimental overlay: Luna uses Fast while implementation models use Standard.
+# Invoke with `codex --profile luna-fast-sol-astra-standard ...`.
+model = "gpt-5.6-luna"
+model_reasoning_effort = "xhigh"
+service_tier = "fast"
+
+developer_instructions = """
+EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD
+This experimental profile is active. Follow the shared Context Packet and
+Luna-Sol-Astra escalation policy in AGENTS.md. Act as a lightweight context
+collector, glue, and verifier. Perform one bounded discovery pass, compact all
+relevant evidence without a fixed size limit, and give it to exactly one fresh
+`senior_executor` Sol Medium agent. Sol owns technical planning, implementation,
+and one lightweight focused check. If Sol completes the package, do not call
+Astra. Only after concrete escalation evidence may you start one fresh
+`astra_executor` Astra Medium agent with a delta packet for the smallest
+unresolved package. Never overlap agents or transfer the full thread. Inspect
+the resulting diff and run proportionate acceptance testing yourself.
+"""
+
+[agents]
+max_concurrent_threads_per_session = 1
+max_depth = 1
+default_subagent_model = "gpt-5.6-sol"
+default_subagent_reasoning_effort = "medium"
+
+[agents.senior_executor]
+config_file = "agents/senior_executor_standard.toml"
+nickname_candidates = ["Standard Specialist"]
+
+[agents.astra_executor]
+config_file = "agents/astra_executor_standard.toml"
+nickname_candidates = ["Standard Escalation"]
