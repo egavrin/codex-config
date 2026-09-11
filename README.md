@@ -15,6 +15,8 @@ configuration snapshot updated on September 10, 2026.
   (Luna High), and the strictly gated `senior_executor` (Sol Medium).
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
+- `codex/luna-astra-implementer.config.toml` — an opt-in comparison route with
+  Luna xHigh as root and one fresh-context Astra Medium implementer.
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
@@ -88,6 +90,32 @@ spawned threads. A selected Sol senior executor may receive one explicitly
 granted Research Slot for a Luna Medium read-only investigator; the slot is
 withheld by default, counts toward the global cap, and permits no further nesting.
 
+## Experimental Luna-Astra profile
+
+`codex/luna-astra-implementer.config.toml` tests the inverse orchestration model:
+Luna xHigh acts as lightweight glue for one fresh-context Astra Medium agent,
+which owns technical planning and implementation. Luna then inspects the diff
+and runs acceptance testing. The experiment prohibits additional agents and
+nested delegation so its quota and quality results remain easy to attribute.
+
+Start a new isolated CLI task with:
+
+```sh
+codex --profile luna-astra-implementer -C /absolute/path/to/project \
+  "Implement the bounded task described here."
+```
+
+Use a task that is large enough to justify implementation delegation but has
+deterministic acceptance tests. For a useful comparison, run a separate task of
+similar scope through the normal profile, record quota before and after each
+run, and compare completion, test results, wall time, model turns, and per-model
+token usage from the local session logs. Do not reuse or resume either thread;
+each arm needs a fresh root context.
+
+The external claim being tested is a 40–70% quota reduction. Treat that range as
+a hypothesis rather than a guarantee; repository shape, task complexity, prompt
+length, retries, and the product's quota accounting can materially change it.
+
 ## Restore
 
 The active user configuration normally lives at `~/.codex/config.toml`. See the
@@ -135,6 +163,7 @@ codex_source="${CODEX_HOME:-$HOME/.codex}"
 cp "$codex_source/config.toml" codex/config.toml
 cp "$codex_source/AGENTS.md" codex/AGENTS.md
 cp "$codex_source/astra-sol-research.config.toml" codex/astra-sol-research.config.toml
+cp "$codex_source/luna-astra-implementer.config.toml" codex/luna-astra-implementer.config.toml
 for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci skills/hatch-pet skills/repo-modernizer; do
   mkdir -p "codex/$codex_part"
   rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' \

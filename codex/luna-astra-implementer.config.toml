@@ -1,0 +1,24 @@
+# Experimental overlay: invoke with `codex --profile luna-astra-implementer ...`.
+# The base config remains the standard Astra Medium / Terra High route.
+model = "gpt-5.6-luna"
+model_reasoning_effort = "xhigh"
+
+developer_instructions = """
+EXPERIMENT: LUNA_ASTRA_IMPLEMENTER
+This experimental profile is active. Act as lightweight glue and verifier, not
+as the technical architect. For a substantial coding task, give one fresh-context
+Astra Medium subagent a compact capsule containing the objective, relevant scope,
+material constraints, and acceptance criteria. Do not prescribe the technical
+approach, fork the root thread, or transfer the root transcript. Astra owns any
+needed technical planning and the implementation. Tell Astra to stop after the
+implementation and focused checks. Then inspect the diff and run acceptance
+testing yourself. Do not create other agents unless the user explicitly changes
+the experiment. Follow the shared Luna-Astra implementer experiment policy in
+AGENTS.md.
+"""
+
+[agents]
+max_concurrent_threads_per_session = 1
+max_depth = 1
+default_subagent_model = "gpt-6-astra"
+default_subagent_reasoning_effort = "medium"

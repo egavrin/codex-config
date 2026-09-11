@@ -46,8 +46,9 @@ In Heavy, the root is the director, not the routine production worker:
   gate below to other Sol packages.
 - An untyped/default subagent is acceptable only when neither named role fits;
   it must still receive a bounded task and must not spawn subagents.
-- Do not use Astra as a subagent. Do not use Sol outside the defined base-route
-  exception or the Astra-Sol research profile below.
+- Do not use Astra as a subagent except under the exact Luna-Astra experiment
+  marker below. Do not use Sol outside the defined base-route exception or the
+  Astra-Sol research profile below.
 - Never run more than two spawned threads concurrently, counting nested threads.
   Subagents may not create agents except for the selected `senior_executor`'s
   explicit Research Slot under the shared policy below.
@@ -83,6 +84,38 @@ unrelated routing, verification, safety, or completion instructions.
 
 `agents.max_depth` is a V1 guard only. Multi-agent V2 currently does not enforce
 it, so these explicit capsule and slot rules are the operative nesting limit.
+
+## Luna-Astra implementer experiment
+
+This policy changes only when the root developer instructions contain the exact
+marker `EXPERIMENT: LUNA_ASTRA_IMPLEMENTER`, supplied by the
+`luna-astra-implementer.config.toml` CLI profile. In that experiment, Luna xHigh
+is a lightweight root coordinator and verifier, and one fresh-context Astra
+Medium subagent owns technical planning and the bounded implementation.
+
+- Use an untyped/default subagent with explicit model `gpt-6-astra`, reasoning
+  `medium`, `fork_turns="none"`, and a compact self-contained capsule.
+- Do not send the root transcript or unrelated history to Astra.
+- Luna must act as glue rather than the technical planner. Give Astra the user
+  objective, relevant scope, material constraints, and acceptance criteria; do
+  not prescribe a detailed implementation plan or write a long technical prompt.
+- Astra must inspect the relevant code, choose the technical approach, plan the
+  work when planning is needed, and implement the solution.
+- Astra may inspect, implement, and run only the focused checks needed while
+  implementing. It must stop after returning the completed implementation,
+  changed files, focused check results, and residual risks.
+- Luna independently inspects the resulting diff, runs the acceptance tests,
+  decides whether the task is complete, and communicates with the user.
+- If testing exposes an ordinary implementation defect, send one compact repair
+  follow-up to the same Astra agent, then have Luna re-run the failed checks.
+- Do not create explorer, tester, Terra, or Sol agents in this experiment unless
+  the user explicitly changes the experiment. Do not create a second Astra
+  agent for review or a second opinion.
+- Keep at most one spawned thread live and prohibit all nested agents.
+- Use this profile only for isolated comparison tasks started with the explicit
+  CLI profile. It does not change the normal Desktop route.
+- Treat a 40–70% quota reduction as the external hypothesis to measure, not as
+  an expected or guaranteed result.
 
 ## Sol research-slot policy
 
