@@ -16,8 +16,8 @@ configuration snapshot updated on September 11, 2026.
   Standard-tier `senior_executor_standard` (Sol Medium) and
   `astra_executor_standard` (Astra Medium) for the default route, and dedicated
   `terra_context_compactor_fast` (Terra Medium Fast) for conditional context
-  compaction, plus dedicated Luna Medium Fast collector, light-worker, and
-  acceptance-verifier roles for the Terra-Luna-Sol-Astra experiment.
+  compaction, plus `luna_evidence_collector_fast`, `luna_light_worker_fast`, and
+  `luna_acceptance_verifier_fast` for the Terra-Luna-Sol-Astra experiment.
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
 - `codex/astra-terra-standard.config.toml` — a historical comparison route with
@@ -59,9 +59,9 @@ only its selection remains in the configuration snapshot.
 The default execution model is:
 
 ```text
-Root                     Terra Medium Fast     context collection and acceptance
-standard_senior_executor Sol Medium Standard   primary implementation owner
-astra_executor           Astra Medium Standard evidence-gated escalation only
+Root                       Terra Medium Fast     context collection and acceptance
+senior_executor_standard   Sol Medium Standard   primary implementation owner
+astra_executor_standard    Astra Medium Standard evidence-gated escalation only
 ```
 
 Small bounded tasks and narrow reviews use Terra directly without subagents.
@@ -88,13 +88,24 @@ Terra Medium Fast was promoted to the normal route after the three valid paired
 results documented below. The default is now Terra → Sol → Terra acceptance →
 optional Astra, with no Luna child or separate tester.
 
-In the default Terra route, the first Sol spawn is mandatory for every
-substantive implementation or review. Terra may work directly only on the
-documented Light exceptions; if classification is uncertain, it chooses Heavy.
-The root must report an unavailable role or slot instead of silently taking over
-the delegated package. The one-agent concurrency and depth guards remain in
-place because they permit Terra to call Sol while preventing nested or overlapping
-agent chains.
+In the default Terra route, `[agents].enabled = true`, and the first
+`senior_executor_standard` spawn is mandatory for every substantive
+implementation or review when the session exposes native collaboration and that
+exact role. Native collaboration means the session's internal subagent spawn
+mechanism. User-visible `create_thread`, `fork_thread`, and
+`send_message_to_thread` operations, as well as nested `codex exec`, are not
+automatic substitutes; a separate user-visible task is created only when the
+user explicitly requests one.
+
+If native collaboration is entirely absent, Terra completes Heavy work and
+acceptance directly and discloses
+`effective_route = terra-single-agent-fallback` with the reason. If
+collaboration exists but the exact role is missing, Terra also labels the
+condition as configuration drift and uses that fallback. Temporary occupation
+of the one-child slot is not fallback justification: the route waits, reuses,
+or closes its own child as appropriate. Normal completion reports
+`effective_route = terra-sol-astra`, even when Astra is unused. Fallback
+sessions are excluded from valid Terra-to-Sol benchmark comparisons.
 
 The `astra-terra-standard` profile remains available only as a historical
 comparison with an Astra Medium orchestrator, Terra High implementation, and an
@@ -590,6 +601,28 @@ configuration is already restored:
 ```sh
 cp codex/luna-terra-context-sol-astra.config.toml "$codex_target/"
 cp codex/agents/terra_context_compactor_fast.toml "$codex_target/agents/"
+```
+
+Validate the base configuration and every retained named profile without
+starting a model session:
+
+```sh
+codex_validation_home="$(mktemp -d "${TMPDIR:-/tmp}/codex-config-validate.XXXXXX")"
+cleanup_codex_validation_home() {
+  if [ -d "$codex_validation_home" ]; then
+    find "$codex_validation_home" -depth -delete
+  fi
+}
+trap cleanup_codex_validation_home EXIT HUP INT TERM
+cp -R codex/. "$codex_validation_home/"
+CODEX_HOME="$codex_validation_home" codex mcp list >/dev/null
+for profile in astra-sol-research astra-terra-standard luna-astra-implementer \
+  luna-sol-astra-escalation luna-terra-context-sol-astra terra-luna-sol-astra; do
+  CODEX_HOME="$codex_validation_home" codex --profile "$profile" mcp list \
+    >/dev/null
+done
+cleanup_codex_validation_home
+trap - EXIT HUP INT TERM
 ```
 
 Open Codex again after the restore. Sign in and reconnect integrations if

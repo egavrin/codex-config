@@ -14,26 +14,39 @@ This is the sole normal routing profile. Follow the default Terra-Sol-Astra and
 shared Context Packet policies in AGENTS.md. Keep Light work in the Terra root.
 For every Heavy implementation or review, perform one bounded evidence pass,
 form a provenance-preserving Context Packet without a fixed size limit, and
-spawn exactly one fresh `standard_senior_executor` Sol Medium agent. Terra must
+spawn exactly one fresh `senior_executor_standard` Sol Medium agent. Terra must
 not implement Heavy production changes or perform a substantive Heavy review.
 Sol owns technical planning, implementation, and one lightweight focused check;
 Heavy review packages are explicitly read-only. Treat the packet as working
 context: Sol may inspect exact edit locations and directly connected
 definitions, but broader discovery must identify a deficient packet field and
-explain why expansion is necessary. If the role or slot is unavailable, report
-the runtime limitation instead of taking over. Keep completed Sol open and idle
-while Terra inspects the diff and affected contract boundaries and runs
+explain why expansion is necessary. If the initial spawn cannot proceed, apply
+the capability-aware contract below. Keep completed Sol open and idle while
+Terra inspects the diff and affected contract boundaries and runs
 proportionate deterministic acceptance tests and material edge cases.
 Distinguish product defects from harness or environment limitations. Send at
 most one ordinary failure to the same open Sol thread with exact
 expected-versus-observed evidence, then rerun the affected checks. Close Sol
 only after acceptance succeeds or before Astra. Do not call Astra when Sol
 completes the package. Only after concrete evidence isolates a narrow hard
-remainder may you start one fresh `astra_executor` Astra Medium agent with a
-delta packet. Do not create a Luna child, explorer, tester, context compactor,
+remainder may you start one fresh `astra_executor_standard` Astra Medium agent
+with a delta packet. Do not create a Luna child, explorer, tester, context compactor,
 second Sol, second opinion, untyped child, or nested agent. Never overlap
 children or transfer the full thread. Skip delegation only for the explicit
 Light exceptions in AGENTS.md; when uncertain, choose Heavy and delegate.
+Native internal delegation means the session's collaboration or subagent spawn
+mechanism. Never automatically substitute `create_thread`, `fork_thread`,
+`send_message_to_thread`, or nested `codex exec`; create a user-visible task
+only after an explicit user request. When native collaboration and the exact Sol
+role exist, Heavy still requires exactly one `senior_executor_standard`. If the
+collaboration mechanism is entirely absent, Terra completes Heavy work and
+acceptance directly and reports `effective_route = terra-single-agent-fallback`
+with the concrete reason. If collaboration exists but the exact role is
+unavailable, label configuration drift, use that same fallback, and do not claim
+a Terra-to-Sol benchmark run. A route-owned child occupying the only slot is not
+fallback justification: wait, reuse, or close it as the route requires. Normal
+completion reports `effective_route = terra-sol-astra`; fallback sessions are
+excluded from valid Terra-to-Sol benchmarks.
 """
 
 [features]
@@ -43,17 +56,18 @@ js_repl = false
 goals = true
 
 [agents]
+enabled = true
 max_concurrent_threads_per_session = 1
 # V1 guard only: multi-agent V2 currently does not enforce this depth setting.
 max_depth = 1
 default_subagent_model = "gpt-5.6-sol"
 default_subagent_reasoning_effort = "medium"
 
-[agents.standard_senior_executor]
+[agents.senior_executor_standard]
 config_file = "agents/senior_executor_standard.toml"
 nickname_candidates = ["Standard Specialist"]
 
-[agents.astra_executor]
+[agents.astra_executor_standard]
 config_file = "agents/astra_executor_standard.toml"
 nickname_candidates = ["Standard Escalation"]
 

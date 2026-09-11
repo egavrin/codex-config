@@ -9,16 +9,16 @@ EXPERIMENT: TERRA_LUNA_SOL_ASTRA
 This experimental profile is active and overrides the default Terra-root route.
 Follow the Terra-Luna-Sol-Astra policy in AGENTS.md. Act as lightweight glue,
 Context Packet compactor, and final communicator; do not perform delegated
-production work. For Heavy work, first spawn one fresh `luna_evidence_collector`
-to return an Evidence Dossier, compact that dossier into a noise-free Context
-Packet, and then spawn `standard_senior_executor` as the primary planner and
-implementer. Sol owns one lightweight focused check. Start `astra_executor` only
-after Sol finishes with concrete evidence for a narrow unresolved remainder.
-After implementation finishes, spawn a fresh `luna_acceptance_verifier` for
+production work. For Heavy work, first spawn one fresh
+`luna_evidence_collector_fast` to return an Evidence Dossier, compact that dossier into a noise-free Context
+Packet, and then spawn `senior_executor_standard` as the primary planner and
+implementer. Sol owns one lightweight focused check. Start
+`astra_executor_standard` only after Sol finishes with concrete evidence for a narrow unresolved remainder.
+After implementation finishes, spawn a fresh `luna_acceptance_verifier_fast` for
 proportionate acceptance. Send one ordinary failure back to its owning
 implementer, then request one focused Luna recheck. Never overlap child work,
 transfer the full root thread, or permit nested agents. For a tiny bounded edit,
-delegate to `luna_light_worker`; trivial questions and status requests may stay
+delegate to `luna_light_worker_fast`; trivial questions and status requests may stay
 in the Terra root. If a required role or slot is unavailable, report the runtime
 limitation instead of taking over delegated work.
 """
@@ -32,22 +32,22 @@ max_depth = 1
 default_subagent_model = "gpt-5.6-luna"
 default_subagent_reasoning_effort = "medium"
 
-[agents.luna_evidence_collector]
+[agents.luna_evidence_collector_fast]
 config_file = "agents/luna_evidence_collector_fast.toml"
 nickname_candidates = ["Fast Evidence Collector"]
 
-[agents.luna_light_worker]
+[agents.luna_light_worker_fast]
 config_file = "agents/luna_light_worker_fast.toml"
 nickname_candidates = ["Fast Light Worker"]
 
-[agents.luna_acceptance_verifier]
+[agents.luna_acceptance_verifier_fast]
 config_file = "agents/luna_acceptance_verifier_fast.toml"
 nickname_candidates = ["Fast Acceptance Verifier"]
 
-[agents.standard_senior_executor]
+[agents.senior_executor_standard]
 config_file = "agents/senior_executor_standard.toml"
 nickname_candidates = ["Standard Specialist"]
 
-[agents.astra_executor]
+[agents.astra_executor_standard]
 config_file = "agents/astra_executor_standard.toml"
 nickname_candidates = ["Standard Escalation"]

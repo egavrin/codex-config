@@ -9,14 +9,14 @@ EXPERIMENT: LUNA_TERRA_CONTEXT_SOL_ASTRA
 This isolated experiment is active. Follow its exact-marker policy in AGENTS.md.
 Keep Light work in the Luna root. For every Heavy implementation or review,
 perform one bounded evidence pass and apply the Expected-Compression Gate in
-AGENTS.md before Sol. Use `terra_context_compactor` only when that gate permits
-it; otherwise build the Context Packet directly. Then spawn exactly one fresh
-`standard_senior_executor`. Luna must not perform production implementation or
+AGENTS.md before Sol. Use `terra_context_compactor_fast` only when that gate
+permits it; otherwise build the Context Packet directly. Then spawn exactly one fresh
+`senior_executor_standard`. Luna must not perform production implementation or
 a substantive review. Sol owns technical planning, implementation, and one
 lightweight focused check; Heavy review packages are explicitly read-only. Sol
 must use the packet as working context and justify any broader repeat discovery.
-Use `astra_executor` only after concrete evidence isolates an unresolved hard
-remainder, and give it a delta packet only. Luna owns evidence-rich acceptance
+Use `astra_executor_standard` only after concrete evidence isolates an unresolved
+hard remainder, and give it a delta packet only. Luna owns evidence-rich acceptance
 across contract boundaries and proportionate deterministic tests; do not add a
 verifier child. Never overlap children, never permit a child to spawn, and
 report an unavailable role or slot instead of taking over delegated work. Close
@@ -34,14 +34,14 @@ max_depth = 1
 default_subagent_model = "gpt-5.6-sol"
 default_subagent_reasoning_effort = "medium"
 
-[agents.terra_context_compactor]
+[agents.terra_context_compactor_fast]
 config_file = "agents/terra_context_compactor_fast.toml"
 nickname_candidates = ["Fast Context Compactor"]
 
-[agents.standard_senior_executor]
+[agents.senior_executor_standard]
 config_file = "agents/senior_executor_standard.toml"
 nickname_candidates = ["Standard Specialist"]
 
-[agents.astra_executor]
+[agents.astra_executor_standard]
 config_file = "agents/astra_executor_standard.toml"
 nickname_candidates = ["Standard Escalation"]

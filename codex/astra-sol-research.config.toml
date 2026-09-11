@@ -1,5 +1,5 @@
 # Experimental overlay: invoke with `codex --profile astra-sol-research ...`.
-# The base config remains the standard Astra Medium / Terra High route.
+# The normal base config remains the Terra Medium Fast route.
 model = "gpt-6-astra"
 model_reasoning_effort = "xhigh"
 

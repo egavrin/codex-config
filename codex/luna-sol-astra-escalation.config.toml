@@ -1,6 +1,6 @@
 # Experimental overlay: invoke with
 # `codex --profile luna-sol-astra-escalation ...`.
-# The base config remains the standard Astra Medium / Terra High route.
+# The normal base config remains the Terra Medium Fast route.
 model = "gpt-5.6-luna"
 model_reasoning_effort = "xhigh"
 

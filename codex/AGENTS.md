@@ -40,7 +40,7 @@ worker:
 - The root owns task interpretation, scope, evidence collection, package
   boundaries, escalation, integration, acceptance, and user communication. Sol
   owns technical planning and implementation inside the supplied contract.
-- Use `standard_senior_executor` (Sol Medium, Standard tier) as the primary
+- Use `senior_executor_standard` (Sol Medium, Standard tier) as the primary
   implementation owner after Terra builds the Context Packet.
 - Sol treats the packet as working context and may inspect exact edit locations
   and directly connected definitions. Broader discovery requires naming the
@@ -55,13 +55,13 @@ worker:
   runs proportionate deterministic tests and material edge cases, distinguishes
   product failures from harness or environment limitations, and includes exact
   expected-versus-observed evidence in any repair delta.
-- For a Heavy review, give `standard_senior_executor` one explicitly read-only
+- For a Heavy review, give `senior_executor_standard` one explicitly read-only
   review package. Sol inspects the supplied diff and relevant tests, reports
   findings with evidence, and must not modify files. Terra validates and
   integrates the findings. Do not create a second reviewer merely for another
   opinion.
-- Use `astra_executor` only after Sol returns the concrete escalation evidence
-  defined below. Do not create a Luna child, explorer, tester, context
+- Use `astra_executor_standard` only after Sol returns the concrete escalation
+  evidence defined below. Do not create a Luna child, explorer, tester, context
   compactor, second Sol, untyped agent, or second-opinion agent in the default
   route.
 - Never run more than one spawned thread concurrently in the default route.
@@ -83,12 +83,11 @@ requires a material design decision, or is likely to need more than a few
 focused root tool calls. The Heavy review criteria above apply unchanged.
 
 For every Heavy implementation or review, the root must build the Context
-Packet and spawn exactly one fresh `standard_senior_executor` before doing the
+Packet and spawn exactly one fresh `senior_executor_standard` before doing the
 delegated work. The Terra root must not start, duplicate, or take over Heavy
 production implementation, and must not perform the substantive review itself.
-A Heavy review capsule must be explicitly read-only. If the required role or
-agent slot is unavailable, report the runtime limitation instead of silently
-doing the delegated package in Terra.
+A Heavy review capsule must be explicitly read-only. Apply the capability-aware
+fallback contract below when native collaboration or the exact role is absent.
 
 Skip delegation only for a question or explanation, a bounded diagnosis when no
 fix was requested, a tiny obviously local and reversible edit, a narrow review
@@ -96,6 +95,29 @@ requiring only a few focused reads, or an explicit user request not to use
 subagents. When uncertain whether an implementation or review is genuinely
 small, choose Heavy and delegate. The single-agent limit controls concurrency;
 it does not make this mandatory first spawn optional.
+
+### Capability-aware default fallback
+
+A native internal subagent is created through the current session's
+collaboration or subagent spawn mechanism. `create_thread`, `fork_thread`,
+`send_message_to_thread`, and nested `codex exec` are not automatic substitutes.
+Use a user-visible task creation mechanism only after the user explicitly asks
+for a separate task.
+
+When native collaboration and the exact `senior_executor_standard` role are
+available, every Heavy package still mandates exactly one such Sol child. If the
+collaboration mechanism is entirely absent, Terra completes the Heavy work and
+acceptance directly, reports
+`effective_route = terra-single-agent-fallback`, and states the concrete reason.
+If native collaboration exists but the exact named role is unexpectedly absent,
+label the condition as configuration drift, use the same Terra fallback, and do
+not claim a Terra-to-Sol benchmark run. A route-owned child temporarily occupying
+the single slot is not fallback justification: wait for it, reuse it for its
+owned repair, or close it when the route requires.
+
+A normal default-route completion reports `effective_route = terra-sol-astra`,
+whether or not Astra was needed. Exclude every single-agent fallback session
+from valid Terra-to-Sol benchmark comparisons.
 
 ## Root Reasoning Presets
 
@@ -148,16 +170,16 @@ routine investigator, technical planner, implementer, or acceptance runner.
 Choose Light or Heavy before spawning or editing. Questions, explanations, and
 status requests that need no repository mutation may remain in Terra. A tiny,
 obviously local, reversible implementation may be delegated directly to one
-fresh `luna_light_worker`, which owns the edit and one focused check. Terra must
-not perform even Light production edits itself. When an implementation needs
-material repository discovery, crosses a component or interface boundary,
+fresh `luna_light_worker_fast`, which owns the edit and one focused check. Terra
+must not perform even Light production edits itself. When an implementation
+needs material repository discovery, crosses a component or interface boundary,
 changes multiple files non-mechanically, requires a material design decision,
 or has meaningful verification needs, choose Heavy.
 
 For every Heavy implementation or review, use this exact sequential flow:
 
 1. Terra states the objective and observable acceptance criteria, then spawns
-   one fresh `luna_evidence_collector`. Luna performs bounded read-only
+   one fresh `luna_evidence_collector_fast`. Luna performs bounded read-only
    investigation and returns an Evidence Dossier containing exact repository,
    file, symbol, and interface references; applicable instructions; current
    behavior and minimal gap evidence; relevant tests and focused commands;
@@ -166,21 +188,21 @@ For every Heavy implementation or review, use this exact sequential flow:
 2. After Luna finishes, Terra compacts the dossier into the Context Packet
    contract below. Terra removes duplication and noise, preserves material
    uncertainty, and does not choose the implementation approach for Sol.
-3. Terra spawns one fresh `standard_senior_executor` with the Context Packet.
+3. Terra spawns one fresh `senior_executor_standard` with the Context Packet.
    Standard Sol Medium owns technical planning, implementation, ordinary repair,
    and one lightweight focused implementation check. A Heavy review package is
    explicitly read-only. Sol may not spawn agents.
 4. If Sol completes the package, do not call Astra. If Sol finishes with a
-   concrete blocker, Terra may start one fresh `astra_executor` only for the
-   narrow unresolved remainder. Sol's evidence must name the unresolved
+   concrete blocker, Terra may start one fresh `astra_executor_standard` only
+   for the narrow unresolved remainder. Sol's evidence must name the unresolved
    acceptance criterion, attempted work and observed result, smallest remaining
    ownership surface, and why Astra is needed. Give Astra a delta packet, not
    the full dossier, Context Packet, or completed work.
 5. After all implementation work finishes, Terra spawns one fresh
-   `luna_acceptance_verifier`. Luna runs proportionate deterministic acceptance
-   checks and reports `PASS` or `FAIL` with exact evidence; it never repairs
-   production code. Prefer a fresh verifier context. Reuse a dedicated Luna
-   thread only when the runtime safely supports resetting it to the acceptance
+   `luna_acceptance_verifier_fast`. Luna runs proportionate deterministic
+   acceptance checks and reports `PASS` or `FAIL` with exact evidence; it never
+   repairs production code. Prefer a fresh verifier context. Reuse a dedicated
+   Luna thread only when the runtime safely supports resetting it to the acceptance
    capsule without carrying investigation instructions or stale task state.
 6. For an ordinary acceptance failure, Terra sends one compact repair follow-up
    to the Sol or Astra owner of the defect. After that owner finishes, Terra
@@ -207,7 +229,7 @@ Terra-root `TERRA_LUNA_SOL_ASTRA` experiment.
 Light work remains in the Luna xHigh Fast root. For every Heavy implementation
 or review, Luna performs one bounded evidence pass, applies the
 Expected-Compression Gate below, builds or commissions a provenance-preserving
-Context Packet, and then spawns exactly one fresh `standard_senior_executor`.
+Context Packet, and then spawns exactly one fresh `senior_executor_standard`.
 Standard Sol Medium owns technical planning and implementation, or one
 explicitly read-only substantive review. Luna must not implement production
 changes or perform the substantive review.
@@ -414,21 +436,23 @@ testing after Sol reports completion.
 ## Runtime Routing Contract
 
 Task names, nicknames, and role labels do not activate an agent configuration or
-tool profile. When the collaboration tool accepts model and reasoning overrides,
-pass the configured values explicitly on every initial spawn:
+tool profile. A custom role file's `name` is authoritative, so every
+`[agents.<id>]` registration and operative prompt reference must use that exact
+value. When the collaboration tool accepts model and reasoning overrides, pass
+the configured values explicitly on every initial spawn:
 
 | Role | Model | Reasoning | Service tier |
 |------|-------|-----------|--------------|
-| `standard_senior_executor` | `gpt-5.6-sol` | `medium` | `default` |
-| `astra_executor` | `gpt-6-astra` | `medium` | `default` |
-| `terra_context_compactor` | `gpt-5.6-terra` | `medium` | `fast` |
+| `senior_executor_standard` | `gpt-5.6-sol` | `medium` | `default` |
+| `astra_executor_standard` | `gpt-6-astra` | `medium` | `default` |
+| `terra_context_compactor_fast` | `gpt-5.6-terra` | `medium` | `fast` |
 | `explorer` | `gpt-5.6-luna` | `medium` | inherited |
 | `worker` | `gpt-5.6-terra` | `high` | inherited |
 | `tester` | `gpt-5.6-luna` | `high` | inherited |
 | `senior_executor` | `gpt-5.6-sol` | `medium` | inherited |
-| `luna_evidence_collector` | `gpt-5.6-luna` | `medium` | `fast` |
-| `luna_light_worker` | `gpt-5.6-luna` | `medium` | `fast` |
-| `luna_acceptance_verifier` | `gpt-5.6-luna` | `medium` | `fast` |
+| `luna_evidence_collector_fast` | `gpt-5.6-luna` | `medium` | `fast` |
+| `luna_light_worker_fast` | `gpt-5.6-luna` | `medium` | `fast` |
+| `luna_acceptance_verifier_fast` | `gpt-5.6-luna` | `medium` | `fast` |
 
 Do not route an `explorer` or `tester` to the default Terra model merely because
 its task name contains the role name. A task such as `tester`, `explorer_apps`,
@@ -457,7 +481,7 @@ In the default route, before implementation:
 2. Perform one bounded evidence pass over the smallest decision-critical
    context and form the Context Packet.
 3. Give exactly one bounded implementation or read-only review package to
-   `standard_senior_executor`.
+   `senior_executor_standard`.
 4. Keep Sol open while Terra inspects the result and runs acceptance.
 5. Close Sol after success, or before one evidence-gated Astra escalation.
 
@@ -501,7 +525,7 @@ not fork the full root transcript merely for convenience.
 Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
 
-For the default `standard_senior_executor`, use the Worker capsule structure and
+For the default `senior_executor_standard`, use the Worker capsule structure and
 state `Research Slot: withheld`. Mandatory primary Sol ownership does not require
 Senior Executor escalation evidence. Default-route children may not delegate.
 
@@ -618,7 +642,7 @@ permit replacement workers or testers.
 
 This gate applies to the optional `senior_executor` role in profiles that expose
 it. It does not apply to the default route's mandatory primary
-`standard_senior_executor`. For the optional role, use at most one senior
+`senior_executor_standard`. For the optional role, use at most one senior
 executor at a time and only when at least one condition is true:
 
 - one focused Terra worker attempt produced concrete evidence that the bounded
