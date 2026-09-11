@@ -17,6 +17,9 @@ configuration snapshot updated on September 10, 2026.
   experimental Astra Extra High and Sol-primary research route.
 - `codex/luna-astra-implementer.config.toml` — an opt-in comparison route with
   Luna xHigh as root and one fresh-context Astra Medium implementer.
+- `codex/luna-sol-astra-escalation.config.toml` — an opt-in comparison route
+  with Luna xHigh as root, Sol Medium as implementer, and Astra Medium only as
+  an evidence-gated escalation.
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
@@ -116,6 +119,29 @@ The external claim being tested is a 40–70% quota reduction. Treat that range 
 a hypothesis rather than a guarantee; repository shape, task complexity, prompt
 length, retries, and the product's quota accounting can materially change it.
 
+## Experimental Luna-Sol-Astra profile
+
+`codex/luna-sol-astra-escalation.config.toml` tests a cheaper primary
+implementation route. Luna xHigh acts as lightweight glue, one fresh-context Sol
+Medium agent owns technical planning and implementation, and Astra Medium is
+called only when Sol finishes with concrete evidence for a narrowly isolated
+unresolved package. Sol and Astra never overlap, neither may create nested
+agents, and Luna owns final acceptance testing.
+
+Start a new isolated CLI task with:
+
+```sh
+codex --profile luna-sol-astra-escalation -C /absolute/path/to/project \
+  "Implement the bounded task described here."
+```
+
+Compare this arm with both the normal profile and the Luna-Astra profile. In
+addition to quota, quality, model turns, token usage, repairs, and wall time,
+record whether Astra escalation occurred and what concrete blocker justified it.
+The preferred outcome is a correct Sol implementation without any Astra call;
+an Astra escalation is successful only when it resolves a documented hard
+remainder without repeating completed Sol work.
+
 ## Restore
 
 The active user configuration normally lives at `~/.codex/config.toml`. See the
@@ -164,6 +190,7 @@ cp "$codex_source/config.toml" codex/config.toml
 cp "$codex_source/AGENTS.md" codex/AGENTS.md
 cp "$codex_source/astra-sol-research.config.toml" codex/astra-sol-research.config.toml
 cp "$codex_source/luna-astra-implementer.config.toml" codex/luna-astra-implementer.config.toml
+cp "$codex_source/luna-sol-astra-escalation.config.toml" codex/luna-sol-astra-escalation.config.toml
 for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci skills/hatch-pet skills/repo-modernizer; do
   mkdir -p "codex/$codex_part"
   rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' \

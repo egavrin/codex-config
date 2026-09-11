@@ -46,9 +46,9 @@ In Heavy, the root is the director, not the routine production worker:
   gate below to other Sol packages.
 - An untyped/default subagent is acceptable only when neither named role fits;
   it must still receive a bounded task and must not spawn subagents.
-- Do not use Astra as a subagent except under the exact Luna-Astra experiment
-  marker below. Do not use Sol outside the defined base-route exception or the
-  Astra-Sol research profile below.
+- Do not use Astra as a subagent except under one of the exact experimental
+  markers below. Do not use Sol outside the defined base-route exception or an
+  explicit experimental profile below.
 - Never run more than two spawned threads concurrently, counting nested threads.
   Subagents may not create agents except for the selected `senior_executor`'s
   explicit Research Slot under the shared policy below.
@@ -116,6 +116,42 @@ Medium subagent owns technical planning and the bounded implementation.
   CLI profile. It does not change the normal Desktop route.
 - Treat a 40–70% quota reduction as the external hypothesis to measure, not as
   an expected or guaranteed result.
+
+## Luna-Sol-Astra escalation experiment
+
+This policy changes only when the root developer instructions contain the exact
+marker `EXPERIMENT: LUNA_SOL_ASTRA_ESCALATION`, supplied by the
+`luna-sol-astra-escalation.config.toml` CLI profile. In that experiment, Luna
+xHigh is lightweight glue and verifier, one fresh-context Sol Medium subagent is
+the primary technical planner and implementer, and Astra Medium is available
+only for a narrow unresolved package after evidence-based escalation.
+
+- Give Sol a compact self-contained capsule with the objective, relevant scope,
+  material constraints, and acceptance criteria. Use explicit model
+  `gpt-5.6-sol`, reasoning `medium`, and `fork_turns="none"`.
+- Luna must not prescribe a detailed technical approach. Sol owns inspection,
+  technical planning, implementation, and focused implementation checks.
+- If Sol can complete the package, it must do so and Astra must not be called.
+- Sol may request Astra escalation only after a focused attempt produces a
+  concrete blocker or isolates an intrinsically difficult remainder. Its report
+  must identify the unresolved acceptance criterion, evidence from the attempt,
+  the smallest remaining ownership surface, and why Astra is needed.
+- Sol must finish before escalation. Luna evaluates the evidence and, only when
+  justified, starts one fresh-context Astra Medium agent for the unresolved
+  package. Sol must never spawn Astra or any other agent itself.
+- Give Astra only the original objective needed to understand the remainder,
+  relevant constraints, the precise unresolved package, and compact evidence
+  from Sol. Do not transfer either full thread or ask Astra to repeat completed
+  Sol work.
+- Luna independently inspects the combined diff and runs acceptance tests. Send
+  at most one focused repair follow-up to the agent that owns the defect, then
+  have Luna re-run the failed checks.
+- Keep at most one spawned thread live, prohibit nested agents, and create no
+  explorer, tester, Terra, or second-opinion agents unless the user explicitly
+  changes the experiment.
+- Use this profile only for isolated fresh-task comparisons. Record how often
+  Astra escalation occurs; avoiding unnecessary Astra calls is a primary success
+  criterion.
 
 ## Sol research-slot policy
 
