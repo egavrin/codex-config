@@ -122,6 +122,66 @@ testing only when independently justified, and selective Sol under the Senior
 Executor Escalation Gate. This explicit profile overrides the default Fast Luna
 route while active.
 
+## Terra-Luna-Sol-Astra experiment
+
+This policy changes only when the root developer instructions contain the exact
+marker `EXPERIMENT: TERRA_LUNA_SOL_ASTRA`, supplied by the
+`terra-luna-sol-astra.config.toml` CLI profile. The marker overrides the default
+Fast Luna route while selected. Terra Medium Fast is lightweight glue, Context
+Packet compactor, acceptance integrator, and final communicator; it is not the
+routine investigator, technical planner, implementer, or acceptance runner.
+
+Choose Light or Heavy before spawning or editing. Questions, explanations, and
+status requests that need no repository mutation may remain in Terra. A tiny,
+obviously local, reversible implementation may be delegated directly to one
+fresh `luna_light_worker`, which owns the edit and one focused check. Terra must
+not perform even Light production edits itself. When an implementation needs
+material repository discovery, crosses a component or interface boundary,
+changes multiple files non-mechanically, requires a material design decision,
+or has meaningful verification needs, choose Heavy.
+
+For every Heavy implementation or review, use this exact sequential flow:
+
+1. Terra states the objective and observable acceptance criteria, then spawns
+   one fresh `luna_evidence_collector`. Luna performs bounded read-only
+   investigation and returns an Evidence Dossier containing exact repository,
+   file, symbol, and interface references; applicable instructions; current
+   behavior and minimal gap evidence; relevant tests and focused commands;
+   scoped git status; and material uncertainties. Luna reports evidence, not a
+   technical design or proposed solution, and makes no edits.
+2. After Luna finishes, Terra compacts the dossier into the Context Packet
+   contract below. Terra removes duplication and noise, preserves material
+   uncertainty, and does not choose the implementation approach for Sol.
+3. Terra spawns one fresh `standard_senior_executor` with the Context Packet.
+   Standard Sol Medium owns technical planning, implementation, ordinary repair,
+   and one lightweight focused implementation check. A Heavy review package is
+   explicitly read-only. Sol may not spawn agents.
+4. If Sol completes the package, do not call Astra. If Sol finishes with a
+   concrete blocker, Terra may start one fresh `astra_executor` only for the
+   narrow unresolved remainder. Sol's evidence must name the unresolved
+   acceptance criterion, attempted work and observed result, smallest remaining
+   ownership surface, and why Astra is needed. Give Astra a delta packet, not
+   the full dossier, Context Packet, or completed work.
+5. After all implementation work finishes, Terra spawns one fresh
+   `luna_acceptance_verifier`. Luna runs proportionate deterministic acceptance
+   checks and reports `PASS` or `FAIL` with exact evidence; it never repairs
+   production code. Prefer a fresh verifier context. Reuse a dedicated Luna
+   thread only when the runtime safely supports resetting it to the acceptance
+   capsule without carrying investigation instructions or stale task state.
+6. For an ordinary acceptance failure, Terra sends one compact repair follow-up
+   to the Sol or Astra owner of the defect. After that owner finishes, Terra
+   requests one focused Luna acceptance recheck. Architecture, contract, scope,
+   security, migration, or ambiguous-causality failures return to Terra for a
+   decision rather than entering a repair loop.
+
+At most one child may actively work at a time. Every initial child starts with a
+fresh, compact, self-contained capsule; no child receives the root transcript.
+No child may spawn another agent. Terra waits for each phase to finish before
+starting the next, never duplicates delegated work, and reports a missing role
+or slot instead of becoming the production worker. Use this profile only for
+explicit, isolated comparisons and verify effective model and service tiers
+from rollout data before drawing conclusions.
+
 ## Luna-Astra implementer experiment
 
 This policy changes only when the root developer instructions contain the exact
@@ -211,11 +271,13 @@ tiers from rollout data before drawing conclusions from the experiment.
 
 ### Context Packet contract
 
-For all Luna-root experiments above, Luna gathers decision-relevant facts before the
-implementation agent starts. The packet is a task-proportional compaction of the
-relevant context, not a technical design. It has no fixed word limit: include all
-material evidence needed for the implementation agent to work efficiently, but
-exclude noise, duplication, and unrelated history. Include:
+For all Luna-root experiments above, Luna gathers decision-relevant facts before
+the implementation agent starts. In the Terra-Luna-Sol-Astra experiment, the
+Luna collector gathers those facts in an Evidence Dossier and Terra performs the
+compaction. In either case, the packet is a task-proportional compaction of the
+relevant context, not a technical design. It has no fixed word limit: include
+all material evidence needed for the implementation agent to work efficiently,
+but exclude noise, duplication, and unrelated history. Include:
 
 1. The user's objective and observable acceptance criteria.
 2. Exact repository root, relevant files, symbols, interfaces, and component
@@ -241,12 +303,15 @@ Implementation-owned validation must be lightweight: run the narrowest cheap
 smoke test, syntax/type check, or directly affected test that can catch an
 obvious defect. Do not run the full suite, broad integration tests, or repeated
 model review unless the task cannot be implemented responsibly without them.
-Luna owns the proportionate acceptance suite after implementation.
+In Luna-root experiments, Luna owns the proportionate acceptance suite after
+implementation. In the Terra-Luna-Sol-Astra experiment, the dedicated Luna
+acceptance verifier owns that suite and reports its evidence to Terra.
 
-If Sol supplies justified Astra escalation evidence, Luna sends Astra a delta
-packet containing the unresolved acceptance criterion, relevant original packet
-facts, Sol's concrete evidence, current changed paths, and the smallest remaining
-ownership surface. Do not resend completed work or the original packet wholesale.
+If Sol supplies justified Astra escalation evidence, the root sends Astra a
+delta packet containing the unresolved acceptance criterion, relevant original
+packet facts, Sol's concrete evidence, current changed paths, and the smallest
+remaining ownership surface. Do not resend completed work or the original
+packet wholesale.
 
 ## Sol research-slot policy
 
@@ -281,6 +346,9 @@ pass the configured values explicitly on every initial spawn:
 | `worker` | `gpt-5.6-terra` | `high` | inherited |
 | `tester` | `gpt-5.6-luna` | `high` | inherited |
 | `senior_executor` | `gpt-5.6-sol` | `medium` | inherited |
+| `luna_evidence_collector` | `gpt-5.6-luna` | `medium` | `fast` |
+| `luna_light_worker` | `gpt-5.6-luna` | `medium` | `fast` |
+| `luna_acceptance_verifier` | `gpt-5.6-luna` | `medium` | `fast` |
 
 Do not route an `explorer` or `tester` to the default Terra model merely because
 its task name contains the role name. A task such as `tester`, `explorer_apps`,

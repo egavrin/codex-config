@@ -14,7 +14,9 @@ configuration snapshot updated on September 11, 2026.
 - `codex/agents/` — `worker` (Terra High), `explorer` (Luna Medium), `tester`
   (Luna High), the strictly gated `senior_executor` (Sol Medium), plus
   Standard-tier `senior_executor_standard` (Sol Medium) and
-  `astra_executor_standard` (Astra Medium) for the default route.
+  `astra_executor_standard` (Astra Medium) for the default route, and dedicated
+  Luna Medium Fast collector, light-worker, and acceptance-verifier roles for
+  the Terra-Luna-Sol-Astra experiment.
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
 - `codex/astra-terra-standard.config.toml` — the previous Astra Medium / Terra
@@ -26,6 +28,9 @@ configuration snapshot updated on September 11, 2026.
   an evidence-gated escalation.
 - `codex/luna-fast-sol-astra-standard.config.toml` — the same Context Packet
   route with only Luna on Fast service tier and Sol/Astra forced to Standard.
+- `codex/terra-luna-sol-astra.config.toml` — an opt-in sequential experiment
+  with Terra Medium Fast as glue, dedicated Luna Medium Fast evidence and
+  acceptance roles, Standard Sol implementation, and evidence-gated Astra.
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
@@ -84,7 +89,7 @@ context-transfer, concurrency, and escalation contracts.
 
 ## Routing benchmark
 
-On September 11, 2026, five routes were run from the same clean benchmark commit
+On September 11, 2026, six routes were run from the same clean benchmark commit
 against the same deterministic deployment-planner task. Every implementation
 passed the four public tests and seven external acceptance tests. `Model traffic`
 below is the sum of uncached input and output tokens for the root and all spawned
@@ -93,6 +98,7 @@ agents; it is a comparison metric, not a documented Codex quota formula.
 | Route | Wall time | Model traffic | Astra used | Spawned agents | Result |
 |---|---:|---:|:---:|---:|:---:|
 | Fast Luna → Context Packet → Standard Sol | **148.12 s** | 84,852 | No | 1 | 11/11 |
+| Fast Terra → Fast Luna evidence → Standard Sol → Fast Luna acceptance | 170.89 s | 124,437 | No | 3 | 11/11 |
 | Luna → Astra | 215.52 s | 83,916 | Yes | 1 | 11/11 |
 | Astra → Terra → Luna tester | 243.13 s | 140,213 | Yes | 2 | 11/11 |
 | Luna → Sol before Context Packet | 247.27 s | 87,863 | No | 1 | 11/11 |
@@ -192,6 +198,45 @@ codex --profile luna-fast-sol-astra-standard -C /absolute/path/to/project \
 Verify the effective service tier of every rollout before comparing results;
 otherwise inherited Fast settings could invalidate the experiment.
 
+## Experimental Terra-Luna-Sol-Astra profile
+
+`codex/terra-luna-sol-astra.config.toml` tests a strictly sequential route in
+which Terra Medium Fast remains lightweight glue. For Heavy work, a fresh Luna
+Medium Fast collector returns an evidence-only dossier; Terra compacts it into a
+Context Packet; Standard Sol Medium plans and implements; and Standard Astra
+Medium is available only for a narrow remainder after concrete Sol escalation
+evidence. A fresh Luna Medium Fast verifier then runs acceptance without
+repairing production code. Tiny bounded edits may go directly to the dedicated
+Luna light worker. All children are explicitly configured, no child may spawn,
+and only one child works at a time.
+
+The first controlled deployment-planner run completed in 170.89 seconds with
+124,437 measured model-traffic tokens, no Astra escalation, and all 11 checks
+passing. The intended sequence was observed: Terra root, Luna evidence
+collector, Standard Sol implementer, then a fresh Luna acceptance verifier.
+Compared with the earlier Fast-Luna Context Packet route on the same benchmark,
+this run was 15.4% slower and used 46.7% more measured model traffic. The extra
+independent evidence and acceptance phases did not improve the already-perfect
+deterministic result on this small task, so this profile should remain
+experimental until medium or large tasks demonstrate that the added context
+discipline reduces expensive retries or failures. Model and reasoning values
+were present in rollout metadata; service tiers were pinned in role
+configuration but were not emitted in the inspected rollout records.
+
+After restoring the profile and its role files, start a fresh isolated task:
+
+```sh
+codex --profile terra-luna-sol-astra -C /absolute/path/to/project \
+  "Implement the bounded task described here."
+```
+
+For a controlled comparison, copy the same clean task state into a new arm for
+each route, use the same task prompt and external acceptance command, and do not
+resume or reuse sessions. Record wall time, per-model rollout and token traffic,
+service tier, child sequence, repairs, acceptance results, and whether Astra was
+used. Do not infer general latency or quota savings from this single small-task
+run.
+
 ## Restore
 
 The active user configuration normally lives at `~/.codex/config.toml`. See the
@@ -243,6 +288,7 @@ cp "$codex_source/astra-sol-research.config.toml" codex/astra-sol-research.confi
 cp "$codex_source/luna-astra-implementer.config.toml" codex/luna-astra-implementer.config.toml
 cp "$codex_source/luna-sol-astra-escalation.config.toml" codex/luna-sol-astra-escalation.config.toml
 cp "$codex_source/luna-fast-sol-astra-standard.config.toml" codex/luna-fast-sol-astra-standard.config.toml
+cp "$codex_source/terra-luna-sol-astra.config.toml" codex/terra-luna-sol-astra.config.toml
 for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci skills/hatch-pet skills/repo-modernizer; do
   mkdir -p "codex/$codex_part"
   rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' \
