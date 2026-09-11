@@ -12,7 +12,9 @@ configuration snapshot updated on September 11, 2026.
   batching, event-driven waits without polling, and separate implementation and
   verification ownership.
 - `codex/agents/` — `worker` (Terra High), `explorer` (Luna Medium), `tester`
-  (Luna High), and the strictly gated `senior_executor` (Sol Medium).
+  (Luna High), the strictly gated `senior_executor` (Sol Medium), plus
+  Standard-tier `senior_executor_standard` (Sol Medium) and
+  `astra_executor_standard` (Astra Medium) for the default route.
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
 - `codex/astra-terra-standard.config.toml` — the previous Astra Medium / Terra
@@ -29,7 +31,8 @@ configuration snapshot updated on September 11, 2026.
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
   bundled licenses where present.
 
-The active default is `gpt-5.6-luna` with xHigh reasoning on Fast service tier.
+The active default is `gpt-5.6-luna` with xHigh reasoning on Fast service tier;
+both `service_tier = "fast"` and `[features].fast_mode = true` are set.
 For substantial implementation, Luna compacts relevant evidence into a Context
 Packet and gives it to one fresh Standard-tier Sol Medium agent. Luna owns final
 acceptance; Standard-tier Astra Medium is used only for a narrowly isolated

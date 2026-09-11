@@ -1,3 +1,5 @@
+name = "tester"
+description = "Independent verifier for completed bounded implementation packages."
 model = "gpt-5.6-luna"
 model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"

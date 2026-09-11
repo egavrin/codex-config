@@ -18,6 +18,9 @@ unresolved package. Never overlap agents or transfer the full thread. Inspect
 the resulting diff and run proportionate acceptance testing yourself.
 """
 
+[features]
+fast_mode = true
+
 [agents]
 max_concurrent_threads_per_session = 1
 max_depth = 1

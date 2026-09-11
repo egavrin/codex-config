@@ -24,6 +24,7 @@ the resulting diff and run proportionate acceptance testing yourself.
 
 [features]
 multi_agent = true
+fast_mode = true
 js_repl = false
 goals = true
 
@@ -167,6 +168,24 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/Users/egavrin/Documents/arkestr"]
+trust_level = "trusted"
+
+[projects."/Users/egavrin/Documents/codex/2026-09-10/referenced-chatgpt-conversation-this-is-an/experiments/routing-ab-20260911/luna-astra"]
+trust_level = "trusted"
+
+[projects."/Users/egavrin/Documents/codex/2026-09-10/referenced-chatgpt-conversation-this-is-an/experiments/routing-ab-20260911/luna-sol-astra"]
+trust_level = "trusted"
+
+[projects."/Users/egavrin/Documents/codex/2026-09-10/referenced-chatgpt-conversation-this-is-an/experiments/routing-ab-20260911/luna-sol-astra-context"]
+trust_level = "trusted"
+
+[projects."/Users/egavrin/Documents/codex/2026-09-10/referenced-chatgpt-conversation-this-is-an/experiments/routing-ab-20260911/default-astra-orchestrator"]
+trust_level = "trusted"
+
+[projects."/Users/egavrin/Documents/codex/2026-09-10/referenced-chatgpt-conversation-this-is-an/experiments/routing-ab-20260911/luna-fast-sol-standard"]
+trust_level = "trusted"
+
+[projects."/Users/egavrin/Documents/deal-stdlib"]
 trust_level = "trusted"
 
 [apps.connector_76869538009648d5b282a4bb21c3d157.tools.github_add_review_to_pr]
