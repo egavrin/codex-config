@@ -13,6 +13,8 @@ configuration snapshot updated on September 10, 2026.
   verification ownership.
 - `codex/agents/` — `worker` (Terra High), `explorer` (Luna Medium), `tester`
   (Luna High), and the strictly gated `senior_executor` (Sol Medium).
+- `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
+  experimental Astra Extra High and Sol-primary research route.
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
@@ -20,9 +22,11 @@ configuration snapshot updated on September 10, 2026.
 
 The snapshot preserves the active values, including `gpt-6-astra` with Medium
 reasoning, `approval_policy = "never"`, `sandbox_mode = "danger-full-access"`,
-Standard service tier, at most two concurrent subagents, and a maximum subagent
-depth of one. Routine implementation is routed to Terra High. Sol Medium is
-available only through the escalation gate documented in `codex/AGENTS.md`.
+Standard service tier, at most two concurrent spawned threads, and a V1 maximum
+subagent depth of two. Routine implementation is routed to Terra High. Sol Medium is
+available as a selective fallback through the gate documented in
+`codex/AGENTS.md`; the opt-in research profile makes it primary only for that
+explicit CLI session.
 
 The repository intentionally excludes authentication data, tokens, task
 history, databases, memories, attachments, automations, downloaded plugins,
@@ -39,8 +43,13 @@ Root                   GPT-6 Astra Medium architecture, decisions, integration
 worker                 Terra High         implementation and ordinary repair
 explorer               Luna Medium        bounded read-only investigation
 tester                 Luna High          independent verification
-senior_executor        Sol Medium         strictly gated hard implementation
+senior_executor        Sol Medium         selective difficult-work fallback
 ```
+
+In the base route, Sol is a selective fallback for a high-uncertainty or
+cross-component difficult diagnosis when the task capsule explains why. Terra
+remains the default owner for clear bounded implementation. Sol is not the
+default primary subagent in a normal Desktop session.
 
 Small bounded tasks use the Light route without subagents. Substantial work uses
 the Heavy route: the root directs bounded agents, transfers compact context,
@@ -61,6 +70,23 @@ runtime, `codex/AGENTS.md` also defines an explicit runtime routing contract. Th
 root passes the role's model and reasoning effort when spawning an agent. A
 dependent tester starts only after the relevant worker finishes and never polls
 or waits for sibling agents.
+
+## Experimental Astra-Sol profile
+
+`codex/astra-sol-research.config.toml` is an opt-in CLI overlay for experiments
+that need Astra Extra High as root and Sol Medium as the primary subagent. It is
+not activated by a normal Codex Desktop start. Invoke it explicitly after placing
+the file in `~/.codex/`:
+
+```sh
+codex --profile astra-sol-research
+```
+
+The profile supplies the marker `EXPERIMENT: ASTRA_SOL_RESEARCH`, which activates
+the corresponding policy in `codex/AGENTS.md`. It keeps a global cap of two live
+spawned threads. A selected Sol senior executor may receive one explicitly
+granted Research Slot for a Luna Medium read-only investigator; the slot is
+withheld by default, counts toward the global cap, and permits no further nesting.
 
 ## Restore
 
@@ -108,6 +134,7 @@ selected user skills:
 codex_source="${CODEX_HOME:-$HOME/.codex}"
 cp "$codex_source/config.toml" codex/config.toml
 cp "$codex_source/AGENTS.md" codex/AGENTS.md
+cp "$codex_source/astra-sol-research.config.toml" codex/astra-sol-research.config.toml
 for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci skills/hatch-pet skills/repo-modernizer; do
   mkdir -p "codex/$codex_part"
   rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' \

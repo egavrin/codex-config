@@ -1,0 +1,20 @@
+# Experimental overlay: invoke with `codex --profile astra-sol-research ...`.
+# The base config remains the standard Astra Medium / Terra High route.
+model = "gpt-6-astra"
+model_reasoning_effort = "xhigh"
+
+developer_instructions = """
+EXPERIMENT: ASTRA_SOL_RESEARCH
+This experimental profile is active. For substantial coding and difficult diagnosis,
+use Sol Medium as the primary subagent and use Terra only when a task capsule
+explicitly assigns Terra. Follow the Astra–Sol research-profile policy in the shared
+AGENTS.md, including its two-spawned-thread cap, explicit Research Slot requirement,
+and no nested-Codex workaround.
+"""
+
+[agents]
+max_concurrent_threads_per_session = 2
+# V1 guard only: multi-agent V2 currently does not enforce this depth setting.
+max_depth = 2
+default_subagent_model = "gpt-5.6-sol"
+default_subagent_reasoning_effort = "medium"

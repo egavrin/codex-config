@@ -34,19 +34,23 @@ In Heavy, the root is the director, not the routine production worker:
 - The root owns task interpretation, scope, architecture, causal and strategic
   decisions, package boundaries, integration, acceptance, and user communication.
 - Use `explorer` for bounded read-only repository investigation.
-- Use `worker` for bounded implementation, ordinary debugging, repair, and
-  implementation-owned validation.
+- Use `worker` (Terra High) for bounded, clear implementation, ordinary
+  debugging, repair, and implementation-owned validation.
 - Use `tester` for independent verification when the change is substantive,
   risky, cross-cutting, or has important acceptance criteria.
-- Use `senior_executor` only for one exceptionally difficult bounded package
-  that requires stronger mathematical, logical, architectural, or cross-cutting
-  reasoning, subject to the escalation gate below.
+- Use `senior_executor` (Sol Medium) for one difficult bounded package that
+  requires stronger mathematical, logical, architectural, or cross-component
+  reasoning. In the base route, Sol may be the first choice for a
+  high-uncertainty or cross-component difficult diagnosis when the capsule
+  explains why; a failed Terra attempt is not required. Apply the escalation
+  gate below to other Sol packages.
 - An untyped/default subagent is acceptable only when neither named role fits;
   it must still receive a bounded task and must not spawn subagents.
-- Do not use Sol or Astra as subagents unless the user explicitly requests it or
-  one focused Terra attempt proves that the package requires stronger reasoning.
-- Never run more than two subagents concurrently. Subagents must not create
-  nested subagents.
+- Do not use Astra as a subagent. Do not use Sol outside the defined base-route
+  exception or the Astra-Sol research profile below.
+- Never run more than two spawned threads concurrently, counting nested threads.
+  Subagents may not create agents except for the selected `senior_executor`'s
+  explicit Research Slot under the shared policy below.
 
 If the route is not obvious, prefer Light for a genuinely small request and
 Heavy for a substantial implementation. Do not use a half-delegated pattern in
@@ -66,11 +70,44 @@ trying to change the preset from instructions. If the runtime exposes an
 explicit preset choice, keep Medium unless the user selects Extra High or the
 task is exceptionally difficult enough to justify its additional usage.
 
+## Astra-Sol research profile
+
+This policy changes only when the root developer instructions contain the exact
+marker `EXPERIMENT: ASTRA_SOL_RESEARCH`, supplied by the
+`astra-sol-research.config.toml` CLI profile. In that experiment, Astra Extra
+High is the root and Sol Medium is the default primary subagent for substantial
+coding and difficult diagnosis. Terra is used only when the task capsule
+explicitly assigns Terra. This marker takes precedence over the base-route
+Terra-first selection rule while the profile is active; it does not replace
+unrelated routing, verification, safety, or completion instructions.
+
+`agents.max_depth` is a V1 guard only. Multi-agent V2 currently does not enforce
+it, so these explicit capsule and slot rules are the operative nesting limit.
+
+## Sol research-slot policy
+
+This policy applies whenever a selected `senior_executor` receives a Sol package,
+in either the base route or the Astra-Sol research profile. A Research Slot is
+**withheld by default**. A senior-executor capsule must explicitly say `Research
+Slot: withheld` or `Research Slot: granted`; only the latter permits one Luna
+Medium read-only investigator.
+
+Before granting the slot, Astra must confirm that the global cap of two live
+spawned threads includes the prospective nested investigator, terminate or
+release its own researcher, and reserve the freed slot exclusively for Sol.
+Astra must not use a reserved slot. The Luna investigator may not spawn agents,
+and neither Sol nor the investigator may delegate any further work. Sol must
+terminate or release the investigator before Sol reports its package complete.
+If the slot is withheld, unavailable, or native delegation is unavailable, Sol
+reads directly; it must not use `codex exec` or another nested-Codex workaround.
+Sol owns ordinary repair in its package; the root owns contracts and starts
+testing after Sol reports completion.
+
 ## Runtime Routing Contract
 
-Task names do not activate the role profiles in `~/.codex/agents/`. When the
-collaboration tool accepts model and reasoning overrides, pass the configured
-values explicitly on every initial spawn:
+Task names, nicknames, and role labels do not activate an agent configuration or
+tool profile. When the collaboration tool accepts model and reasoning overrides,
+pass the configured values explicitly on every initial spawn:
 
 | Role | Model | Reasoning |
 |------|-------|-----------|
@@ -85,6 +122,11 @@ or `explorer_repository` remains untyped unless the runtime applies the matching
 role profile. If typed roles are unavailable, use the table above as the
 effective routing contract and include the role's behavioral constraints in the
 task capsule.
+
+The standalone agent files document intended restrictions but do not by
+themselves prove that a runtime tool or sandbox profile was applied. State a
+sandbox guarantee only after verifying the effective restriction; otherwise use
+explicit model, reasoning, and behavioral constraints in the capsule.
 
 Do not start a tester while the implementation it must verify is still running.
 Wait for the relevant worker to finish, then give the tester the completed state
@@ -180,9 +222,16 @@ tester must not repair production code.
 
 ### Senior Executor capsule
 
-Use the Worker capsule structure, but explicitly add `Escalation Evidence` that
-states why Terra is insufficient. The senior executor receives one bounded hard
-package, not the complete project or an open-ended request.
+Use the Worker capsule structure, but explicitly add:
+
+- `Escalation Evidence`, stating why Sol was selected, including why it should
+  investigate first when Terra has not run;
+- `Experiment Marker`, repeating `EXPERIMENT: ASTRA_SOL_RESEARCH` when active
+  or stating `none` otherwise; and
+- `Research Slot`, explicitly `granted` or `withheld` (withheld by default).
+
+The senior executor receives one bounded hard package, not the complete project
+or an open-ended request.
 
 For a follow-up, repeat the Task ID and send only changed facts, decisions,
 scope, evidence, or acceptance criteria. Do not resend an unchanged capsule or
@@ -237,12 +286,15 @@ In Heavy, do not let the expensive root silently become the routine implementer.
 
 ## Senior Executor Escalation Gate
 
-`senior_executor` is a costly exception, never the default implementation path.
-Use at most one senior executor at a time and only when at least one condition is
-true:
+`senior_executor` is a selective base-route choice, never the default path for
+clear bounded implementation. Use at most one senior executor at a time and
+only when at least one condition is true:
 
 - one focused Terra worker attempt produced concrete evidence that the bounded
   package exceeds Terra's reasoning capability;
+- the package is a high-uncertainty or cross-component difficult diagnosis and
+  the capsule explains why Sol should investigate first; a failed Terra attempt
+  is not required;
 - the package is intrinsically difficult mathematical, algorithmic, logical,
   architectural, or cross-cutting work and the root can explain why Terra is
   unlikely to be reliable;
@@ -253,8 +305,10 @@ Do not escalate merely because a task is large, a worker is still running, the
 first result needs an ordinary repair, or Sol might be faster. Record the
 qualifying evidence in the Senior Executor capsule. Give it non-overlapping
 ownership, one focused attempt, and proportionate validation. It must not spawn
-subagents. If it cannot complete the package, return the decision to the root;
-do not create a chain of senior agents.
+subagents except for the explicitly granted Research Slot under the shared Sol
+research-slot policy. If it cannot complete the package, return the decision to
+the root; do not create a chain of senior agents. The active research profile's
+Sol-primary rule supersedes this base-route gate.
 
 ## Verification
 

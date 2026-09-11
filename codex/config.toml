@@ -15,7 +15,8 @@ goals = true
 
 [agents]
 max_concurrent_threads_per_session = 2
-max_depth = 1
+# V1 guard only: multi-agent V2 currently does not enforce this depth setting.
+max_depth = 2
 default_subagent_model = "gpt-5.6-terra"
 default_subagent_reasoning_effort = "high"
 
@@ -138,6 +139,12 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/Users/egavrin/Documents/codex"]
+trust_level = "trusted"
+
+[projects."/Users/egavrin/Documents/T-Invest"]
+trust_level = "trusted"
+
+[projects."/Users/egavrin/Documents/arkestr"]
 trust_level = "trusted"
 
 [apps.connector_76869538009648d5b282a4bb21c3d157.tools.github_add_review_to_pr]
