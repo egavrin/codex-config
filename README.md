@@ -15,8 +15,9 @@ configuration snapshot updated on September 11, 2026.
   (Luna High), the strictly gated `senior_executor` (Sol Medium), plus
   Standard-tier `senior_executor_standard` (Sol Medium) and
   `astra_executor_standard` (Astra Medium) for the default route, and dedicated
-  Luna Medium Fast collector, light-worker, and acceptance-verifier roles for
-  the Terra-Luna-Sol-Astra experiment.
+  `terra_context_compactor_fast` (Terra Medium Fast) for conditional context
+  compaction, plus dedicated Luna Medium Fast collector, light-worker, and
+  acceptance-verifier roles for the Terra-Luna-Sol-Astra experiment.
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
 - `codex/astra-terra-standard.config.toml` — the previous Astra Medium / Terra
@@ -28,6 +29,9 @@ configuration snapshot updated on September 11, 2026.
   an evidence-gated escalation.
 - `codex/luna-fast-sol-astra-standard.config.toml` — the same Context Packet
   route with only Luna on Fast service tier and Sol/Astra forced to Standard.
+- `codex/luna-terra-context-sol-astra.config.toml` — an opt-in comparison route
+  that conditionally inserts Terra Medium Fast context compaction before the
+  same Standard Sol and evidence-gated Astra owners.
 - `codex/terra-luna-sol-astra.config.toml` — an opt-in sequential experiment
   with Terra Medium Fast as glue, dedicated Luna Medium Fast evidence and
   acceptance roles, Standard Sol implementation, and evidence-gated Astra.
@@ -198,6 +202,85 @@ codex --profile luna-fast-sol-astra-standard -C /absolute/path/to/project \
 Verify the effective service tier of every rollout before comparing results;
 otherwise inherited Fast settings could invalidate the experiment.
 
+## Experimental conditional Terra context profile
+
+`codex/luna-terra-context-sol-astra.config.toml` preserves the default route's
+Luna xHigh Fast root, mandatory Standard Sol owner for every Heavy package,
+evidence-gated Standard Astra escalation, and Luna-owned acceptance. Its only
+routing variable is whether a read-only Terra Medium Fast compactor transforms
+Luna's Evidence Bundle into the Context Packet before Sol. The existing default
+and the full Terra-root profile remain unchanged.
+
+The deterministic Context Complexity Gate requires Terra when evidence crosses
+multiple component or instruction scopes; the change couples schema, API,
+codegen, or documentation; sources conflict or are stale; a large diff, log, or
+trace has a small relevant subset; ownership remains unclear after the bounded
+pass; or a direct packet would force Sol to repeat broad discovery. Terra is
+skipped for one cohesive component with clear paths, constraints, and tests. An
+uncertain case gets one extra focused Luna read; remaining ownership or
+constraint ambiguity requires Terra.
+
+Start a fresh isolated task with:
+
+```sh
+codex --profile luna-terra-context-sol-astra -C /absolute/path/to/project \
+  "Implement the bounded task described here."
+```
+
+This profile is experimental. Its controlled two-arm protocol uses
+`experiments/context-routing-ab-20260911`: start both arms
+from their identical clean commit, give each the same `TASK.md` prompt, run the
+default profile against `luna-fast-sol-astra-standard` and this profile against
+`luna-terra-context-sol-astra`, never resume a session, and evaluate each with
+`python3 acceptance_test.py /absolute/path/to/arm`. Record wall time, per-model
+traffic, effective service tiers, child sequence, repairs, Astra use, and all
+acceptance results before adding any conclusions.
+
+### Preliminary context-heavy A/B result (September 11, 2026)
+
+One fresh run per arm used the same clean fixture commit
+`c7eab2161c5768c79bffec11f990062e6a0c13e5`, identical prompt, and no resume.
+The baseline ran first at 18:13 Europe/Moscow; the conditional-Terra arm ran
+second at 18:19. These single samples are directional, not statistically stable.
+
+| Metric | Luna Fast -> Sol Standard | Luna Fast -> Terra Fast -> Sol Standard |
+|---|---:|---:|
+| Wall time | 353.69 s | 582.65 s |
+| External acceptance | 7/8 | 8/8 |
+| Public tests | 8 passed | 7 passed |
+| Uncached input + output, root | 81,684 | 112,439 |
+| Uncached input + output, implementation Sol thread | 56,420 | 53,561* |
+| Uncached input + output, Terra | 0 | 26,255 |
+| Total measured model traffic | 138,104 | 192,255 |
+| Sol tool calls before first production edit | 1 | 3 |
+| Repair follow-ups | 0 | 1 |
+| Astra escalations | 0 | 0 |
+
+The conditional gate fired for multiple component/instruction scopes and for
+schema/API/generated-contract/documentation coupling. Terra returned roughly
+1,046 words of assistant output, so this run did not demonstrate meaningful
+packet compaction. Sol performed more discovery before its first edit, total
+traffic rose by 39%, and wall time rose by 65%. The extra acceptance point came
+from more extensive root acceptance and a repair, not from proven lower Sol
+discovery. The baseline's only external failure was documentation wording:
+`must strictly increase` did not match the hidden check for `strictly
+increasing`.
+
+`*` The Sol rollout was resumed after being closed and the runtime warned that
+the resumed model changed from Sol to Luna. Its aggregate traffic therefore
+contains the repair under that runtime-controlled model change. The profile now
+keeps Sol open through root acceptance to preserve the pinned role on repair.
+Rollout metadata confirmed Luna xHigh, Terra Medium, and Sol Medium initially;
+it did not emit a service-tier field, so Fast/Standard remain pinned
+configuration values rather than telemetry-confirmed values. Coarse weekly
+account usage moved from 10% before both arms to 11% after both arms and cannot
+be attributed precisely between arms.
+
+Conclusion: retain the current Luna-to-Sol default. Keep conditional Terra as an
+opt-in experiment for additional medium/large real tasks; this run improved the
+hidden acceptance score but failed the cost, latency, packet-compaction, and Sol
+discovery success criteria.
+
 ## Experimental Terra-Luna-Sol-Astra profile
 
 `codex/terra-luna-sol-astra.config.toml` tests a strictly sequential route in
@@ -270,6 +353,14 @@ rsync -av --backup --backup-dir="$codex_backup_dir" codex/ "$codex_target/"
 printf 'Backup of replaced files: %s\n' "$codex_backup_dir"
 ```
 
+To install only the conditional profile and its dedicated role after the base
+configuration is already restored:
+
+```sh
+cp codex/luna-terra-context-sol-astra.config.toml "$codex_target/"
+cp codex/agents/terra_context_compactor_fast.toml "$codex_target/agents/"
+```
+
 Open Codex again after the restore. Sign in and reconnect integrations if
 needed. Start a new task so the new configuration and global instructions are
 loaded into a fresh session.
@@ -288,6 +379,7 @@ cp "$codex_source/astra-sol-research.config.toml" codex/astra-sol-research.confi
 cp "$codex_source/luna-astra-implementer.config.toml" codex/luna-astra-implementer.config.toml
 cp "$codex_source/luna-sol-astra-escalation.config.toml" codex/luna-sol-astra-escalation.config.toml
 cp "$codex_source/luna-fast-sol-astra-standard.config.toml" codex/luna-fast-sol-astra-standard.config.toml
+cp "$codex_source/luna-terra-context-sol-astra.config.toml" codex/luna-terra-context-sol-astra.config.toml
 cp "$codex_source/terra-luna-sol-astra.config.toml" codex/terra-luna-sol-astra.config.toml
 for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci skills/hatch-pet skills/repo-modernizer; do
   mkdir -p "codex/$codex_part"

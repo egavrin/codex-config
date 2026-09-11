@@ -182,6 +182,62 @@ or slot instead of becoming the production worker. Use this profile only for
 explicit, isolated comparisons and verify effective model and service tiers
 from rollout data before drawing conclusions.
 
+## Luna-Terra-context-Sol-Astra experiment
+
+This policy changes only when the root developer instructions contain the exact
+marker `EXPERIMENT: LUNA_TERRA_CONTEXT_SOL_ASTRA`, supplied by the
+`luna-terra-context-sol-astra.config.toml` CLI profile. It is an isolated
+comparison route; it does not change the default Fast-Luna route or the full
+Terra-root `TERRA_LUNA_SOL_ASTRA` experiment.
+
+Light work remains in the Luna xHigh Fast root. For every Heavy implementation
+or review, Luna performs one bounded evidence pass, applies the Context
+Complexity Gate below, builds or commissions a provenance-preserving Context
+Packet, and then spawns exactly one fresh `standard_senior_executor`. Standard
+Sol Medium owns technical planning and implementation, or one explicitly
+read-only substantive review. Luna must not implement production changes or
+perform the substantive review. Luna owns final acceptance; this route has no
+Luna verifier child.
+
+Apply the Context Complexity Gate deterministically before Sol. Terra compaction
+is required when any one of these conditions is present:
+
+- evidence crosses multiple component or instruction scopes;
+- implementation is coupled to schema, API, code generation, or documentation;
+- cited sources are contradictory or stale;
+- a large diff, log, or trace contains only a small relevant subset;
+- ownership cannot be narrowed after Luna's bounded evidence pass; or
+- a direct packet would make Sol repeat broad discovery.
+
+Skip Terra when the task is confined to one cohesive component with clear
+paths, constraints, and focused tests. If classification is uncertain, Luna
+performs one additional focused read. If ownership or constraints remain
+ambiguous, Luna must call `terra_context_compactor`. Terra receives the Evidence
+Bundle, removes duplication and noise while preserving provenance, constraints,
+acceptance criteria, exact references, and uncertainty, and returns the Context
+Packet. It does not discover broadly, design, edit, accept, or spawn agents.
+
+Sol and Astra follow the existing evidence-gated escalation contract. If Sol
+returns a narrow, complete delta packet, send it directly to Astra. If Sol's
+blocker is mixed with completed work, large logs, or ambiguous ownership, send
+a delta-only compaction follow-up to the existing Terra thread when one exists;
+otherwise start one fresh Terra compactor. Astra receives only the unresolved
+criterion, smallest ownership surface, Sol's attempted work and observed
+failure, and relevant changed paths. For an ordinary defect, send one focused
+repair follow-up to the owning Sol or Astra agent, then Luna reruns the affected
+acceptance checks.
+
+At most one child may work at a time and no child may spawn. Every Heavy task
+still mandates exactly one Standard Sol implementation or review owner. If a
+required role or slot is unavailable, report the runtime limitation instead of
+taking over the package in Luna.
+
+Because the runtime counts a completed but open child against the one-thread
+limit, close Terra after receiving its packet and before spawning Sol. Keep the
+completed Sol thread open and idle while Luna runs acceptance; use that same
+still-open thread for the one permitted repair follow-up. Close Sol only after
+acceptance succeeds, or before starting Astra when escalation is required.
+
 ## Luna-Astra implementer experiment
 
 This policy changes only when the root developer instructions contain the exact
@@ -342,6 +398,7 @@ pass the configured values explicitly on every initial spawn:
 |------|-------|-----------|--------------|
 | `standard_senior_executor` | `gpt-5.6-sol` | `medium` | `default` |
 | `astra_executor` | `gpt-6-astra` | `medium` | `default` |
+| `terra_context_compactor` | `gpt-5.6-terra` | `medium` | `fast` |
 | `explorer` | `gpt-5.6-luna` | `medium` | inherited |
 | `worker` | `gpt-5.6-terra` | `high` | inherited |
 | `tester` | `gpt-5.6-luna` | `high` | inherited |

@@ -1,0 +1,44 @@
+# Experimental overlay: Luna conditionally delegates context compaction to Terra.
+# Invoke with `codex --profile luna-terra-context-sol-astra ...`.
+model = "gpt-5.6-luna"
+model_reasoning_effort = "xhigh"
+service_tier = "fast"
+
+developer_instructions = """
+EXPERIMENT: LUNA_TERRA_CONTEXT_SOL_ASTRA
+This isolated experiment is active. Follow its exact-marker policy in AGENTS.md.
+Keep Light work in the Luna root. For every Heavy implementation or review,
+perform one bounded evidence pass and apply the deterministic Context Complexity
+Gate before Sol. Use `terra_context_compactor` whenever the gate requires it;
+otherwise build the Context Packet directly. Then spawn exactly one fresh
+`standard_senior_executor`. Luna must not perform production implementation or
+a substantive review. Sol owns technical planning, implementation, and one
+lightweight focused check; Heavy review packages are explicitly read-only.
+Use `astra_executor` only after concrete evidence isolates an unresolved hard
+remainder, and give it a delta packet only. Luna owns acceptance. Never overlap
+children, never permit a child to spawn, and report an unavailable role or slot
+instead of taking over delegated work. Close Terra before spawning Sol, but keep
+Sol open and idle through Luna acceptance so one repair follow-up retains the
+pinned Sol role; close Sol only after acceptance succeeds or before Astra starts.
+"""
+
+[features]
+fast_mode = true
+
+[agents]
+max_concurrent_threads_per_session = 1
+max_depth = 1
+default_subagent_model = "gpt-5.6-sol"
+default_subagent_reasoning_effort = "medium"
+
+[agents.terra_context_compactor]
+config_file = "agents/terra_context_compactor_fast.toml"
+nickname_candidates = ["Fast Context Compactor"]
+
+[agents.standard_senior_executor]
+config_file = "agents/senior_executor_standard.toml"
+nickname_candidates = ["Standard Specialist"]
+
+[agents.astra_executor]
+config_file = "agents/astra_executor_standard.toml"
+nickname_candidates = ["Standard Escalation"]
