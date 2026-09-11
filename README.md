@@ -96,10 +96,11 @@ withheld by default, counts toward the global cap, and permits no further nestin
 ## Experimental Luna-Astra profile
 
 `codex/luna-astra-implementer.config.toml` tests the inverse orchestration model:
-Luna xHigh acts as lightweight glue for one fresh-context Astra Medium agent,
-which owns technical planning and implementation. Luna then inspects the diff
-and runs acceptance testing. The experiment prohibits additional agents and
-nested delegation so its quota and quality results remain easy to attribute.
+Luna xHigh gathers a bounded Context Packet and passes it to one fresh-context
+Astra Medium agent, which owns technical planning and implementation. Luna then
+inspects the diff and runs acceptance testing. The experiment prohibits
+additional agents and nested delegation so its quota and quality results remain
+easy to attribute.
 
 Start a new isolated CLI task with:
 
@@ -122,8 +123,10 @@ length, retries, and the product's quota accounting can materially change it.
 ## Experimental Luna-Sol-Astra profile
 
 `codex/luna-sol-astra-escalation.config.toml` tests a cheaper primary
-implementation route. Luna xHigh acts as lightweight glue, one fresh-context Sol
-Medium agent owns technical planning and implementation, and Astra Medium is
+implementation route. Luna xHigh first gathers a bounded Context Packet with
+relevant files, contracts, evidence, tests, and acceptance criteria. One
+fresh-context Sol Medium agent then owns technical planning and implementation,
+and Astra Medium is
 called only when Sol finishes with concrete evidence for a narrowly isolated
 unresolved package. Sol and Astra never overlap, neither may create nested
 agents, and Luna owns final acceptance testing.

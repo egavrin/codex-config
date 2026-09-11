@@ -95,6 +95,9 @@ Medium subagent owns technical planning and the bounded implementation.
 
 - Use an untyped/default subagent with explicit model `gpt-6-astra`, reasoning
   `medium`, `fork_turns="none"`, and a compact self-contained capsule.
+- Before spawning Astra, Luna performs one bounded discovery pass and builds the
+  Context Packet defined below. Stop discovery as soon as every required packet
+  field has adequate evidence; do not attempt exhaustive repository mapping.
 - Do not send the root transcript or unrelated history to Astra.
 - Luna must act as glue rather than the technical planner. Give Astra the user
   objective, relevant scope, material constraints, and acceptance criteria; do
@@ -126,8 +129,10 @@ xHigh is lightweight glue and verifier, one fresh-context Sol Medium subagent is
 the primary technical planner and implementer, and Astra Medium is available
 only for a narrow unresolved package after evidence-based escalation.
 
-- Give Sol a compact self-contained capsule with the objective, relevant scope,
-  material constraints, and acceptance criteria. Use explicit model
+- Before spawning Sol, Luna performs one bounded discovery pass and builds the
+  Context Packet defined below. Stop discovery as soon as every required packet
+  field has adequate evidence; do not attempt exhaustive repository mapping.
+- Give Sol the compact self-contained Context Packet. Use explicit model
   `gpt-5.6-sol`, reasoning `medium`, and `fork_turns="none"`.
 - Luna must not prescribe a detailed technical approach. Sol owns inspection,
   technical planning, implementation, and focused implementation checks.
@@ -152,6 +157,33 @@ only for a narrow unresolved package after evidence-based escalation.
 - Use this profile only for isolated fresh-task comparisons. Record how often
   Astra escalation occurs; avoiding unnecessary Astra calls is a primary success
   criterion.
+
+### Context Packet contract
+
+For both Luna-root experiments, Luna gathers decision-relevant facts before the
+implementation agent starts. The packet is evidence, not a technical design,
+and should normally stay below 1,200 words. Include:
+
+1. The user's objective and observable acceptance criteria.
+2. Exact repository root, relevant files, symbols, interfaces, and component
+   boundaries, with line references when useful.
+3. Applicable repository instructions and material constraints.
+4. Current behavior and the smallest reproducible evidence for the gap, such as
+   a focused failing test or error. Summarize outputs instead of pasting logs.
+5. Existing tests and the exact focused commands the implementer should run.
+6. Git status limited to relevant paths so user-owned changes are preserved.
+7. Known uncertainties stated as questions for the implementer to resolve.
+
+Do not include the full conversation, broad file dumps, repeated instructions,
+speculative implementation steps, or an architecture chosen by Luna. Luna may
+use batched read-only searches and focused commands, but must not edit production
+files during collection. The implementer verifies any assumption that would
+materially affect its design rather than trusting the packet blindly.
+
+If Sol supplies justified Astra escalation evidence, Luna sends Astra a delta
+packet containing the unresolved acceptance criterion, relevant original packet
+facts, Sol's concrete evidence, current changed paths, and the smallest remaining
+ownership surface. Do not resend completed work or the original packet wholesale.
 
 ## Sol research-slot policy
 

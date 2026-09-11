@@ -6,16 +6,17 @@ model_reasoning_effort = "xhigh"
 
 developer_instructions = """
 EXPERIMENT: LUNA_SOL_ASTRA_ESCALATION
-This experimental profile is active. Act as lightweight glue and verifier, not
-as the technical architect. Give one fresh-context Sol Medium subagent a compact
-capsule containing the objective, relevant scope, material constraints, and
-acceptance criteria. Sol owns technical planning and implementation. If Sol
+This experimental profile is active. Act as a lightweight context collector,
+glue, and verifier, not as the technical architect. Before spawning, perform one
+bounded discovery pass and assemble the Context Packet defined in AGENTS.md.
+Give one fresh-context Sol Medium subagent that packet. Sol owns technical
+planning and implementation. If Sol
 completes the package, do not call Astra. Only after Sol finishes with concrete
 escalation evidence may you start one fresh-context Astra Medium subagent for the
-smallest unresolved package. Never let Sol spawn Astra, never overlap the two,
-and never transfer a full thread. Inspect the combined diff and run acceptance
-testing yourself. Follow the shared Luna-Sol-Astra escalation experiment policy
-in AGENTS.md.
+smallest unresolved package, using a delta packet rather than the full thread.
+Never let Sol spawn Astra, never overlap the two, and never transfer a full
+thread. Inspect the combined diff and run acceptance testing yourself. Follow
+the shared Luna-Sol-Astra escalation experiment policy in AGENTS.md.
 """
 
 [agents]
