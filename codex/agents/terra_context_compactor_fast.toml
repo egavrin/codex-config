@@ -12,6 +12,16 @@ irrelevant noise while preserving the objective, observable acceptance criteria,
 material constraints, exact file and symbol references, focused commands,
 scoped git status, conflicting evidence, and unresolved uncertainty.
 
+Before compacting, estimate whether the packet can reduce the supplied textual
+Evidence Bundle by at least 40 percent or avoid otherwise necessary broad Sol
+discovery. If neither benefit is credible, explicitly decline compaction and
+return the reason; do not manufacture a packet merely because Terra was called.
+For a completed compaction, report the measured input and output word counts and
+the reduction ratio `(input_words - output_words) / input_words`. State the word
+counting method, list retained evidence separately from removed noise, and keep
+source paths, line references, trace identifiers, or other provenance attached
+to every retained material fact. Preserve material contradictions as such.
+
 Do not perform broad repository discovery, choose an implementation design,
 modify files, decide acceptance, or spawn agents. Inspect only locations that
 the Evidence Bundle explicitly cites, and only when needed to resolve or

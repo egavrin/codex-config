@@ -191,41 +191,53 @@ comparison route; it does not change the default Fast-Luna route or the full
 Terra-root `TERRA_LUNA_SOL_ASTRA` experiment.
 
 Light work remains in the Luna xHigh Fast root. For every Heavy implementation
-or review, Luna performs one bounded evidence pass, applies the Context
-Complexity Gate below, builds or commissions a provenance-preserving Context
-Packet, and then spawns exactly one fresh `standard_senior_executor`. Standard
-Sol Medium owns technical planning and implementation, or one explicitly
-read-only substantive review. Luna must not implement production changes or
-perform the substantive review. Luna owns final acceptance; this route has no
-Luna verifier child.
+or review, Luna performs one bounded evidence pass, applies the
+Expected-Compression Gate below, builds or commissions a provenance-preserving
+Context Packet, and then spawns exactly one fresh `standard_senior_executor`.
+Standard Sol Medium owns technical planning and implementation, or one
+explicitly read-only substantive review. Luna must not implement production
+changes or perform the substantive review.
 
-Apply the Context Complexity Gate deterministically before Sol. Terra compaction
-is required when any one of these conditions is present:
+Apply the Expected-Compression Gate before Sol. Terra is allowed only after
+Luna has already gathered the decision-relevant context and concrete evidence
+makes either of these benefits credible:
 
-- evidence crosses multiple component or instruction scopes;
-- implementation is coupled to schema, API, code generation, or documentation;
-- cited sources are contradictory or stale;
-- a large diff, log, or trace contains only a small relevant subset;
-- ownership cannot be narrowed after Luna's bounded evidence pass; or
-- a direct packet would make Sol repeat broad discovery.
+- substantial noise, duplication, contradictions, or large raw logs, diffs, or
+  traces can reasonably be expected to shrink the implementation packet by at
+  least approximately 40 percent; or
+- compaction can select and organize a provenance-linked relevant subset that
+  avoids otherwise necessary broad Sol discovery.
 
-Skip Terra when the task is confined to one cohesive component with clear
-paths, constraints, and focused tests. If classification is uncertain, Luna
-performs one additional focused read. If ownership or constraints remain
-ambiguous, Luna must call `terra_context_compactor`. Terra receives the Evidence
-Bundle, removes duplication and noise while preserving provenance, constraints,
-acceptance criteria, exact references, and uncertainty, and returns the Context
-Packet. It does not discover broadly, design, edit, accept, or spawn agents.
+Multiple components, instruction scopes, or schema/API/codegen/documentation
+coupling alone do not trigger Terra. If evidence is merely incomplete, Luna may
+perform one focused read. If the remaining issue requires a technical judgment
+or design decision, send the gathered context directly to Sol; Terra must not
+design. When neither expected benefit is credible, Luna builds the Context
+Packet directly.
+
+Terra receives only the gathered Evidence Bundle. It must measure and report
+input and output word counts, state its counting method, and report reduction as
+`(input_words - output_words) / input_words`. It separately identifies retained
+evidence and removed noise, keeps exact provenance attached to every material
+fact, and preserves unresolved contradictions. If an approximately 40 percent
+reduction or avoidance of broad Sol discovery is not credible, Terra explicitly
+declines compaction. It does not discover broadly, design, edit, accept, or spawn
+agents.
+
+Sol treats the resulting packet as working context instead of repeating Luna's
+broad discovery. It may open exact edit locations and directly connected
+definitions. Before expanding beyond them, Sol must identify which packet field
+is incomplete, contradictory, stale, or insufficient for a material technical
+decision and explain why that gap requires the additional discovery.
 
 Sol and Astra follow the existing evidence-gated escalation contract. If Sol
-returns a narrow, complete delta packet, send it directly to Astra. If Sol's
-blocker is mixed with completed work, large logs, or ambiguous ownership, send
-a delta-only compaction follow-up to the existing Terra thread when one exists;
-otherwise start one fresh Terra compactor. Astra receives only the unresolved
-criterion, smallest ownership surface, Sol's attempted work and observed
-failure, and relevant changed paths. For an ordinary defect, send one focused
-repair follow-up to the owning Sol or Astra agent, then Luna reruns the affected
-acceptance checks.
+isolates a genuinely hard unresolved remainder, Luna builds a narrow delta
+packet from Sol's evidence, closes Sol, and only then starts Astra. Astra
+receives only the unresolved criterion, smallest ownership surface, Sol's
+attempted work and observed failure, and relevant changed paths. For an ordinary
+defect, Luna sends one evidence-rich repair delta to the still-open owning Sol
+thread, then reruns the affected acceptance checks. An Astra-owned ordinary
+defect returns once to the still-open Astra thread under the same rule.
 
 At most one child may work at a time and no child may spawn. Every Heavy task
 still mandates exactly one Standard Sol implementation or review owner. If a
@@ -237,6 +249,13 @@ limit, close Terra after receiving its packet and before spawning Sol. Keep the
 completed Sol thread open and idle while Luna runs acceptance; use that same
 still-open thread for the one permitted repair follow-up. Close Sol only after
 acceptance succeeds, or before starting Astra when escalation is required.
+
+Luna acceptance must inspect the implementation or reviewed diff and affected
+cross-contract boundaries, then run proportionate deterministic tests that
+cover the observable criteria and material edge cases. It must distinguish
+product failures from environment limits and preserve concrete failure output,
+paths, and expected-versus-observed behavior in the single permitted repair
+delta. This route never adds a tester or verifier child.
 
 ## Luna-Astra implementer experiment
 

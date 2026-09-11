@@ -211,14 +211,24 @@ routing variable is whether a read-only Terra Medium Fast compactor transforms
 Luna's Evidence Bundle into the Context Packet before Sol. The existing default
 and the full Terra-root profile remain unchanged.
 
-The deterministic Context Complexity Gate requires Terra when evidence crosses
-multiple component or instruction scopes; the change couples schema, API,
-codegen, or documentation; sources conflict or are stale; a large diff, log, or
-trace has a small relevant subset; ownership remains unclear after the bounded
-pass; or a direct packet would force Sol to repeat broad discovery. Terra is
-skipped for one cohesive component with clear paths, constraints, and tests. An
-uncertain case gets one extra focused Luna read; remaining ownership or
-constraint ambiguity requires Terra.
+The refined Expected-Compression Gate permits Terra only after Luna has gathered
+the relevant context and the evidence supports an expected packet reduction of
+about 40 percent or selection of a provenance-linked subset that prevents
+otherwise necessary broad Sol discovery. Multiple components or
+schema/API/codegen/documentation coupling alone no longer triggers Terra. An
+incomplete bundle gets at most one focused Luna read; technical decisions go
+directly to Sol because Terra is a read-only compactor, not a designer. Terra
+must report input/output word counts, reduction ratio, retained evidence,
+removed noise, and provenance, or decline when the expected benefit is not
+credible.
+
+Sol treats the packet as working context and may inspect exact edit locations
+and directly connected definitions. Broader discovery requires naming the
+incomplete, contradictory, stale, or decision-insufficient packet field that
+justifies it. Luna keeps Sol open through acceptance, inspects affected
+cross-contract boundaries, and runs proportionate deterministic checks without
+a verifier child. One ordinary failure returns as an evidence-rich delta to the
+same Sol thread; Sol closes only after success or before an Astra escalation.
 
 Start a fresh isolated task with:
 
@@ -227,7 +237,7 @@ codex --profile luna-terra-context-sol-astra -C /absolute/path/to/project \
   "Implement the bounded task described here."
 ```
 
-This profile is experimental. Its controlled two-arm protocol uses
+The first controlled two-arm protocol used
 `experiments/context-routing-ab-20260911`: start both arms
 from their identical clean commit, give each the same `TASK.md` prompt, run the
 default profile against `luna-fast-sol-astra-standard` and this profile against
@@ -235,6 +245,60 @@ default profile against `luna-fast-sol-astra-standard` and this profile against
 `python3 acceptance_test.py /absolute/path/to/arm`. Record wall time, per-model
 traffic, effective service tiers, child sequence, repairs, Astra use, and all
 acceptance results before adding any conclusions.
+
+The refined policy has a separate, deliberately compression-heavy protocol in
+`experiments/context-compression-ab-20260911`. Its repositories include a large
+noisy incident corpus around a bounded Python fix so the gate, Terra's measured
+reduction, and Sol's discovery discipline can be observed. Use that directory's
+README and acceptance runner for new A/B runs.
+
+### Refined compression-heavy A/B result (September 11, 2026)
+
+One fresh run per arm used the same clean fixture commit
+`179111c3c802e71a78ccb46ba1008cf687e14d80`, identical prompt, and no resume.
+The baseline ran first at 18:48 Europe/Moscow; the refined conditional-Terra arm
+ran second at 18:52. The incident corpus contained 3,090 whitespace-delimited
+words around a repair bounded to two production files. These single samples are
+directional, not statistically stable.
+
+| Metric | Luna Fast -> Sol Standard | Luna Fast -> Terra Fast -> Sol Standard |
+|---|---:|---:|
+| Wall time | 225.10 s | 344.30 s |
+| External acceptance | 8/8 | 8/8 |
+| Public tests | 4 passed | 4 passed |
+| Uncached input + output, root | 81,561 | 115,320 |
+| Uncached input + output, implementation Sol | 35,633 | 30,550 |
+| Uncached input + output, Terra | 0 | 33,466 |
+| Total measured model traffic | 117,194 | 179,336 |
+| Sol tool calls before first production edit | 1 | 2 |
+| Repair follow-ups | 0 | 0 |
+| Astra escalations | 0 | 0 |
+
+The refined gate fired for an expected high reduction in duplicated raw traces,
+stale hypotheses, and unrelated incidents. Terra measured a reduction from
+3,090 input words to a 726-word provenance-linked packet, or 76.50 percent, and
+retained the authoritative `CURSOR-3`, `OBS-17`, handshake, and event IDs. Sol
+did not reread the evidence corpus in either arm. Its measured traffic fell by
+14.3 percent with Terra, but it used two tool calls before its first edit versus
+one in the baseline. Both arms passed every external acceptance check without a
+repair or Astra escalation.
+
+The reduction did not amortize the orchestration cost: total measured traffic
+rose by 53.0 percent and wall time rose by 53.0 percent. Root traffic also rose
+by 41.4 percent because Luna still had to read and package the complete evidence
+before Terra could transform it. Coarse weekly account usage moved from 11
+percent before both arms to 12 percent afterward and cannot be attributed
+precisely between arms. Rollout metadata confirmed Luna xHigh, Terra Medium, and
+Sol Medium; it did not emit service-tier fields, so Fast/Standard remain pinned
+configuration values rather than telemetry-confirmed values.
+
+Conclusion from the refined protocol: the Expected-Compression Gate works and
+Terra can produce a materially smaller, provenance-preserving packet, but this
+architecture still loses on total traffic and latency when Luna has already
+read and understood the raw corpus. Retain the Luna-to-Sol default. Keep this
+profile opt-in only for cases where the packet will be reused by several costly
+downstream owners, or where compaction is expected to prevent a repair or Astra
+escalation; a single bounded Sol implementation does not justify the extra hop.
 
 ### Preliminary context-heavy A/B result (September 11, 2026)
 
@@ -256,7 +320,7 @@ second at 18:19. These single samples are directional, not statistically stable.
 | Repair follow-ups | 0 | 1 |
 | Astra escalations | 0 | 0 |
 
-The conditional gate fired for multiple component/instruction scopes and for
+The first-protocol conditional gate fired for multiple component/instruction scopes and for
 schema/API/generated-contract/documentation coupling. Terra returned roughly
 1,046 words of assistant output, so this run did not demonstrate meaningful
 packet compaction. Sol performed more discovery before its first edit, total
@@ -276,9 +340,10 @@ configuration values rather than telemetry-confirmed values. Coarse weekly
 account usage moved from 10% before both arms to 11% after both arms and cannot
 be attributed precisely between arms.
 
-Conclusion: retain the current Luna-to-Sol default. Keep conditional Terra as an
-opt-in experiment for additional medium/large real tasks; this run improved the
-hidden acceptance score but failed the cost, latency, packet-compaction, and Sol
+Conclusion from the first protocol: retain the current Luna-to-Sol default. The
+conditional profile remains opt-in, and the refined protocol must be measured
+before drawing any second-run conclusion. The first run improved the hidden
+acceptance score but failed the cost, latency, packet-compaction, and Sol
 discovery success criteria.
 
 ## Experimental Terra-Luna-Sol-Astra profile
