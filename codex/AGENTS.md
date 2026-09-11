@@ -42,6 +42,11 @@ worker:
   owns technical planning and implementation inside the supplied contract.
 - Use `standard_senior_executor` (Sol Medium, Standard tier) as the primary
   implementation owner after Luna builds the Context Packet.
+- Keep the completed Sol thread open and idle while Luna performs acceptance.
+  Send one ordinary evidence-rich repair follow-up to that same thread when
+  needed, and close Sol only after acceptance succeeds or before starting
+  Astra. This is an orchestration instruction validated by local rollout
+  evidence, not a claim that the runtime guarantees thread persistence.
 - For a Heavy review, give `standard_senior_executor` one explicitly read-only
   review package. Sol inspects the supplied diff and relevant tests, reports
   findings with evidence, and must not modify files. Luna validates and
@@ -343,6 +348,28 @@ This is the normal route unless another explicit CLI profile overrides its
 developer instructions. Do not spawn either implementation model as an untyped/default agent in this
 variant, because it could inherit the root's Fast tier. Verify effective service
 tiers from rollout data before drawing conclusions from the experiment.
+
+#### Default-route acceptance and repair
+
+In this normal route, Sol treats the Context Packet as working context. It may
+open exact edit locations and directly connected definitions. Before broader
+discovery, it must name the specific packet field that is incomplete,
+contradictory, stale, or insufficient for a material design decision and explain
+why that deficiency requires expanding the search.
+
+Keep the completed Sol thread open and idle while Luna owns acceptance. Luna
+inspects the resulting diff and every affected cross-contract boundary, then
+runs proportionate deterministic tests covering the observable criteria and
+material edge cases. It distinguishes product
+failures from harness or environment limitations.
+
+For one ordinary implementation defect, Luna sends an evidence-rich repair
+delta to the same still-open Sol thread. The delta includes the failed
+criterion, exact expected-versus-observed behavior, concrete output and paths,
+and the narrow recheck to run. Luna then reruns the affected acceptance checks.
+Close Sol only after acceptance succeeds, or before starting Astra for a
+genuinely hard unresolved package under the escalation gate. Do not add a
+separate tester or verifier child to this default route.
 
 ### Context Packet contract
 

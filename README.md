@@ -44,7 +44,8 @@ The active default is `gpt-5.6-luna` with xHigh reasoning on Fast service tier;
 both `service_tier = "fast"` and `[features].fast_mode = true` are set.
 For substantial implementation, Luna compacts relevant evidence into a Context
 Packet and gives it to one fresh Standard-tier Sol Medium agent. Luna owns final
-acceptance; Standard-tier Astra Medium is used only for a narrowly isolated
+acceptance while keeping Sol open and idle for one evidence-rich ordinary repair
+if needed; Standard-tier Astra Medium is used only for a narrowly isolated
 remainder after concrete escalation evidence. The default permits one live
 spawned thread and a V1 maximum depth of one. Approval remains `never`, and the
 sandbox remains `danger-full-access`.
@@ -73,6 +74,22 @@ fresh Sol context. Implementation packages receive a lightweight worker-owned
 check; review packages are explicitly read-only and report evidence-backed
 findings. Luna owns acceptance in both cases. Sol and Astra never overlap, and
 neither may spawn another agent.
+
+Sol treats the Context Packet as working context: it may inspect exact edit
+locations and directly connected definitions, while broader repeat discovery
+requires identifying a specific incomplete, contradictory, stale, or
+decision-insufficient packet field. During acceptance, Luna keeps Sol open and
+idle, inspects the diff and affected contract boundaries, and runs proportionate
+deterministic tests and material edge cases. Luna separates product failures
+from harness or environment limitations and, for one ordinary defect, returns
+exact expected-versus-observed evidence to the same Sol thread before rerunning
+the affected checks. Sol closes after acceptance succeeds or before an Astra
+escalation; the default route does not add a separate tester.
+
+These lifecycle, packet-discipline, and acceptance improvements were promoted
+to the normal route after two controlled conditional-Terra A/B runs. The
+conditional Terra profile remains opt-in: the default is still
+Luna → Sol → Luna acceptance → optional Astra, with no Terra stage.
 
 In the default Luna route, the first Sol spawn is mandatory for every
 substantive implementation or review. Luna may work directly only on the
