@@ -32,6 +32,9 @@ configuration snapshot updated on September 11, 2026.
 - `codex/luna-terra-context-sol-astra.config.toml` — an opt-in comparison route
   that conditionally inserts Terra Medium Fast context compaction before the
   same Standard Sol and evidence-gated Astra owners.
+- `codex/terra-fast-sol-astra-standard.config.toml` — an opt-in comparison route
+  with a Terra Medium Fast root directly preparing the Context Packet for
+  Standard Sol, Terra-owned acceptance, and evidence-gated Standard Astra.
 - `codex/terra-luna-sol-astra.config.toml` — an opt-in sequential experiment
   with Terra Medium Fast as glue, dedicated Luna Medium Fast evidence and
   acceptance roles, Standard Sol implementation, and evidence-gated Astra.
@@ -362,6 +365,79 @@ conditional profile remains opt-in, and the refined protocol must be measured
 before drawing any second-run conclusion. The first run improved the hidden
 acceptance score but failed the cost, latency, packet-compaction, and Sol
 discovery success criteria.
+
+## Experimental Terra Fast to Standard Sol profile
+
+`codex/terra-fast-sol-astra-standard.config.toml` isolates the effect of using
+Terra Medium Fast as the root while preserving the default route's direct
+Context Packet to Standard Sol implementation structure. Light work remains in
+Terra. For Heavy work, Terra performs one bounded evidence pass, directly forms
+a provenance-preserving Context Packet, and delegates exactly once to Standard
+Sol Medium. Terra keeps Sol open through root-owned acceptance for at most one
+evidence-rich repair. Standard Astra Medium is available only after Sol provides
+concrete evidence for a narrow hard remainder and Terra closes Sol first. This
+route has no Luna child, tester, explorer, context compactor, second opinion, or
+nested delegation.
+
+Start a fresh isolated task with:
+
+```sh
+codex --profile terra-fast-sol-astra-standard -C /absolute/path/to/project \
+  "Implement the bounded task described here."
+```
+
+### Preliminary Terra-root A/B result (September 11, 2026)
+
+One fresh run per arm used the same clean fixture commit
+`179111c3c802e71a78ccb46ba1008cf687e14d80` and identical `TASK.md` prompt. The
+Terra-root experiment ran first and the Luna-root baseline ran second. Both arms
+used one Standard Sol Medium implementer, with no repair follow-up and no Astra
+escalation.
+
+| Metric | Terra Medium Fast → Sol Standard | Luna xHigh Fast → Sol Standard |
+|---|---:|---:|
+| Wall time | **122.83 s** | 200.45 s |
+| Public tests | 4/4 | 4/4 |
+| External acceptance | 8/8 | 8/8 |
+| Root uncached input | 36,853 | 51,143 |
+| Root output | 4,865 | 9,055 |
+| Root measured traffic | **41,718** | 60,198 |
+| Sol uncached input | 26,410 | 20,641 |
+| Sol output | 3,357 | 4,900 |
+| Sol measured traffic | 29,767 | **25,541** |
+| Total measured traffic | **71,485** | 85,739 |
+| Sol tool calls before first production edit | 2 | 3 |
+| Repair follow-ups | 0 | 0 |
+| Astra escalations | 0 | 0 |
+
+Rollout metadata confirmed `gpt-5.6-terra` at Medium reasoning for the
+experimental root, `gpt-5.6-luna` at xHigh reasoning for the baseline root, and
+`gpt-5.6-sol` at Medium reasoning for both implementation children. The rollout
+tier field was null, so Fast roots and Standard/default Sol remain configuration
+pins rather than telemetry-confirmed tiers.
+
+Both Sol runs limited inspection to exact code and tests and did not reread the
+raw evidence corpus. During acceptance, the Terra root initially wrote an
+incorrect focused probe assumption about a legacy scalar checkpoint. It
+correctly classified the resulting failure as a harness error, corrected the
+probe without a Sol repair, and then passed. The Luna-root arm additionally
+prevalidated the full event batch so a later invalid cursor could not cause
+partial mutation. The external eight-test suite does not cover multi-event
+atomicity, so this is a qualitative robustness difference rather than a scored
+acceptance advantage.
+
+Compared with the Luna-root baseline, the Terra-root route used 16.62 percent
+less total measured traffic and completed 38.72 percent faster. Terra root
+traffic was 30.70 percent lower, while its Sol traffic was 16.55 percent higher.
+Scored quality was identical. The coarse account quota display was 13 percent
+before and after both runs, so it cannot attribute consumption to either arm.
+
+This preliminary run meets the experiment's one-run success thresholds: equal
+acceptance, more than 15 percent lower total traffic, lower wall time, and no
+added repair or escalation. Keep the profile opt-in and do not replace the
+default after one fixture. The next confirmation should use one medium or large
+real context-heavy task and explicitly test multi-event atomicity and acceptance
+quality.
 
 ## Experimental Terra-Luna-Sol-Astra profile
 

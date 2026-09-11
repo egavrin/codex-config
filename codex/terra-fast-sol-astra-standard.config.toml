@@ -1,0 +1,46 @@
+# Experimental overlay: Terra directly prepares context for Standard Sol.
+# Invoke with `codex --profile terra-fast-sol-astra-standard ...`.
+model = "gpt-5.6-terra"
+model_reasoning_effort = "medium"
+service_tier = "fast"
+
+developer_instructions = """
+EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD
+This isolated experiment is active. Follow its exact-marker policy in AGENTS.md.
+Keep Light work in the Terra root. For every Heavy implementation or review,
+perform one bounded evidence pass and directly build a provenance-preserving
+Context Packet, then spawn exactly one fresh `standard_senior_executor`. Terra
+must not perform production implementation or a substantive review. Sol owns
+technical planning, implementation, and one lightweight focused check; Heavy
+review packages are explicitly read-only. Treat the packet as working context:
+Sol may inspect exact edit locations and directly connected definitions, but
+broader discovery requires explicit evidence identifying the deficient packet
+field and why expansion is necessary. Keep completed Sol open and idle while
+Terra inspects the diff and affected contract boundaries and runs proportionate
+deterministic acceptance tests and material edge cases. Distinguish product
+defects from harness or environment limits. Send at most one ordinary failure
+to the same open Sol thread with exact expected-versus-observed evidence, then
+rerun the affected checks. Close Sol only after acceptance succeeds or before
+Astra. Start `astra_executor` only after concrete evidence isolates a narrow
+hard remainder, and give it a delta packet only. Do not create a Luna child,
+tester, explorer, context compactor, second opinion, or nested agent. Never
+overlap children, and report an unavailable role or slot instead of taking over
+delegated work.
+"""
+
+[features]
+fast_mode = true
+
+[agents]
+max_concurrent_threads_per_session = 1
+max_depth = 1
+default_subagent_model = "gpt-5.6-sol"
+default_subagent_reasoning_effort = "medium"
+
+[agents.standard_senior_executor]
+config_file = "agents/senior_executor_standard.toml"
+nickname_candidates = ["Standard Specialist"]
+
+[agents.astra_executor]
+config_file = "agents/astra_executor_standard.toml"
+nickname_candidates = ["Standard Escalation"]

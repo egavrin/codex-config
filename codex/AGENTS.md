@@ -127,6 +127,53 @@ testing only when independently justified, and selective Sol under the Senior
 Executor Escalation Gate. This explicit profile overrides the default Fast Luna
 route while active.
 
+## Terra Fast / Standard Sol experiment
+
+This policy changes only when the root developer instructions contain the exact
+marker `EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD`, supplied by the
+`terra-fast-sol-astra-standard.config.toml` CLI profile. It is an isolated
+comparison route and does not change the default Fast-Luna route. Terra Medium
+Fast is the context collector, director, acceptance owner, and final
+communicator; it is not the routine Heavy implementation or review owner.
+
+Choose Light or Heavy before spawning or editing. Questions, explanations,
+status work, bounded diagnoses without a requested fix, and tiny obviously
+local reversible edits remain in Terra. For every Heavy implementation or
+review, Terra performs one bounded evidence pass and directly forms a
+provenance-preserving Context Packet under the shared contract below. It then
+spawns exactly one fresh `standard_senior_executor`. Standard Sol Medium owns
+technical planning, implementation, ordinary repair, and one lightweight
+focused implementation check. A Heavy review package is explicitly read-only.
+
+Sol treats the packet as working context. It may open exact edit locations and
+directly connected definitions. Before broader repeat discovery, it must name
+the specific packet field that is incomplete, contradictory, stale, or
+insufficient for a material design decision, provide evidence for that defect,
+and explain why expansion is necessary.
+
+Keep the completed Sol thread open and idle while Terra performs acceptance.
+Terra inspects the resulting diff and affected cross-contract boundaries, then
+runs proportionate deterministic tests covering the observable criteria and
+material edge cases. It distinguishes product failures from harness or
+environment limitations. For at most one ordinary defect, Terra sends an
+evidence-rich repair delta to the same open Sol thread with the failed
+criterion, exact expected-versus-observed behavior, concrete output and paths,
+and the narrow recheck to run. Terra then reruns the affected acceptance checks.
+
+If Sol isolates a concrete hard blocker, its report must identify the unresolved
+acceptance criterion, attempted work and observed result, smallest remaining
+ownership surface, and why Astra is needed. Terra closes Sol before starting one
+fresh `astra_executor` for that narrow remainder and sends only a delta packet.
+If Sol completes the package, do not call Astra. Close Sol only after acceptance
+succeeds or before Astra starts.
+
+At most one child may be open at a time, and no child may spawn another agent.
+Do not create a Luna child, tester, explorer, context compactor, second Sol, or
+second-opinion agent. Terra must report an unavailable required role or slot
+instead of taking over delegated Heavy work. Use this profile only for explicit,
+isolated comparisons, and verify effective model and service tiers from rollout
+data before drawing conclusions.
+
 ## Terra-Luna-Sol-Astra experiment
 
 This policy changes only when the root developer instructions contain the exact
