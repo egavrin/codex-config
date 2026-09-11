@@ -439,6 +439,96 @@ default after one fixture. The next confirmation should use one medium or large
 real context-heavy task and explicitly test multi-event atomicity and acceptance
 quality.
 
+### Real-task case A: symlink ancestry safety
+
+Clean arms used seed `7882b0320fc2fcc3cbd8db0b6ab953ad033ce7ca`
+and identical prompts. The Luna-root arm ran first and the Terra-root arm ran
+second.
+
+| Metric | Terra Medium Fast → Sol Standard | Luna xHigh Fast → Sol Standard |
+|---|---:|---:|
+| Wall time | **318.49 s** | 547.34 s |
+| Root measured traffic | **65,637** | 165,327 |
+| Sol measured traffic | **69,986** | 99,934 |
+| Total measured traffic | **135,623** | 265,261 |
+| Repair follow-ups | 1 | 1 |
+| Astra escalations | 0 | 0 |
+| Transaction tests | 4/4 | 6/6 |
+| Full workflow tests | 61/61 | 63/63 |
+| Token-report tests | 8/8 | 8/8 |
+| External acceptance | **7/8** | 3/8 |
+
+The Luna arm's repair addressed a macOS path alias, but its final protection
+depended on callers supplying explicit `owned_roots`. It therefore missed all
+five direct transaction-API cases involving an existing parent below a higher
+ancestor symlink. The Terra arm caught all five intended symlink escapes, but
+over-rejected an ordinary macOS temporary path because the system alias
+`/var → /private/var` appeared in its ancestry. That failure is a real
+portability defect, not a harness error. Terra used 48.87 percent less total
+measured traffic and completed 41.81 percent faster; its quality was higher but
+still imperfect.
+
+### Real-task case B: observed runtime metadata reporting
+
+Clean arms used seed `db084644ecd4303abe0447d7a05c37850d159674` and
+identical prompts. The valid Terra-root arm ran first and the isolated Luna-root
+arm ran second.
+
+| Metric | Terra Medium Fast → Sol Standard | Luna xHigh Fast → Sol Standard |
+|---|---:|---:|
+| Wall time | **235.90 s** | 355.58 s |
+| Root measured traffic | **32,481** | 112,867 |
+| Sol measured traffic | 60,503 | **47,228** |
+| Total measured traffic | **92,984** | 160,095 |
+| Repair follow-ups | 0 | 0 |
+| Astra escalations | 0 | 0 |
+| Token-report tests | 10/10 | 10/10 |
+| Full workflow tests | 58/58 | 58/58 |
+| External acceptance | 4/4 | 4/4 |
+
+Terra used 41.92 percent less total measured traffic and completed 33.66
+percent faster with identical scored quality. A first Luna attempt is excluded
+from every comparison because its root read the completed sibling Terra diff,
+creating benchmark protocol leakage. It was interrupted after 108.48 seconds
+and 110,969 root-reported traffic. The valid Luna rerun used an isolated
+checkout.
+
+The optional repository `companion` role was unavailable during the valid Luna
+run (`unknown agent_type companion`), so Luna performed the documentation intake
+directly. Terra followed its experimental route without a Companion as designed.
+This is a runtime limitation to retain with the result, not an implementation
+failure.
+
+### Three-pair aggregate
+
+The valid evidence now consists of the relay fixture above and the two real-task
+cases:
+
+| Pair | Terra traffic reduction | Terra wall-time reduction | Acceptance |
+|---|---:|---:|---|
+| Relay reconciliation | 16.62% | 38.72% | Equal, 8/8 each |
+| Symlink ancestry safety | 48.87% | 41.81% | Terra higher, 7/8 vs 3/8 |
+| Runtime metadata report | 41.92% | 33.66% | Equal, 4/4 each |
+| Median | **41.92%** | **38.72%** | Terra never lower |
+
+Repairs were identical within every pair: 0/0, 1/1, and 0/0. No valid arm used
+Astra. Acceptance was equal in two pairs and higher for Terra in one, although
+the security result remains imperfect at 7/8. The account's coarse quota display
+moved from 14 percent before the four-arm real-task experiment to 16 percent
+afterward; that interval includes the excluded contaminated Luna attempt and
+cannot be attributed to an individual arm.
+
+The predeclared promotion threshold is met empirically across these three valid
+pairs. Changing the default remains a separate explicit rollout decision: the
+macOS alias portability defect and sibling-arm isolation failure should be
+addressed first. A promotion should add profile policy and acceptance language
+that distinguishes platform path aliases from unsafe in-tree symlinks and
+forbids reading sibling arms during benchmarks. A more conservative alternative
+is one final isolated medium or large real context-heavy task before changing
+the default. Rollout `service_tier` was null throughout, so Fast and
+Standard/default tiers remain configuration pins rather than telemetry-confirmed
+values.
+
 ## Experimental Terra-Luna-Sol-Astra profile
 
 `codex/terra-luna-sol-astra.config.toml` tests a strictly sequential route in
