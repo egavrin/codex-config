@@ -2,11 +2,11 @@
 
 ## Objective
 
-Use the root model for understanding the request, architecture, decomposition,
-hard decisions, integration, acceptance, and communication. Delegate bounded
-repository exploration, implementation, and independent verification to the
-configured lower-cost roles when the task is substantial enough to justify the
-coordination overhead.
+Use the root model for understanding the request, bounded evidence collection,
+architecture, decomposition, hard decisions, integration, acceptance, and
+communication. In the default route, delegate one bounded implementation or
+substantive read-only review package to Standard Sol. Exact experimental marker
+sections may define other role sequences.
 
 Optimize for completing the user's task with fewer root-model rollouts and less
 repeated root context. Do not optimize token usage by weakening correctness,
@@ -33,7 +33,7 @@ security, architecture, regression, or cross-component review when the diff or
 risk makes one independent Sol pass materially more reliable than a few focused
 root reads.
 
-In the default `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD` route, the root is the
+In the default `EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD` route, the root is the
 context collector, director, and acceptance owner, not the routine production
 worker:
 
@@ -41,20 +41,29 @@ worker:
   boundaries, escalation, integration, acceptance, and user communication. Sol
   owns technical planning and implementation inside the supplied contract.
 - Use `standard_senior_executor` (Sol Medium, Standard tier) as the primary
-  implementation owner after Luna builds the Context Packet.
-- Keep the completed Sol thread open and idle while Luna performs acceptance.
+  implementation owner after Terra builds the Context Packet.
+- Sol treats the packet as working context and may inspect exact edit locations
+  and directly connected definitions. Broader discovery requires naming the
+  deficient packet field, evidence for the deficiency, and why expansion is
+  necessary.
+- Keep the completed Sol thread open and idle while Terra performs acceptance.
   Send one ordinary evidence-rich repair follow-up to that same thread when
   needed, and close Sol only after acceptance succeeds or before starting
   Astra. This is an orchestration instruction validated by local rollout
   evidence, not a claim that the runtime guarantees thread persistence.
+- Terra acceptance inspects the diff and affected cross-contract boundaries,
+  runs proportionate deterministic tests and material edge cases, distinguishes
+  product failures from harness or environment limitations, and includes exact
+  expected-versus-observed evidence in any repair delta.
 - For a Heavy review, give `standard_senior_executor` one explicitly read-only
   review package. Sol inspects the supplied diff and relevant tests, reports
-  findings with evidence, and must not modify files. Luna validates and
+  findings with evidence, and must not modify files. Terra validates and
   integrates the findings. Do not create a second reviewer merely for another
   opinion.
 - Use `astra_executor` only after Sol returns the concrete escalation evidence
-  defined below. Do not create an explorer, tester, Terra, second Sol, untyped
-  agent, or second-opinion agent in the default route.
+  defined below. Do not create a Luna child, explorer, tester, context
+  compactor, second Sol, untyped agent, or second-opinion agent in the default
+  route.
 - Never run more than one spawned thread concurrently in the default route.
   Default-route subagents may not create agents.
 
@@ -65,7 +74,7 @@ also paying coordination cost.
 
 ### Mandatory default-route delegation gate
 
-When `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD` is active, delegation is a
+When `EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD` is active, delegation is a
 required workflow step, not a suggestion. Before any production edit, classify
 the task as Light or Heavy. A substantive implementation is Heavy when it needs
 repository discovery plus implementation, changes behavior across an interface
@@ -75,11 +84,11 @@ focused root tool calls. The Heavy review criteria above apply unchanged.
 
 For every Heavy implementation or review, the root must build the Context
 Packet and spawn exactly one fresh `standard_senior_executor` before doing the
-delegated work. The Luna root must not start, duplicate, or take over production
-implementation, and must not perform the substantive review itself. A Heavy
-review capsule must be explicitly read-only. If the required role or agent slot
-is unavailable, report the runtime limitation instead of silently doing the
-delegated package in Luna.
+delegated work. The Terra root must not start, duplicate, or take over Heavy
+production implementation, and must not perform the substantive review itself.
+A Heavy review capsule must be explicitly read-only. If the required role or
+agent slot is unavailable, report the runtime limitation instead of silently
+doing the delegated package in Terra.
 
 Skip delegation only for a question or explanation, a bounded diagnosis when no
 fix was requested, a tiny obviously local and reversible edit, a narrow review
@@ -90,8 +99,8 @@ it does not make this mandatory first spawn optional.
 
 ## Root Reasoning Presets
 
-Use the configured Luna xHigh Fast preset as the default for both Light and Heavy
-route entry. Light tasks stay with Luna. For Heavy tasks, Luna gathers and
+Use the configured Terra Medium Fast preset as the default for both Light and
+Heavy route entry. Light tasks stay with Terra. For Heavy tasks, Terra gathers and
 compacts relevant context, delegates implementation to Standard Sol Medium, and
 owns final acceptance. Standard Astra Medium is available only after concrete
 evidence identifies a narrow unresolved package.
@@ -111,75 +120,28 @@ marker `EXPERIMENT: ASTRA_SOL_RESEARCH`, supplied by the
 `astra-sol-research.config.toml` CLI profile. In that experiment, Astra Extra
 High is the root and Sol Medium is the default primary subagent for substantial
 coding and difficult diagnosis. Terra is used only when the task capsule
-explicitly assigns Terra. This marker takes precedence over the base-route
-Terra-first selection rule while the profile is active; it does not replace
+explicitly assigns Terra. This marker takes precedence over the default
+Terra-root route while the profile is active; it does not replace
 unrelated routing, verification, safety, or completion instructions.
 
 `agents.max_depth` is a V1 guard only. Multi-agent V2 currently does not enforce
 it, so these explicit capsule and slot rules are the operative nesting limit.
 
-## Astra-Terra Standard fallback profile
+## Astra-Terra Standard comparison profile
 
 The marker `PROFILE: ASTRA_TERRA_STANDARD`, supplied by
-`astra-terra-standard.config.toml`, restores the previous default: Astra Medium
+`astra-terra-standard.config.toml`, provides a historical comparison: Astra Medium
 root on Standard tier, Terra High for clear bounded implementation, Luna High
 testing only when independently justified, and selective Sol under the Senior
-Executor Escalation Gate. This explicit profile overrides the default Fast Luna
+Executor Escalation Gate. This explicit profile overrides the default Fast Terra
 route while active.
-
-## Terra Fast / Standard Sol experiment
-
-This policy changes only when the root developer instructions contain the exact
-marker `EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD`, supplied by the
-`terra-fast-sol-astra-standard.config.toml` CLI profile. It is an isolated
-comparison route and does not change the default Fast-Luna route. Terra Medium
-Fast is the context collector, director, acceptance owner, and final
-communicator; it is not the routine Heavy implementation or review owner.
-
-Choose Light or Heavy before spawning or editing. Questions, explanations,
-status work, bounded diagnoses without a requested fix, and tiny obviously
-local reversible edits remain in Terra. For every Heavy implementation or
-review, Terra performs one bounded evidence pass and directly forms a
-provenance-preserving Context Packet under the shared contract below. It then
-spawns exactly one fresh `standard_senior_executor`. Standard Sol Medium owns
-technical planning, implementation, ordinary repair, and one lightweight
-focused implementation check. A Heavy review package is explicitly read-only.
-
-Sol treats the packet as working context. It may open exact edit locations and
-directly connected definitions. Before broader repeat discovery, it must name
-the specific packet field that is incomplete, contradictory, stale, or
-insufficient for a material design decision, provide evidence for that defect,
-and explain why expansion is necessary.
-
-Keep the completed Sol thread open and idle while Terra performs acceptance.
-Terra inspects the resulting diff and affected cross-contract boundaries, then
-runs proportionate deterministic tests covering the observable criteria and
-material edge cases. It distinguishes product failures from harness or
-environment limitations. For at most one ordinary defect, Terra sends an
-evidence-rich repair delta to the same open Sol thread with the failed
-criterion, exact expected-versus-observed behavior, concrete output and paths,
-and the narrow recheck to run. Terra then reruns the affected acceptance checks.
-
-If Sol isolates a concrete hard blocker, its report must identify the unresolved
-acceptance criterion, attempted work and observed result, smallest remaining
-ownership surface, and why Astra is needed. Terra closes Sol before starting one
-fresh `astra_executor` for that narrow remainder and sends only a delta packet.
-If Sol completes the package, do not call Astra. Close Sol only after acceptance
-succeeds or before Astra starts.
-
-At most one child may be open at a time, and no child may spawn another agent.
-Do not create a Luna child, tester, explorer, context compactor, second Sol, or
-second-opinion agent. Terra must report an unavailable required role or slot
-instead of taking over delegated Heavy work. Use this profile only for explicit,
-isolated comparisons, and verify effective model and service tiers from rollout
-data before drawing conclusions.
 
 ## Terra-Luna-Sol-Astra experiment
 
 This policy changes only when the root developer instructions contain the exact
 marker `EXPERIMENT: TERRA_LUNA_SOL_ASTRA`, supplied by the
 `terra-luna-sol-astra.config.toml` CLI profile. The marker overrides the default
-Fast Luna route while selected. Terra Medium Fast is lightweight glue, Context
+Fast Terra route while selected. Terra Medium Fast is lightweight glue, Context
 Packet compactor, acceptance integrator, and final communicator; it is not the
 routine investigator, technical planner, implementer, or acceptance runner.
 
@@ -239,7 +201,7 @@ from rollout data before drawing conclusions.
 This policy changes only when the root developer instructions contain the exact
 marker `EXPERIMENT: LUNA_TERRA_CONTEXT_SOL_ASTRA`, supplied by the
 `luna-terra-context-sol-astra.config.toml` CLI profile. It is an isolated
-comparison route; it does not change the default Fast-Luna route or the full
+comparison route; it does not change the default Fast-Terra route or the full
 Terra-root `TERRA_LUNA_SOL_ASTRA` experiment.
 
 Light work remains in the Luna xHigh Fast root. For every Heavy implementation
@@ -382,51 +344,16 @@ only for a narrow unresolved package after evidence-based escalation.
   Astra escalation occurs; avoiding unnecessary Astra calls is a primary success
   criterion.
 
-### Luna Fast / implementation Standard variant
-
-The marker `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD`, supplied by the top-level
-default configuration and also available through the
-`luna-fast-sol-astra-standard.config.toml` profile, uses the same Context Packet,
-Sol-first ownership, evidence-gated Astra escalation, single-live-agent limit,
-and Luna acceptance policy. Its only intended experimental difference is service
-tier: the Luna root uses `fast`, while both `standard_senior_executor` Sol and the optional
-`astra_executor` Astra use role configurations with `service_tier = "default"`.
-This is the normal route unless another explicit CLI profile overrides its
-developer instructions. Do not spawn either implementation model as an untyped/default agent in this
-variant, because it could inherit the root's Fast tier. Verify effective service
-tiers from rollout data before drawing conclusions from the experiment.
-
-#### Default-route acceptance and repair
-
-In this normal route, Sol treats the Context Packet as working context. It may
-open exact edit locations and directly connected definitions. Before broader
-discovery, it must name the specific packet field that is incomplete,
-contradictory, stale, or insufficient for a material design decision and explain
-why that deficiency requires expanding the search.
-
-Keep the completed Sol thread open and idle while Luna owns acceptance. Luna
-inspects the resulting diff and every affected cross-contract boundary, then
-runs proportionate deterministic tests covering the observable criteria and
-material edge cases. It distinguishes product
-failures from harness or environment limitations.
-
-For one ordinary implementation defect, Luna sends an evidence-rich repair
-delta to the same still-open Sol thread. The delta includes the failed
-criterion, exact expected-versus-observed behavior, concrete output and paths,
-and the narrow recheck to run. Luna then reruns the affected acceptance checks.
-Close Sol only after acceptance succeeds, or before starting Astra for a
-genuinely hard unresolved package under the escalation gate. Do not add a
-separate tester or verifier child to this default route.
-
 ### Context Packet contract
 
-For all Luna-root experiments above, Luna gathers decision-relevant facts before
-the implementation agent starts. In the Terra-Luna-Sol-Astra experiment, the
-Luna collector gathers those facts in an Evidence Dossier and Terra performs the
-compaction. In either case, the packet is a task-proportional compaction of the
-relevant context, not a technical design. It has no fixed word limit: include
-all material evidence needed for the implementation agent to work efficiently,
-but exclude noise, duplication, and unrelated history. Include:
+For the default Terra route and the Luna-root experiments above, the root
+gathers decision-relevant facts before the implementation agent starts. In the
+Terra-Luna-Sol-Astra experiment, the Luna collector gathers those facts in an
+Evidence Dossier and Terra performs the compaction. In every case, the packet is
+a task-proportional compaction of the relevant context, not a technical design.
+It has no fixed word limit: include all material evidence needed for the
+implementation agent to work efficiently, but exclude noise, duplication, and
+unrelated history. Include:
 
 1. The user's objective and observable acceptance criteria.
 2. Exact repository root, relevant files, symbols, interfaces, and component
@@ -439,10 +366,11 @@ but exclude noise, duplication, and unrelated history. Include:
 7. Known uncertainties stated as questions for the implementer to resolve.
 
 Do not include the full conversation, broad file dumps, repeated instructions,
-speculative implementation steps, or an architecture chosen by Luna. Luna may
-use batched read-only searches and focused commands, but must not edit production
-files during collection. Treat cited packet facts as the working context. The
-implementer should not repeat Luna's broad discovery or re-read every cited file.
+speculative implementation steps, or an architecture chosen by the collecting
+root. The root may use batched read-only searches and focused commands, but must
+not edit Heavy production files during collection. Treat cited packet facts as
+the working context. The implementer should not repeat the root's broad
+discovery or re-read every cited file.
 It may open the exact edit location and directly connected definitions before
 changing them, or investigate further when the packet is incomplete,
 contradictory, stale, or a material design decision cannot safely be made from
@@ -452,9 +380,11 @@ Implementation-owned validation must be lightweight: run the narrowest cheap
 smoke test, syntax/type check, or directly affected test that can catch an
 obvious defect. Do not run the full suite, broad integration tests, or repeated
 model review unless the task cannot be implemented responsibly without them.
-In Luna-root experiments, Luna owns the proportionate acceptance suite after
-implementation. In the Terra-Luna-Sol-Astra experiment, the dedicated Luna
-acceptance verifier owns that suite and reports its evidence to Terra.
+After implementation, the coordinating root owns the proportionate acceptance
+suite unless an exact experimental policy assigns a dedicated verifier. In the
+default route, Terra owns acceptance. In the Terra-Luna-Sol-Astra experiment,
+the dedicated Luna acceptance verifier owns that suite and reports its evidence
+to Terra.
 
 If Sol supplies justified Astra escalation evidence, the root sends Astra a
 delta packet containing the unresolved acceptance criterion, relevant original
@@ -512,28 +442,32 @@ themselves prove that a runtime tool or sandbox profile was applied. State a
 sandbox guarantee only after verifying the effective restriction; otherwise use
 explicit model, reasoning, and behavioral constraints in the capsule.
 
-Do not start a tester while the implementation it must verify is still running.
-Wait for the relevant worker to finish, then give the tester the completed state
-and acceptance criteria. A tester must not poll, wait for, coordinate, or inspect
-the status of sibling agents. Independent packages may still run concurrently,
-subject to the two-agent limit.
+These tester and concurrent-package rules apply only to explicit experimental
+profiles that permit those roles. Do not start a tester while the implementation
+it must verify is still running. Wait for the relevant worker to finish, then
+give the tester the completed state and acceptance criteria. A tester must not
+poll, wait for, coordinate, or inspect the status of sibling agents. The default
+route never creates a tester and never has more than one child open.
 
 ## Heavy Route Entry
 
-Before implementation:
+In the default route, before implementation:
 
 1. State the intended outcome and acceptance criteria.
-2. Identify the smallest decision-critical context the root must inspect.
-3. Separate independent read-only investigation from production ownership.
-4. Form bounded packages with non-overlapping write ownership.
-5. Dispatch independent packages together when doing so reduces root turns.
+2. Perform one bounded evidence pass over the smallest decision-critical
+   context and form the Context Packet.
+3. Give exactly one bounded implementation or read-only review package to
+   `standard_senior_executor`.
+4. Keep Sol open while Terra inspects the result and runs acceptance.
+5. Close Sol after success, or before one evidence-gated Astra escalation.
 
-The root may perform a small amount of direct inspection needed to make a
-material architecture, scope, risk, or acceptance decision. Delegate broad or
-routine discovery instead of repeatedly reading the repository in the root.
+Exact experimental marker sections override this sequence only for their named
+profiles.
 
 ## Adaptive Delegation Budget
 
+This section applies only to explicit profiles that permit multiple agents or
+waves; it does not override the default route's one-child Sol-first lifecycle.
 Treat the number of subagents as an adaptive budget, not a target and not an
 absolute lifetime cap. A genuinely large task may use many agents across its
 full lifetime when each one owns a distinct package or supplies justified
@@ -566,6 +500,10 @@ not fork the full root transcript merely for convenience.
 
 Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
+
+For the default `standard_senior_executor`, use the Worker capsule structure and
+state `Research Slot: withheld`. Mandatory primary Sol ownership does not require
+Senior Executor escalation evidence. Default-route children may not delegate.
 
 ### Explorer capsule
 
@@ -625,7 +563,9 @@ the full root history.
 
 - Batch independent reads, searches, metadata checks, and other operations with
   known inputs.
-- Dispatch independent agents needed for the same decision in one batch.
+- In profiles that permit multiple agents, dispatch independent agents needed
+  for the same decision in one batch. The default route batches root reads but
+  spawns only its single Sol owner.
 - Keep dependent work and overlapping mutations sequential.
 - Wait for the relevant batch, then synthesize its results once.
 - Open another batch only when new evidence materially changes the next task or
@@ -651,13 +591,19 @@ is available.
 
 ## Implementation and Repair Ownership
 
-In Heavy, do not let the expensive root silently become the routine implementer.
+In Heavy, do not let the root silently become the routine implementer. In the
+default route, Sol owns one ordinary repair, Terra supplies the failed criterion
+and exact expected-versus-observed evidence, and Terra reruns the affected
+acceptance checks. Do not add a tester.
+
+The remaining ownership guidance applies only to experimental profiles that
+permit replacement workers or testers.
 
 - The assigned worker owns its package through ordinary implementation,
   self-check, focused repair, and revalidation.
-- If verification finds an ordinary defect, return focused evidence to the same
-  worker, then send the repair delta back to the same tester when independent
-  rechecking is warranted.
+- In experimental profiles that use a tester, if verification finds an ordinary
+  defect, return focused evidence to the same worker, then send the repair delta
+  back to the same tester when independent rechecking is warranted.
 - After one evidence-free or materially incomplete worker response, send one
   focused retry with the missing evidence or criterion.
 - After a second focused failure, replace the worker, narrow the package, or
@@ -670,9 +616,10 @@ In Heavy, do not let the expensive root silently become the routine implementer.
 
 ## Senior Executor Escalation Gate
 
-`senior_executor` is a selective base-route choice, never the default path for
-clear bounded implementation. Use at most one senior executor at a time and
-only when at least one condition is true:
+This gate applies to the optional `senior_executor` role in profiles that expose
+it. It does not apply to the default route's mandatory primary
+`standard_senior_executor`. For the optional role, use at most one senior
+executor at a time and only when at least one condition is true:
 
 - one focused Terra worker attempt produced concrete evidence that the bounded
   package exceeds Terra's reasoning capability;
@@ -697,6 +644,12 @@ Sol-primary rule supersedes this base-route gate.
 ## Verification
 
 Match verification effort to risk.
+
+In the default route, Terra owns verification and acceptance directly: inspect
+the diff and affected contracts, run proportionate deterministic checks and
+material edge cases, and distinguish product defects from harness or
+environment limitations. Do not create a tester or another model-review child.
+The remaining tester guidance applies only to explicit profiles that permit it.
 
 - Small reversible changes may rely on focused worker validation.
 - Use `tester` for substantive behavior changes, regressions, important boundary

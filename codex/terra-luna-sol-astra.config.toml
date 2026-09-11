@@ -6,7 +6,7 @@ service_tier = "fast"
 
 developer_instructions = """
 EXPERIMENT: TERRA_LUNA_SOL_ASTRA
-This experimental profile is active and overrides the default Luna-root route.
+This experimental profile is active and overrides the default Terra-root route.
 Follow the Terra-Luna-Sol-Astra policy in AGENTS.md. Act as lightweight glue,
 Context Packet compactor, and final communicator; do not perform delegated
 production work. For Heavy work, first spawn one fresh `luna_evidence_collector`

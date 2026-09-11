@@ -1,4 +1,4 @@
-# Previous default route, retained as an explicit comparison/fallback profile.
+# Historical Astra/Terra comparison profile.
 # Invoke with `codex --profile astra-terra-standard ...`.
 model = "gpt-6-astra"
 model_reasoning_effort = "medium"
