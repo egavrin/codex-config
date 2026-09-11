@@ -56,11 +56,14 @@ standard_senior_executor Sol Medium Standard   primary implementation owner
 astra_executor           Astra Medium Standard evidence-gated escalation only
 ```
 
-Small bounded tasks use Luna directly without subagents. Substantial tasks use
-one bounded discovery pass, a task-proportional Context Packet without a fixed
-word limit, one fresh Sol implementation context, a lightweight worker-owned
-check, and Luna-owned acceptance. Sol and Astra never overlap, and neither may
-spawn another agent.
+Small bounded tasks and narrow reviews use Luna directly without subagents.
+Substantial implementation tasks and material branch, pull-request, security,
+architecture, regression, or cross-component reviews use one bounded discovery
+pass, a task-proportional Context Packet without a fixed word limit, and one
+fresh Sol context. Implementation packages receive a lightweight worker-owned
+check; review packages are explicitly read-only and report evidence-backed
+findings. Luna owns acceptance in both cases. Sol and Astra never overlap, and
+neither may spawn another agent.
 
 Use `codex --profile astra-terra-standard` when a task benefits from the previous
 Astra Medium orchestrator, Terra High implementation, and an independently

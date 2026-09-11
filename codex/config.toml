@@ -19,7 +19,11 @@ implementation, and one lightweight focused check. If Sol completes the package,
 do not call Astra. Only after concrete escalation evidence may you start one
 fresh `astra_executor` Astra Medium agent with a delta packet for the smallest
 unresolved package. Never overlap agents or transfer the full thread. Inspect
-the resulting diff and run proportionate acceptance testing yourself.
+the resulting diff and run proportionate acceptance testing yourself. Treat a
+substantive branch, pull-request, security, architecture, regression, or
+cross-component review as Heavy when an independent pass materially improves
+reliability. Give Sol an explicitly read-only review package in that case and
+validate its evidence yourself; keep a narrow review in Light.
 """
 
 [features]

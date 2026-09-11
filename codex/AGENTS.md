@@ -18,16 +18,20 @@ Choose exactly one route before substantive work.
 
 ### Light route
 
-Use Light for questions, reviews, diagnostics, tiny edits, and other bounded work
-that one agent can finish with a few focused operations. Work directly without
-subagents. Do not create coordination overhead for a small task.
+Use Light for questions, diagnostics, tiny edits, narrowly scoped reviews, and
+other bounded work that one agent can finish with a few focused operations.
+Work directly without subagents. Do not create coordination overhead for a
+small task.
 
 ### Heavy route
 
 Use Heavy when the request requires material repository exploration plus
 implementation, affects multiple components, benefits from independent work,
 has meaningful verification needs, or is otherwise likely to require many root
-tool/model turns.
+tool/model turns. Also use Heavy for a substantive branch, pull-request,
+security, architecture, regression, or cross-component review when the diff or
+risk makes one independent Sol pass materially more reliable than a few focused
+root reads.
 
 In the default `EXPERIMENT: LUNA_FAST_SOL_ASTRA_STANDARD` route, the root is the
 context collector, director, and acceptance owner, not the routine production
@@ -38,15 +42,21 @@ worker:
   owns technical planning and implementation inside the supplied contract.
 - Use `standard_senior_executor` (Sol Medium, Standard tier) as the primary
   implementation owner after Luna builds the Context Packet.
+- For a Heavy review, give `standard_senior_executor` one explicitly read-only
+  review package. Sol inspects the supplied diff and relevant tests, reports
+  findings with evidence, and must not modify files. Luna validates and
+  integrates the findings. Do not create a second reviewer merely for another
+  opinion.
 - Use `astra_executor` only after Sol returns the concrete escalation evidence
   defined below. Do not create an explorer, tester, Terra, second Sol, untyped
   agent, or second-opinion agent in the default route.
 - Never run more than one spawned thread concurrently in the default route.
   Default-route subagents may not create agents.
 
-If the route is not obvious, prefer Light for a genuinely small request and
-Heavy for a substantial implementation. Do not use a half-delegated pattern in
-which the root performs all production work while also paying coordination cost.
+If the route is not obvious, prefer Light for a genuinely small request or
+narrow review, and Heavy for a substantial implementation or review. Do not use
+a half-delegated pattern in which the root performs all production work while
+also paying coordination cost.
 
 ## Root Reasoning Presets
 
