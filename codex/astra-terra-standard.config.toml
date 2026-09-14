@@ -7,7 +7,7 @@ service_tier = "default"
 developer_instructions = """
 PROFILE: ASTRA_TERRA_STANDARD
 Use Astra Medium as the root for understanding, architecture, decomposition,
-integration, acceptance, and communication. Use the Light route directly for
+integration, acceptance, and communication. Use the Direct route for
 small tasks. For substantial implementation, use Terra High as the primary
 bounded worker. Use an independent Luna High tester only when risk or important
 acceptance criteria justify its overhead. Use Sol Medium only under the shared

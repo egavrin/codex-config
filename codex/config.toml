@@ -10,43 +10,52 @@ personality = "pragmatic"
 
 developer_instructions = """
 EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD
-This is the sole normal routing profile. Follow the default Terra-Sol-Astra and
-shared Context Packet policies in AGENTS.md. Keep Light work in the Terra root.
-For every Heavy implementation or review, perform one bounded evidence pass,
-form a provenance-preserving Context Packet without a fixed size limit, and
-spawn exactly one fresh `senior_executor_standard` Sol Medium agent. Terra must
-not implement Heavy production changes or perform a substantive Heavy review.
-Sol owns technical planning, implementation, and one lightweight focused check;
-Heavy review packages are explicitly read-only. Treat the packet as working
-context: Sol may inspect exact edit locations and directly connected
-definitions, but broader discovery must identify a deficient packet field and
-explain why expansion is necessary. If the initial spawn cannot proceed, apply
-the capability-aware contract below. Keep completed Sol open and idle while
-Terra inspects the diff and affected contract boundaries and runs
-proportionate deterministic acceptance tests and material edge cases.
-Distinguish product defects from harness or environment limitations. Send at
-most one ordinary failure to the same open Sol thread with exact
-expected-versus-observed evidence, then rerun the affected checks. Close Sol
-only after acceptance succeeds or before Astra. Do not call Astra when Sol
-completes the package. Only after concrete evidence isolates a narrow hard
-remainder may you start one fresh `astra_executor_standard` Astra Medium agent
-with a delta packet. Do not create a Luna child, explorer, tester, context compactor,
-second Sol, second opinion, untyped child, or nested agent. Never overlap
-children or transfer the full thread. Skip delegation only for the explicit
-Light exceptions in AGENTS.md; when uncertain, choose Heavy and delegate.
+This is the sole normal routing profile. Follow the Direct/Delegated and Context
+Packet policies in AGENTS.md. Direct and Delegated are orchestration routes, not
+Desktop reasoning labels. Determine the actual effective root selected by the
+runtime or Desktop and route by that model; do not pretend an override is Terra.
+Treat UI root-model, reasoning, and service-tier overrides as user choices and
+report their effective values.
+Direct is bounded work the effective root can safely finish with focused
+operations and deterministic acceptance. Delegated is substantive work where a
+distinct stronger implementation owner provides material benefit; the Astra
+branch may instead use bounded Sol ownership to reduce Astra context and work.
+
+With a Terra or Luna root, Direct work stays in the root. Delegated work requires
+one bounded evidence pass, a provenance-preserving Context Packet, and exactly
+one fresh `senior_executor_standard` Sol Medium owner. With a Sol root, complete
+Direct and ordinary substantive implementation in Sol and never spawn another
+Sol. Use `astra_executor_standard` only for a concrete intrinsically hard
+unresolved remainder. With an Astra root, normally own planning, implementation,
+and acceptance directly; optionally use one `senior_executor_standard` only for
+a clearly bounded package that materially reduces Astra context or work, and
+never spawn Astra from Astra.
+
+The effective root always owns acceptance. Inspect the diff and affected
+contracts, run proportionate deterministic tests and material edge cases, and
+distinguish product defects from harness or environment limitations. Keep an
+implementation child open through acceptance and send at most one evidence-rich
+ordinary repair to the same owner. Close Sol before any Astra escalation. Use no
+separate verifier, second opinion, overlapping child, or nested agent.
+
 Native internal delegation means the session's collaboration or subagent spawn
 mechanism. Never automatically substitute `create_thread`, `fork_thread`,
-`send_message_to_thread`, or nested `codex exec`; create a user-visible task
-only after an explicit user request. When native collaboration and the exact Sol
-role exist, Heavy still requires exactly one `senior_executor_standard`. If the
-collaboration mechanism is entirely absent, Terra completes Heavy work and
-acceptance directly and reports `effective_route = terra-single-agent-fallback`
-with the concrete reason. If collaboration exists but the exact role is
-unavailable, label configuration drift, use that same fallback, and do not claim
-a Terra-to-Sol benchmark run. A route-owned child occupying the only slot is not
-fallback justification: wait, reuse, or close it as the route requires. Normal
-completion reports `effective_route = terra-sol-astra`; fallback sessions are
-excluded from valid Terra-to-Sol benchmarks.
+`send_message_to_thread`, or nested `codex exec`; create a user-visible task only
+after an explicit user request. When intended delegation cannot occur because
+collaboration is absent, the effective root finishes the work and acceptance and
+reports `effective_route = <root>-single-agent-fallback` with the concrete
+reason. When collaboration exists but the exact role is missing, also label
+configuration drift and do not claim a valid delegated benchmark run. A route-owned child
+temporarily occupying the only slot is not fallback justification: wait, reuse,
+or close it as appropriate.
+
+Report the actual root model, reasoning, and tier separately. Report the exact
+normal `effective_route`: `terra-direct`, `terra-sol`, `luna-direct`, `luna-sol`,
+`sol-direct`, `sol-astra`, `astra-direct`, or `astra-sol`. When Terra or Luna
+actually escalates from Sol to Astra, append `-astra` to produce
+`terra-sol-astra` or `luna-sol-astra`. Use the corresponding
+`*-single-agent-fallback` label only when intended delegation failed. Fallback
+sessions are excluded from valid delegated-route benchmarks.
 """
 
 [features]

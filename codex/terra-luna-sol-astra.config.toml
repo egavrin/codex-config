@@ -9,7 +9,7 @@ EXPERIMENT: TERRA_LUNA_SOL_ASTRA
 This experimental profile is active and overrides the default Terra-root route.
 Follow the Terra-Luna-Sol-Astra policy in AGENTS.md. Act as lightweight glue,
 Context Packet compactor, and final communicator; do not perform delegated
-production work. For Heavy work, first spawn one fresh
+production work. For Delegated work, first spawn one fresh
 `luna_evidence_collector_fast` to return an Evidence Dossier, compact that dossier into a noise-free Context
 Packet, and then spawn `senior_executor_standard` as the primary planner and
 implementer. Sol owns one lightweight focused check. Start

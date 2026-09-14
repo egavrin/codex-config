@@ -8,7 +8,7 @@ configuration snapshot updated on September 11, 2026.
 - `codex/config.toml` — model, MCP, plugin, trusted-project, application, and
   multi-agent settings.
 - `codex/AGENTS.md` — the global English-language guide for cost-efficient
-  orchestration, including Light and Heavy routes, compact task capsules,
+  orchestration, including Direct and Delegated routes, compact task capsules,
   batching, event-driven waits without polling, and separate implementation and
   verification ownership.
 - `codex/agents/` — `worker` (Terra High), `explorer` (Luna Medium), `tester`
@@ -40,13 +40,10 @@ configuration snapshot updated on September 11, 2026.
 
 The active default is `gpt-5.6-terra` with Medium reasoning on Fast service tier;
 both `service_tier = "fast"` and `[features].fast_mode = true` are set.
-For substantial implementation, Terra compacts relevant evidence into a Context
-Packet and gives it to one fresh Standard-tier Sol Medium agent. Terra owns final
-acceptance while keeping Sol open and idle for one evidence-rich ordinary repair
-if needed; Standard-tier Astra Medium is used only for a narrowly isolated
-remainder after concrete escalation evidence. The default permits one live
-spawned thread and a V1 maximum depth of one. Approval remains `never`, and the
-sandbox remains `danger-full-access`.
+The `senior_executor_standard` and `astra_executor_standard` role files each pin
+`service_tier = "default"`, so a Fast root selection does not make either child
+Fast. The default permits one live child and a V1 maximum depth of one. Approval
+remains `never`, and the sandbox remains `danger-full-access`.
 
 The repository intentionally excludes authentication data, tokens, task
 history, databases, memories, attachments, automations, downloaded plugins,
@@ -56,56 +53,58 @@ only its selection remains in the configuration snapshot.
 
 ## Orchestration model
 
-The default execution model is:
+Four independent choices affect a session:
 
-```text
-Root                       Terra Medium Fast     context collection and acceptance
-senior_executor_standard   Sol Medium Standard   primary implementation owner
-astra_executor_standard    Astra Medium Standard evidence-gated escalation only
-```
+| Axis | Meaning |
+|---|---|
+| Root model | The Desktop Terra, Luna, Sol, or Astra selection determines which model is the effective root. |
+| Reasoning | Desktop labels such as Light, Medium, High, and Extra High control reasoning effort; they are not task routes. |
+| Service tier | Fast or Standard/default controls rollout service tier independently of model and reasoning. |
+| Orchestration route | Direct means the effective root owns bounded work; Delegated means a distinct stronger owner materially benefits substantive work, with bounded Sol offload as the Astra-root exception. |
 
-Small bounded tasks and narrow reviews use Terra directly without subagents.
-Substantial implementation tasks and material branch, pull-request, security,
-architecture, regression, or cross-component reviews use one bounded discovery
-pass, a task-proportional Context Packet without a fixed word limit, and one
-fresh Sol context. Implementation packages receive a lightweight worker-owned
-check; review packages are explicitly read-only and report evidence-backed
-findings. Terra owns acceptance in both cases. Sol and Astra never overlap, and
-neither may spawn another agent.
+The repository default remains Terra Medium Fast. A Desktop or runtime override
+is an authoritative user choice, so routing and completion reports use the
+actual effective root rather than pretending every session is Terra. When a
+temporary override is no longer intended, select **Reset to default** before
+starting the next session, then verify the effective model, reasoning, and tier
+shown by the runtime.
 
-Sol treats the Context Packet as working context: it may inspect exact edit
-locations and directly connected definitions, while broader repeat discovery
-requires identifying a specific incomplete, contradictory, stale, or
-decision-insufficient packet field. During acceptance, Terra keeps Sol open and
-idle, inspects the diff and affected contract boundaries, and runs proportionate
-deterministic tests and material edge cases. Terra separates product failures
-from harness or environment limitations and, for one ordinary defect, returns
-exact expected-versus-observed evidence to the same Sol thread before rerunning
-the affected checks. Sol closes after acceptance succeeds or before an Astra
-escalation; the default route does not add a separate tester.
+| Effective root | Direct route | Delegated route |
+|---|---|---|
+| Terra | Terra completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_standard` only after Sol. |
+| Luna | Luna completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_standard` only after Sol. |
+| Sol | Sol completes Direct and ordinary substantive implementation itself; it never spawns Sol. | `astra_executor_standard` only for a concrete intrinsically hard unresolved remainder. |
+| Astra | Astra normally owns planning, implementation, and acceptance and never spawns Astra. | Optionally one `senior_executor_standard` for a clearly bounded package that materially reduces Astra context or work. |
+
+The effective root owns deterministic acceptance in every normal branch. Keep an
+implementation child open through acceptance and return at most one ordinary
+repair to that same owner. There is at most one live child, no nesting, no
+separate verifier, and no second-opinion child. Sol closes before a rare Astra
+escalation.
 
 Terra Medium Fast was promoted to the normal route after the three valid paired
-results documented below. The default is now Terra → Sol → Terra acceptance →
-optional Astra, with no Luna child or separate tester.
+results documented below. With the configured default root, Direct reports
+`effective_route = terra-direct`, while successful delegation to Sol reports
+`effective_route = terra-sol`. Other normal labels are `luna-direct`,
+`luna-sol`, `sol-direct`, `sol-astra`, `astra-direct`, and `astra-sol`. Report
+`terra-sol-astra` or `luna-sol-astra` applies only when that root actually
+escalates from Sol to Astra. Report the actual root model, reasoning, and tier
+separately.
 
-In the default Terra route, `[agents].enabled = true`, and the first
-`senior_executor_standard` spawn is mandatory for every substantive
-implementation or review when the session exposes native collaboration and that
-exact role. Native collaboration means the session's internal subagent spawn
-mechanism. User-visible `create_thread`, `fork_thread`, and
+For Terra- or Luna-root Delegated work, `[agents].enabled = true`, and exactly one
+`senior_executor_standard` is mandatory when the session exposes native
+collaboration and that exact role. Native collaboration means the session's
+internal subagent spawn mechanism. User-visible `create_thread`, `fork_thread`, and
 `send_message_to_thread` operations, as well as nested `codex exec`, are not
 automatic substitutes; a separate user-visible task is created only when the
 user explicitly requests one.
 
-If native collaboration is entirely absent, Terra completes Heavy work and
-acceptance directly and discloses
-`effective_route = terra-single-agent-fallback` with the reason. If
-collaboration exists but the exact role is missing, Terra also labels the
-condition as configuration drift and uses that fallback. Temporary occupation
-of the one-child slot is not fallback justification: the route waits, reuses,
-or closes its own child as appropriate. Normal completion reports
-`effective_route = terra-sol-astra`, even when Astra is unused. Fallback
-sessions are excluded from valid Terra-to-Sol benchmark comparisons.
+If intended delegation fails because collaboration is absent, the effective
+root completes the work and acceptance when possible and discloses the matching
+`effective_route = <root>-single-agent-fallback` route with the reason. A missing exact role when
+collaboration exists is also reported as configuration drift. Temporary
+occupation by a route-owned child is not fallback justification. Fallback
+sessions are excluded from valid delegated-route benchmark comparisons.
 
 The `astra-terra-standard` profile remains available only as a historical
 comparison with an Astra Medium orchestrator, Terra High implementation, and an
@@ -217,7 +216,7 @@ remainder without repeating completed Sol work.
 ## Experimental conditional Terra context profile
 
 `codex/luna-terra-context-sol-astra.config.toml` is a historical comparison
-route with a Luna xHigh Fast root, mandatory Standard Sol owner for every Heavy
+route with a Luna xHigh Fast root, mandatory Standard Sol owner for every Delegated
 package, evidence-gated Standard Astra escalation, and Luna-owned acceptance.
 Its routing variable is whether a read-only Terra Medium Fast compactor
 transforms Luna's Evidence Bundle into the Context Packet before Sol. It does
@@ -359,10 +358,10 @@ protocol. The first run improved the hidden acceptance score but failed the
 cost, latency, packet-compaction, and Sol discovery success criteria; later
 Terra-root evidence below superseded that routing decision.
 
-## Default Terra Fast to Standard Sol route
+## Configured Terra Medium Fast branch
 
 `codex/config.toml` is the single source of truth for the normal Terra Medium
-Fast route. Light work remains in Terra. For Heavy work, Terra performs one
+Fast route. Direct work remains in Terra. For Delegated work, Terra performs one
 bounded evidence pass, directly forms a provenance-preserving Context Packet,
 and delegates exactly once to Standard Sol Medium. Terra keeps Sol open through
 root-owned acceptance for at most one evidence-rich repair. Standard Astra
@@ -519,7 +518,7 @@ remain configuration pins rather than telemetry-confirmed values.
 ## Experimental Terra-Luna-Sol-Astra profile
 
 `codex/terra-luna-sol-astra.config.toml` tests a strictly sequential route in
-which Terra Medium Fast remains lightweight glue. For Heavy work, a fresh Luna
+which Terra Medium Fast remains lightweight glue. For Delegated work, a fresh Luna
 Medium Fast collector returns an evidence-only dossier; Terra compacts it into a
 Context Packet; Standard Sol Medium plans and implements; and Standard Astra
 Medium is available only for a narrow remainder after concrete Sol escalation
