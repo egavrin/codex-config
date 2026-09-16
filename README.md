@@ -51,6 +51,19 @@ system skills, and project-specific instructions or skills from other
 repositories. The assets for the selected `custom:rivet` pet are not included;
 only its selection remains in the configuration snapshot.
 
+The global guide favors the simplest maintainable solution that meets the
+requirements, existing project facilities, and suitable maintained libraries.
+It checks documentation for the project's actual API or library version when
+behavior is unfamiliar or version-sensitive. Verification remains proportional
+to risk; existing deterministic checks are not duplicated without a reason.
+
+For subagents, the guide already uses role-specific model and reasoning
+settings, `fork_turns="none"` with a self-contained Context Packet, and
+event-driven waits without routine status polling. The external suggestion
+`fork_context=false` is not the parameter used by this Codex spawn interface.
+These practices reduce avoidable overhead after a native subagent starts; they
+do not make `spawn_agent` available in a session where that mechanism is absent.
+
 ## Orchestration model
 
 Four independent choices affect a session:

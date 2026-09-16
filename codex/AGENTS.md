@@ -13,6 +13,16 @@ Optimize for completing the user's task with fewer root-model rollouts and less
 repeated root context. Do not optimize token usage by weakening correctness,
 skipping necessary verification, or producing incomplete work.
 
+## Engineering Choices
+
+Choose the simplest maintainable solution that meets the requirements. Reuse
+existing project facilities first, then consider suitable maintained libraries
+before building custom infrastructure. Weigh dependency, security, and licensing
+costs; do not add a dependency merely to avoid a small, clear implementation.
+For unfamiliar or version-sensitive external APIs, check documentation for the
+version the project actually uses. Do not upgrade a dependency just to match a
+newer example.
+
 ## Routes
 
 Choose exactly one orchestration route before substantive work. Direct and
@@ -496,6 +506,9 @@ independent verification.
 Initial subagents should normally start without inherited conversation history.
 Use `fork_turns="none"` and provide a compact, self-contained task capsule. Do
 not fork the full root transcript merely for convenience.
+Use the selected role's configured model and reasoning effort rather than
+inheriting the root's effort or reflexively selecting the maximum. Override a
+role's effort only when the specific subtask and supported runtime justify it.
 
 Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
