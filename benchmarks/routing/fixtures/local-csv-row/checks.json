@@ -1,0 +1,68 @@
+{
+  "cases": [
+    {
+      "args": [
+        "a,b,c"
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "function": "solve",
+      "name": "simple"
+    },
+    {
+      "args": [
+        "a,\"b,c\",d"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": [
+          "a",
+          "b,c",
+          "d"
+        ]
+      },
+      "function": "solve",
+      "name": "quoted comma"
+    },
+    {
+      "args": [
+        "\"a\"\"b\",c"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": [
+          "a\"b",
+          "c"
+        ]
+      },
+      "function": "solve",
+      "name": "escaped quote"
+    },
+    {
+      "args": [
+        ",x,"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": [
+          "",
+          "x",
+          ""
+        ]
+      },
+      "function": "solve",
+      "name": "empty fields"
+    }
+  ],
+  "mode": "python"
+}

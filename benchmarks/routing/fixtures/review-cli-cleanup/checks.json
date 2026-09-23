@@ -1,0 +1,72 @@
+{
+  "cases": [
+    {
+      "critical": true,
+      "expected": {
+        "value": true
+      },
+      "name": "unquoted path",
+      "term_groups": [
+        [
+          "candidate.sh"
+        ],
+        [
+          "quote",
+          "split",
+          "glob"
+        ],
+        [
+          "path",
+          "variable"
+        ]
+      ],
+      "terms": []
+    },
+    {
+      "critical": true,
+      "expected": {
+        "value": true
+      },
+      "name": "traversal",
+      "term_groups": [
+        [
+          "candidate.sh"
+        ],
+        [
+          "travers",
+          "escape",
+          "outside"
+        ],
+        [
+          "root"
+        ]
+      ],
+      "terms": []
+    },
+    {
+      "critical": false,
+      "expected": {
+        "value": true
+      },
+      "name": "missing arguments",
+      "term_groups": [
+        [
+          "candidate.sh"
+        ],
+        [
+          "argument",
+          "missing",
+          "empty"
+        ],
+        [
+          "root",
+          "target",
+          "delete",
+          "rm"
+        ]
+      ],
+      "terms": []
+    }
+  ],
+  "mode": "review"
+}

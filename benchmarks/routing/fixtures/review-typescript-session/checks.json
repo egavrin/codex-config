@@ -1,0 +1,65 @@
+{
+  "cases": [
+    {
+      "critical": true,
+      "expected": {
+        "value": true
+      },
+      "name": "cross-user cache",
+      "term_groups": [
+        [
+          "candidate.mjs"
+        ],
+        [
+          "cache"
+        ],
+        [
+          "user"
+        ]
+      ],
+      "terms": []
+    },
+    {
+      "critical": true,
+      "expected": {
+        "value": true
+      },
+      "name": "token log",
+      "term_groups": [
+        [
+          "candidate.mjs"
+        ],
+        [
+          "token"
+        ],
+        [
+          "log"
+        ]
+      ],
+      "terms": []
+    },
+    {
+      "critical": true,
+      "expected": {
+        "value": true
+      },
+      "name": "open redirect",
+      "term_groups": [
+        [
+          "candidate.mjs"
+        ],
+        [
+          "redirect"
+        ],
+        [
+          "valid",
+          "allow",
+          "trusted",
+          "external"
+        ]
+      ],
+      "terms": []
+    }
+  ],
+  "mode": "review"
+}

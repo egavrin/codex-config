@@ -1,0 +1,57 @@
+{
+  "cases": [
+    {
+      "args": [
+        "/out",
+        "docs/readme.txt"
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": "/out/docs/readme.txt"
+      },
+      "function": "solve",
+      "name": "safe member"
+    },
+    {
+      "args": [
+        "/out",
+        "../secret"
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "value": null
+      },
+      "function": "solve",
+      "name": "parent traversal"
+    },
+    {
+      "args": [
+        "/out",
+        "/etc/passwd"
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "value": null
+      },
+      "function": "solve",
+      "name": "absolute member"
+    },
+    {
+      "args": [
+        "/out",
+        "..\\secret"
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "value": null
+      },
+      "function": "solve",
+      "name": "backslash traversal"
+    }
+  ],
+  "mode": "python"
+}

@@ -17,6 +17,10 @@ configuration snapshot updated on September 10, 2026.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
   bundled licenses where present.
+- [`benchmarks/routing/`](benchmarks/routing/README.md) — isolated public
+  fixtures, pinned coordinator profiles, rollout telemetry importer, external
+  acceptance checks, and paired route analysis. Benchmark cycles and raw logs
+  stay local under its ignored `artifacts/` directory.
 
 The snapshot preserves the active values, including `gpt-6-astra` with High
 reasoning, `approval_policy = "never"`, `sandbox_mode = "danger-full-access"`,

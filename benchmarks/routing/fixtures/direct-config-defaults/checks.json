@@ -1,0 +1,83 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "threads": 4
+        },
+        {}
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": {
+          "threads": 4
+        }
+      },
+      "function": "solve",
+      "name": "no override"
+    },
+    {
+      "args": [
+        {
+          "threads": 4
+        },
+        {
+          "threads": 0
+        }
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": {
+          "threads": 0
+        }
+      },
+      "function": "solve",
+      "name": "zero override"
+    },
+    {
+      "args": [
+        {
+          "enabled": true,
+          "label": "x"
+        },
+        {
+          "enabled": false,
+          "label": ""
+        }
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": {
+          "enabled": false,
+          "label": ""
+        }
+      },
+      "function": "solve",
+      "name": "false and empty override"
+    },
+    {
+      "args": [
+        {
+          "a": 1
+        },
+        {
+          "b": 2
+        }
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": {
+          "a": 1,
+          "b": 2
+        }
+      },
+      "function": "solve",
+      "name": "defaults unchanged"
+    }
+  ],
+  "mode": "python"
+}

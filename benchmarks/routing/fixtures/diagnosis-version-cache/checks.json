@@ -1,0 +1,97 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "a": 1
+        },
+        [
+          [
+            "get",
+            "a"
+          ]
+        ]
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": [
+          1
+        ]
+      },
+      "function": "solve",
+      "name": "initial read"
+    },
+    {
+      "args": [
+        {
+          "a": 1
+        },
+        [
+          [
+            "get",
+            "a"
+          ],
+          [
+            "set",
+            "a",
+            2
+          ],
+          [
+            "get",
+            "a"
+          ]
+        ]
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": [
+          1,
+          2
+        ]
+      },
+      "function": "solve",
+      "name": "updated value"
+    },
+    {
+      "args": [
+        {
+          "a": 1,
+          "b": 5
+        },
+        [
+          [
+            "get",
+            "a"
+          ],
+          [
+            "get",
+            "b"
+          ],
+          [
+            "set",
+            "a",
+            2
+          ],
+          [
+            "get",
+            "b"
+          ]
+        ]
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": [
+          1,
+          5,
+          5
+        ]
+      },
+      "function": "solve",
+      "name": "unrelated key"
+    }
+  ],
+  "mode": "python"
+}

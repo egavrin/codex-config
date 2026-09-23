@@ -1,0 +1,11 @@
+name = "astra_executor_standard"
+description = "GPT-6 Astra Medium Standard narrow evidence-gated remainder owner."
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
+service_tier = "default"
+sandbox_mode = "workspace-write"
+
+developer_instructions = """
+Own only the unresolved remainder identified by the parent after Sol's focused attempt.
+Do not repeat completed work or spawn agents. Report changed paths and focused checks.
+"""

@@ -1,0 +1,70 @@
+{
+  "cases": [
+    {
+      "critical": true,
+      "expected": {
+        "value": true
+      },
+      "name": "SQL injection",
+      "term_groups": [
+        [
+          "candidate.py"
+        ],
+        [
+          "sql"
+        ],
+        [
+          "parameter"
+        ]
+      ],
+      "terms": []
+    },
+    {
+      "critical": true,
+      "expected": {
+        "value": true
+      },
+      "name": "sort allowlist",
+      "term_groups": [
+        [
+          "candidate.py"
+        ],
+        [
+          "sort"
+        ],
+        [
+          "allow",
+          "fixed",
+          "map"
+        ]
+      ],
+      "terms": []
+    },
+    {
+      "critical": false,
+      "expected": {
+        "value": true
+      },
+      "name": "suppressed error",
+      "term_groups": [
+        [
+          "candidate.py"
+        ],
+        [
+          "error",
+          "fail",
+          "exception"
+        ],
+        [
+          "empty",
+          "[]",
+          "suppress",
+          "swallow",
+          "hide"
+        ]
+      ],
+      "terms": []
+    }
+  ],
+  "mode": "review"
+}

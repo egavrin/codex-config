@@ -1,0 +1,33 @@
+{
+  "scored": false,
+  "purpose": "Historical fixtures used while developing the benchmark method; excluded from route scores and bootstrap resampling.",
+  "sets": [
+    {
+      "id": "known-pattern",
+      "kind": "small_pilot",
+      "origin": "codex-routing-pilot, 2026-09-10"
+    },
+    {
+      "id": "two-component",
+      "kind": "small_pilot",
+      "origin": "codex-routing-pilot, 2026-09-10"
+    },
+    {
+      "id": "diagnosis",
+      "kind": "small_pilot",
+      "origin": "codex-routing-pilot, 2026-09-10"
+    },
+    {
+      "id": "symlink-ancestry-safety",
+      "kind": "paired_real_task",
+      "origin": "terra-real-ab-20260911, seed 7882b03",
+      "status": "one paired functional pilot; original checks tied and post-hoc safety checks found distinct gaps"
+    },
+    {
+      "id": "runtime-metadata-report",
+      "kind": "paired_real_task",
+      "origin": "terra-real-ab-20260911, seed db08464",
+      "status": "selected pair was interrupted by child-slot exhaustion; no paired result"
+    }
+  ]
+}

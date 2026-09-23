@@ -1,0 +1,75 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "token": "abc",
+          "user": "a"
+        }
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": {
+          "token": "[REDACTED]",
+          "user": "a"
+        }
+      },
+      "function": "solve",
+      "name": "top-level token"
+    },
+    {
+      "args": [
+        {
+          "auth": {
+            "token": "abc"
+          }
+        }
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "value": {
+          "auth": {
+            "token": "[REDACTED]"
+          }
+        }
+      },
+      "function": "solve",
+      "name": "nested token"
+    },
+    {
+      "args": [
+        {
+          "users": [
+            {
+              "password": "x"
+            },
+            {
+              "name": "b"
+            }
+          ]
+        }
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "input_unchanged": true,
+        "value": {
+          "users": [
+            {
+              "password": "[REDACTED]"
+            },
+            {
+              "name": "b"
+            }
+          ]
+        }
+      },
+      "function": "solve",
+      "input_unchanged": true,
+      "name": "list nested password"
+    }
+  ],
+  "mode": "python"
+}
