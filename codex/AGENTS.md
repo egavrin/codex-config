@@ -659,9 +659,12 @@ Sol-primary rule supersedes this base-route gate.
 
 Match verification effort to risk.
 
-Never write unit tests after writing production code. Strongly prefer end-to-end
-(E2E) tests as the sole testing mechanism for behavior changes, and use them to
-verify that complex features work through the complete workflow. Every E2E run
+Never write unit tests after writing production code. Invert the testing
+pyramid: strongly prefer end-to-end (E2E) tests as the sole testing mechanism
+for behavior changes. Make them black-box tests of complete workflows, using
+golden-master outputs when appropriate, and use them to verify complex features.
+Reach for integration, component, or unit tests only when necessary because E2E
+tests cannot reliably cover or diagnose a failure. Every E2E run
 must produce a verifiable, repeatable artifact with the tested revision, exact
 command and inputs, expected and observed results, and saved evidence such as
 logs, traces, or screenshots when applicable. Report the artifact's location.
