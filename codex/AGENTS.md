@@ -659,6 +659,17 @@ Sol-primary rule supersedes this base-route gate.
 
 Match verification effort to risk.
 
+Never write unit tests after writing production code. Strongly prefer end-to-end
+(E2E) tests as the sole testing mechanism for behavior changes, and use them to
+verify that complex features work through the complete workflow. Every E2E run
+must produce a verifiable, repeatable artifact with the tested revision, exact
+command and inputs, expected and observed results, and saved evidence such as
+logs, traces, or screenshots when applicable. Report the artifact's location.
+
+If testing a system in isolation is necessary, first write down all identifiable
+ways the scoped system could fail and encode those cases in isolated tests before
+writing production code. Then implement against those tests.
+
 In the default route, the effective root owns verification and acceptance: inspect
 the diff and affected contracts, run proportionate deterministic checks and
 material edge cases, and distinguish product defects from harness or
@@ -674,8 +685,8 @@ The remaining tester guidance applies only to explicit profiles that permit it.
 - A justified verification cycle may include explorer, worker, tester, repair by
   the same worker, and a focused recheck by the same tester. Preserve that cycle
   when the risk warrants it; remove only duplicate or evidence-free passes.
-- Prefer deterministic tests, compilers, linters, schemas, and other executable
-  gates over repeated model review.
+- Prefer deterministic E2E tests, compilers, linters, schemas, and other
+  executable gates over repeated model review.
 - Do not add a separate model-review cycle when existing automated evidence is
   sufficient.
 - Never weaken assertions, coverage, or failure visibility to save tokens.
