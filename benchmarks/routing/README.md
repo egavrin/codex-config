@@ -13,6 +13,10 @@ eight TypeScript, and four CLI/configuration tasks. All code, prompts, and
 external checks are synthetic and publishable. The earlier three tiny pilot
 tasks and two archived real-task pairs are recorded in `calibration.json` as
 calibration material only; their results are not included in a scored cycle.
+The three small pilots include their original seed files and tests under
+`calibration/`; the two larger archived tasks retain their task prompts and
+seed identifiers here. Their source trees and acceptance scripts belong to a
+separate historical archive and are not included in this public suite.
 
 The completed [2026-09-23 results](RESULTS-2026-09-23.md) include per-class
 scores, completeness limits, and the decision to retain the current default.
