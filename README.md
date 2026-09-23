@@ -1,7 +1,7 @@
 # Codex config
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
-configuration snapshot updated on September 11, 2026.
+configuration snapshot updated on September 23, 2026.
 
 ## Contents
 
@@ -38,11 +38,12 @@ configuration snapshot updated on September 11, 2026.
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
   bundled licenses where present.
 
-The active default is `gpt-5.6-terra` with Medium reasoning on Fast service tier;
+The active default is `gpt-6-luna` with High reasoning on Fast service tier;
 both `service_tier = "fast"` and `[features].fast_mode = true` are set.
 The `senior_executor_standard` and `astra_executor_standard` role files each pin
 `service_tier = "default"`, so a Fast root selection does not make either child
-Fast. The default permits one live child and a V1 maximum depth of one. Approval
+Fast. The default route uses one live child at a time; the configured session
+capacity is three threads and the V1 maximum depth is one. Approval
 remains `never`, and the sandbox remains `danger-full-access`.
 
 The repository intentionally excludes authentication data, tokens, task
@@ -75,9 +76,9 @@ Four independent choices affect a session:
 | Service tier | Fast or Standard/default controls rollout service tier independently of model and reasoning. |
 | Orchestration route | Direct means the effective root owns bounded work; Delegated means a distinct stronger owner materially benefits substantive work, with bounded Sol offload as the Astra-root exception. |
 
-The repository default remains Terra Medium Fast. A Desktop or runtime override
+The repository default is GPT-6 Luna High Fast. A Desktop or runtime override
 is an authoritative user choice, so routing and completion reports use the
-actual effective root rather than pretending every session is Terra. When a
+actual effective root. When a
 temporary override is no longer intended, select **Reset to default** before
 starting the next session, then verify the effective model, reasoning, and tier
 shown by the runtime.
@@ -95,11 +96,11 @@ repair to that same owner. There is at most one live child, no nesting, no
 separate verifier, and no second-opinion child. Sol closes before a rare Astra
 escalation.
 
-Terra Medium Fast was promoted to the normal route after the three valid paired
-results documented below. With the configured default root, Direct reports
-`effective_route = terra-direct`, while successful delegation to Sol reports
-`effective_route = terra-sol`. Other normal labels are `luna-direct`,
-`luna-sol`, `sol-direct`, `sol-astra`, `astra-direct`, and `astra-sol`. Report
+Terra Medium Fast was selected after the three valid historical pairs documented
+below. The current Luna default was selected without a new benchmark. With this
+default, Direct reports `effective_route = luna-direct`, while successful
+delegation to Sol reports `effective_route = luna-sol`. Other normal labels are
+`terra-direct`, `terra-sol`, `sol-direct`, `sol-astra`, `astra-direct`, and `astra-sol`. Report
 `terra-sol-astra` or `luna-sol-astra` applies only when that root actually
 escalates from Sol to Astra. Report the actual root model, reasoning, and tier
 separately.
@@ -521,7 +522,7 @@ afterward; that interval includes the excluded contaminated Luna attempt and
 cannot be attributed to an individual arm.
 
 The predeclared promotion threshold was met empirically across these three valid
-pairs, so Terra Medium Fast was promoted to the sole normal root route. The
+pairs, so Terra Medium Fast was promoted to the normal root route at that time. The
 macOS alias portability defect remains a product finding from the security case,
 and the contaminated Luna attempt remains excluded as a benchmark-isolation
 failure; neither adds fixture-specific logic to the production routing policy.

@@ -111,10 +111,10 @@ such sessions from valid delegated-route benchmarks.
 
 ## Root Selection, Reasoning, and Tier
 
-The repository default is Terra with Medium reasoning on Fast service tier.
+The repository default is GPT-6 Luna with High reasoning on Fast service tier.
 Desktop model, reasoning, and tier overrides are user choices: respect the
-effective values and never describe an effective Luna, Sol, or Astra root as
-Terra. Names such as Light, Medium, High, and Extra High describe reasoning
+effective values and never describe an effective Terra, Sol, or Astra root as
+Luna. Names such as Light, Medium, High, and Extra High describe reasoning
 levels in the Desktop selector; they do not select Direct or Delegated routing.
 Do not request a reasoning change merely to enter an orchestration route.
 
@@ -138,7 +138,7 @@ The marker `PROFILE: ASTRA_TERRA_STANDARD`, supplied by
 `astra-terra-standard.config.toml`, provides a historical comparison: Astra Medium
 root on Standard tier, Terra High for clear bounded implementation, Luna High
 testing only when independently justified, and selective Sol under the Senior
-Executor Escalation Gate. This explicit profile overrides the default Fast Terra
+Executor Escalation Gate. This explicit profile overrides the default Fast Luna
 route while active.
 
 ## Terra-Luna-Sol-Astra experiment
@@ -146,7 +146,7 @@ route while active.
 This policy changes only when the root developer instructions contain the exact
 marker `EXPERIMENT: TERRA_LUNA_SOL_ASTRA`, supplied by the
 `terra-luna-sol-astra.config.toml` CLI profile. The marker overrides the default
-Fast Terra route while selected. Terra Medium Fast is lightweight glue, Context
+Fast Luna route while selected. Terra Medium Fast is lightweight glue, Context
 Packet compactor, acceptance integrator, and final communicator; it is not the
 routine investigator, technical planner, implementer, or acceptance runner.
 
@@ -206,7 +206,7 @@ from rollout data before drawing conclusions.
 This policy changes only when the root developer instructions contain the exact
 marker `EXPERIMENT: LUNA_TERRA_CONTEXT_SOL_ASTRA`, supplied by the
 `luna-terra-context-sol-astra.config.toml` CLI profile. It is an isolated
-comparison route; it does not change the default Fast-Terra route or the full
+comparison route; it does not change the default Fast-Luna route or the full
 Terra-root `TERRA_LUNA_SOL_ASTRA` experiment.
 
 Direct work remains in the Luna xHigh Fast root. For every Delegated implementation
@@ -427,7 +427,7 @@ the configured values explicitly on every initial spawn:
 
 | Role | Model | Reasoning | Service tier |
 |------|-------|-----------|--------------|
-| `senior_executor_standard` | `gpt-5.6-sol` | `medium` | `default` |
+| `senior_executor_standard` | `gpt-6-sol` | `medium` | `default` |
 | `astra_executor_standard` | `gpt-6-astra` | `medium` | `default` |
 | `terra_context_compactor_fast` | `gpt-5.6-terra` | `medium` | `fast` |
 | `explorer` | `gpt-5.6-luna` | `medium` | inherited |
@@ -438,7 +438,7 @@ the configured values explicitly on every initial spawn:
 | `luna_light_worker_fast` | `gpt-5.6-luna` | `medium` | `fast` |
 | `luna_acceptance_verifier_fast` | `gpt-5.6-luna` | `medium` | `fast` |
 
-Do not route an `explorer` or `tester` to the default Terra model merely because
+Do not route an `explorer` or `tester` to the default Luna model merely because
 its task name contains the role name. A task such as `tester`, `explorer_apps`,
 or `explorer_repository` remains untyped unless the runtime applies the matching
 role profile. If typed roles are unavailable, use the table above as the

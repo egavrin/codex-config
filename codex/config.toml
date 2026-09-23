@@ -1,5 +1,5 @@
-model = "gpt-5.6-terra"
-model_reasoning_effort = "medium"
+model = "gpt-6-luna"
+model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 
@@ -13,7 +13,7 @@ EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD
 This is the sole normal routing profile. Follow the Direct/Delegated and Context
 Packet policies in AGENTS.md. Direct and Delegated are orchestration routes, not
 Desktop reasoning labels. Determine the actual effective root selected by the
-runtime or Desktop and route by that model; do not pretend an override is Terra.
+runtime or Desktop and route by that model; do not infer it from the marker name.
 Treat UI root-model, reasoning, and service-tier overrides as user choices and
 report their effective values.
 Direct is bounded work the effective root can safely finish with focused
@@ -66,10 +66,10 @@ goals = true
 
 [agents]
 enabled = true
-max_concurrent_threads_per_session = 1
+max_concurrent_threads_per_session = 3
 # V1 guard only: multi-agent V2 currently does not enforce this depth setting.
 max_depth = 1
-default_subagent_model = "gpt-5.6-sol"
+default_subagent_model = "gpt-6-sol"
 default_subagent_reasoning_effort = "medium"
 
 [agents.senior_executor_standard]
