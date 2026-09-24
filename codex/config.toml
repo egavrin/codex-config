@@ -1,15 +1,15 @@
-model = "gpt-6-luna"
+model = "gpt-6-sol"
 model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 
 notify = ["/Users/egavrin/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
-service_tier = "fast"
+service_tier = "default"
 model_verbosity = "high"
 personality = "pragmatic"
 
 developer_instructions = """
-EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD
+EXPERIMENT: SOL_HIGH_ASTRA_MEDIUM_XHIGH
 This is the sole normal routing profile. Follow the Direct/Delegated and Context
 Packet policies in AGENTS.md. Direct and Delegated are orchestration routes, not
 Desktop reasoning labels. Determine the actual effective root selected by the
@@ -17,26 +17,21 @@ runtime or Desktop and route by that model; do not infer it from the marker name
 Treat UI root-model, reasoning, and service-tier overrides as user choices and
 report their effective values.
 Direct is bounded work the effective root can safely finish with focused
-operations and deterministic acceptance. Delegated is substantive work where a
-distinct stronger implementation owner provides material benefit; the Astra
-branch may instead use bounded Sol ownership to reduce Astra context and work.
-
-With a Terra or Luna root, Direct work stays in the root. Delegated work requires
+operations and deterministic acceptance. With the default Sol root, keep Direct
+work in Sol. Delegated production implementation or substantive review requires
 one bounded evidence pass, a provenance-preserving Context Packet, and exactly
-one fresh `senior_executor_standard` Sol Medium owner. With a Sol root, complete
-Direct and ordinary substantive implementation in Sol and never spawn another
-Sol. Use `astra_executor_standard` only for a concrete intrinsically hard
-unresolved remainder. With an Astra root, normally own planning, implementation,
-and acceptance directly; optionally use one `senior_executor_standard` only for
-a clearly bounded package that materially reduces Astra context or work, and
-never spawn Astra from Astra.
+one fresh `astra_executor_standard` Astra Medium owner. Sol must not duplicate
+the delegated package. Use `astra_executor_xhigh` only after Astra Medium returns
+concrete evidence of an intrinsically hard unresolved remainder. Close Medium
+Astra before Extra High starts. Never spawn Sol from Sol or Astra from Astra.
 
 The effective root always owns acceptance. Inspect the diff and affected
 contracts, run proportionate deterministic tests and material edge cases, and
 distinguish product defects from harness or environment limitations. Keep an
 implementation child open through acceptance and send at most one evidence-rich
-ordinary repair to the same owner. Close Sol before any Astra escalation. Use no
-separate verifier, second opinion, overlapping child, or nested agent.
+ordinary repair to the same owner. A routine repair stays with Medium Astra and
+does not justify Extra High escalation. Use no separate verifier, second opinion,
+overlapping child, or nested agent.
 
 Native internal delegation means the session's collaboration or subagent spawn
 mechanism. Never automatically substitute `create_thread`, `fork_thread`,
@@ -50,12 +45,9 @@ temporarily occupying the only slot is not fallback justification: wait, reuse,
 or close it as appropriate.
 
 Report the actual root model, reasoning, and tier separately. Report the exact
-normal `effective_route`: `terra-direct`, `terra-sol`, `luna-direct`, `luna-sol`,
-`sol-direct`, `sol-astra`, `astra-direct`, or `astra-sol`. When Terra or Luna
-actually escalates from Sol to Astra, append `-astra` to produce
-`terra-sol-astra` or `luna-sol-astra`. Use the corresponding
-`*-single-agent-fallback` label only when intended delegation failed. Fallback
-sessions are excluded from valid delegated-route benchmarks.
+normal `effective_route`: `sol-direct`, `sol-astra`, or `sol-astra-xhigh` for the
+default Sol root. Use `sol-single-agent-fallback` only when intended delegation
+failed. Fallback sessions are excluded from valid delegated-route benchmarks.
 """
 
 [features]
@@ -69,7 +61,7 @@ enabled = true
 max_concurrent_threads_per_session = 3
 # V1 guard only: multi-agent V2 currently does not enforce this depth setting.
 max_depth = 1
-default_subagent_model = "gpt-6-sol"
+default_subagent_model = "gpt-6-astra"
 default_subagent_reasoning_effort = "medium"
 
 [agents.senior_executor_standard]
@@ -78,7 +70,11 @@ nickname_candidates = ["Standard Specialist"]
 
 [agents.astra_executor_standard]
 config_file = "agents/astra_executor_standard.toml"
-nickname_candidates = ["Standard Escalation"]
+nickname_candidates = ["Astra Implementer"]
+
+[agents.astra_executor_xhigh]
+config_file = "agents/astra_executor_xhigh.toml"
+nickname_candidates = ["Astra Deep Escalation"]
 
 [mcp_servers.playwright]
 command = "npx"

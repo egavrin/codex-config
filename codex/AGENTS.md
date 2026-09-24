@@ -50,14 +50,15 @@ default.
 
 ### Default model-aware routing
 
-The marker `EXPERIMENT: TERRA_FAST_SOL_ASTRA_STANDARD` selects the normal policy,
-but Desktop or runtime root overrides remain authoritative user choices:
+The marker `EXPERIMENT: SOL_HIGH_ASTRA_MEDIUM_XHIGH` selects the normal policy.
+The local default is Sol High on the Standard tier, but Desktop or runtime root
+overrides remain authoritative user choices:
 
 | Effective root | Direct and ordinary root-owned work | Delegated behavior |
 |---|---|---|
 | Terra | Complete Direct work in Terra. | Give exactly one Context Packet to `senior_executor_standard`; use `astra_executor_standard` only for a narrow evidence-gated remainder after Sol. |
 | Luna | Complete Direct work in Luna. | Give exactly one Context Packet to `senior_executor_standard`; use `astra_executor_standard` only for a narrow evidence-gated remainder after Sol. |
-| Sol | Complete Direct and ordinary substantive implementation in Sol. Never spawn another Sol. | Use `astra_executor_standard` only for a concrete intrinsically hard unresolved remainder. |
+| Sol | Complete Direct work in Sol. Never spawn another Sol. | Give exactly one Context Packet to `astra_executor_standard`; use `astra_executor_xhigh` only for an evidence-gated intrinsically hard remainder after Medium Astra. |
 | Astra | Normally own planning, implementation, and acceptance directly. Never spawn Astra from Astra. | Optionally give one clearly bounded package to `senior_executor_standard` only when doing so materially reduces Astra context or work. |
 
 For Terra- and Luna-root Delegated work, the root performs one bounded evidence
@@ -68,21 +69,34 @@ connected definitions are allowed, while broad repeated discovery requires the
 specific deficient packet field, evidence for the deficiency, and why expansion
 is necessary. The root must not duplicate the delegated package.
 
+For the default Sol-root Delegated route, Sol performs one bounded evidence pass,
+forms the Context Packet, and assigns exactly one fresh
+`astra_executor_standard`. Astra Medium owns technical planning within the
+package, implementation or an explicitly read-only review, and one lightweight
+focused check. Sol must not prescribe a detailed implementation plan or duplicate
+the package. A routine acceptance defect returns once to that same still-open
+Medium Astra owner. Extra High is not a repair tier: use `astra_executor_xhigh`
+only when Medium Astra provides a concrete attempted failure, unresolved
+criterion, smallest remaining ownership surface, and why deeper reasoning is
+needed. Close Medium Astra before starting Extra High and give Extra High a delta
+packet rather than the full original packet.
+
 The effective root always owns final acceptance. Inspect the diff and affected
 cross-contract boundaries, run proportionate deterministic tests and material
 edge cases, distinguish product defects from harness or environment limitations,
 and preserve exact expected-versus-observed evidence in a repair delta. Keep the
 implementation owner open and idle through acceptance; send at most one ordinary
-repair to that same owner. Close Sol before starting Astra. This keep-open
-behavior is an instruction validated by local rollout evidence, not a runtime
-lifecycle guarantee.
+repair to that same owner. Close the current owner before a model-tier
+escalation. This keep-open behavior is an instruction validated by local rollout
+evidence, not a runtime lifecycle guarantee.
 
 Never run more than one child concurrently, permit nested agents, add a separate
-verifier or second-opinion child, spawn Sol from Sol, or spawn Astra from Astra.
-Astra remains rare and evidence-gated. When route choice is uncertain, use Direct
-only if the effective root can safely complete the task and deterministic
-acceptance without a distinct stronger owner; otherwise use the model-aware
-Delegated branch.
+verifier or second-opinion child, spawn Sol from Sol, or allow a child to spawn
+another agent. Medium Astra is the normal Sol-root implementation owner; Extra
+High Astra remains rare and evidence-gated. When route choice is uncertain, use
+Direct only if the effective root can safely complete the task and deterministic
+acceptance without a distinct implementation owner; otherwise use the
+model-aware Delegated branch.
 
 ### Capability-aware default fallback
 
@@ -103,18 +117,17 @@ justification: wait, reuse it for its owned repair, or close it as required.
 
 Report the actual effective root model, reasoning, and service tier separately.
 For normal work, report the exact `effective_route`: `terra-direct`, `terra-sol`,
-`luna-direct`, `luna-sol`, `sol-direct`, `sol-astra`, `astra-direct`, or
-`astra-sol`. When Terra or Luna actually escalates from Sol to Astra, append
-`-astra` to produce `terra-sol-astra` or `luna-sol-astra`. Use the corresponding
+`luna-direct`, `luna-sol`, `sol-direct`, `sol-astra`, `sol-astra-xhigh`,
+`astra-direct`, or `astra-sol`. Use the corresponding
 `*-single-agent-fallback` label only when intended delegation failed, and exclude
 such sessions from valid delegated-route benchmarks.
 
 ## Root Selection, Reasoning, and Tier
 
-The repository default is GPT-6 Luna with High reasoning on Fast service tier.
+The local default is GPT-6 Sol with High reasoning on Standard service tier.
 Desktop model, reasoning, and tier overrides are user choices: respect the
-effective values and never describe an effective Terra, Sol, or Astra root as
-Luna. Names such as Light, Medium, High, and Extra High describe reasoning
+effective values and never describe an effective Terra, Luna, or Astra root as
+Sol. Names such as Light, Medium, High, and Extra High describe reasoning
 levels in the Desktop selector; they do not select Direct or Delegated routing.
 Do not request a reasoning change merely to enter an orchestration route.
 
@@ -138,7 +151,7 @@ The marker `PROFILE: ASTRA_TERRA_STANDARD`, supplied by
 `astra-terra-standard.config.toml`, provides a historical comparison: Astra Medium
 root on Standard tier, Terra High for clear bounded implementation, Luna High
 testing only when independently justified, and selective Sol under the Senior
-Executor Escalation Gate. This explicit profile overrides the default Fast Luna
+Executor Escalation Gate. This explicit profile overrides the default Sol High
 route while active.
 
 ## Terra-Luna-Sol-Astra experiment
@@ -146,7 +159,7 @@ route while active.
 This policy changes only when the root developer instructions contain the exact
 marker `EXPERIMENT: TERRA_LUNA_SOL_ASTRA`, supplied by the
 `terra-luna-sol-astra.config.toml` CLI profile. The marker overrides the default
-Fast Luna route while selected. Terra Medium Fast is lightweight glue, Context
+Sol High route while selected. Terra Medium Fast is lightweight glue, Context
 Packet compactor, acceptance integrator, and final communicator; it is not the
 routine investigator, technical planner, implementer, or acceptance runner.
 
@@ -206,7 +219,7 @@ from rollout data before drawing conclusions.
 This policy changes only when the root developer instructions contain the exact
 marker `EXPERIMENT: LUNA_TERRA_CONTEXT_SOL_ASTRA`, supplied by the
 `luna-terra-context-sol-astra.config.toml` CLI profile. It is an isolated
-comparison route; it does not change the default Fast-Luna route or the full
+comparison route; it does not change the default Sol High route or the full
 Terra-root `TERRA_LUNA_SOL_ASTRA` experiment.
 
 Direct work remains in the Luna xHigh Fast root. For every Delegated implementation
@@ -429,6 +442,7 @@ the configured values explicitly on every initial spawn:
 |------|-------|-----------|--------------|
 | `senior_executor_standard` | `gpt-6-sol` | `medium` | `default` |
 | `astra_executor_standard` | `gpt-6-astra` | `medium` | `default` |
+| `astra_executor_xhigh` | `gpt-6-astra` | `xhigh` | `default` |
 | `terra_context_compactor_fast` | `gpt-5.6-terra` | `medium` | `fast` |
 | `explorer` | `gpt-5.6-luna` | `medium` | inherited |
 | `worker` | `gpt-5.6-terra` | `high` | inherited |
@@ -459,16 +473,18 @@ route never creates a tester and never has more than one child open.
 
 ## Delegated Route Entry
 
-For a Terra- or Luna-root Delegated package in the default route:
+For a Sol-root Delegated package in the default route:
 
 1. State the intended outcome and acceptance criteria.
 2. Perform one bounded evidence pass over the smallest decision-critical
    context and form the Context Packet.
-3. Give exactly one bounded implementation or read-only review package to
-   `senior_executor_standard`.
-4. Keep Sol open while the effective root inspects the result and runs
-   acceptance.
-5. Close Sol after success, or before one evidence-gated Astra escalation.
+3. Give exactly one bounded implementation or read-only review package to a
+   fresh `astra_executor_standard`.
+4. Keep Medium Astra open while Sol inspects the result and runs acceptance.
+5. Return one ordinary repair to that same owner, if required; otherwise close
+   it after acceptance.
+6. Only for a concrete intrinsically hard unresolved remainder, close Medium
+   Astra and give one narrow delta packet to `astra_executor_xhigh`.
 
 Exact experimental marker sections override this sequence only for their named
 profiles.

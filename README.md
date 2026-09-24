@@ -1,7 +1,7 @@
 # Codex config
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
-configuration snapshot updated on September 23, 2026.
+configuration snapshot updated on September 24, 2026.
 
 ## Contents
 
@@ -14,7 +14,8 @@ configuration snapshot updated on September 23, 2026.
 - `codex/agents/` — `worker` (Terra High), `explorer` (Luna Medium), `tester`
   (Luna High), the strictly gated `senior_executor` (Sol Medium), plus
   Standard-tier `senior_executor_standard` (Sol Medium) and
-  `astra_executor_standard` (Astra Medium) for the default route, and dedicated
+  `astra_executor_standard` (Astra Medium) and evidence-gated
+  `astra_executor_xhigh` (Astra Extra High) for the default route, and dedicated
   `terra_context_compactor_fast` (Terra Medium Fast) for conditional context
   compaction, plus `luna_evidence_collector_fast`, `luna_light_worker_fast`, and
   `luna_acceptance_verifier_fast` for the Terra-Luna-Sol-Astra experiment.
@@ -38,12 +39,13 @@ configuration snapshot updated on September 23, 2026.
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
   bundled licenses where present.
 
-The active default is `gpt-6-luna` with High reasoning on Fast service tier;
-both `service_tier = "fast"` and `[features].fast_mode = true` are set.
-The `senior_executor_standard` and `astra_executor_standard` role files each pin
-`service_tier = "default"`, so a Fast root selection does not make either child
-Fast. The default route uses one live child at a time; the configured session
-capacity is three threads and the V1 maximum depth is one. Approval
+The active default is `gpt-6-sol` with High reasoning on the Standard service
+tier. Direct work remains in Sol. Delegated production implementation or
+substantive review is assigned to one fresh `astra_executor_standard` at Astra
+Medium. `astra_executor_xhigh` is reserved for a narrow intrinsically hard
+remainder supported by concrete failed-attempt evidence; it is not a routine
+repair tier. The default route uses one live child at a time; the configured
+session capacity is three threads and the V1 maximum depth is one. Approval
 remains `never`, and the sandbox remains `danger-full-access`.
 
 The repository intentionally excludes authentication data, tokens, task
@@ -74,9 +76,9 @@ Four independent choices affect a session:
 | Root model | The Desktop Terra, Luna, Sol, or Astra selection determines which model is the effective root. |
 | Reasoning | Desktop labels such as Light, Medium, High, and Extra High control reasoning effort; they are not task routes. |
 | Service tier | Fast or Standard/default controls rollout service tier independently of model and reasoning. |
-| Orchestration route | Direct means the effective root owns bounded work; Delegated means a distinct stronger owner materially benefits substantive work, with bounded Sol offload as the Astra-root exception. |
+| Orchestration route | Direct means the effective root owns bounded work; Delegated means a distinct implementation owner materially benefits substantive work. |
 
-The repository default is GPT-6 Luna High Fast. A Desktop or runtime override
+The repository default is GPT-6 Sol High Standard. A Desktop or runtime override
 is an authoritative user choice, so routing and completion reports use the
 actual effective root. When a
 temporary override is no longer intended, select **Reset to default** before
@@ -87,26 +89,23 @@ shown by the runtime.
 |---|---|---|
 | Terra | Terra completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_standard` only after Sol. |
 | Luna | Luna completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_standard` only after Sol. |
-| Sol | Sol completes Direct and ordinary substantive implementation itself; it never spawns Sol. | `astra_executor_standard` only for a concrete intrinsically hard unresolved remainder. |
+| Sol | Sol completes bounded Direct work and never spawns Sol. | One fresh `astra_executor_standard` owns planning within the package and implementation; `astra_executor_xhigh` is available only for an evidence-gated hard remainder. |
 | Astra | Astra normally owns planning, implementation, and acceptance and never spawns Astra. | Optionally one `senior_executor_standard` for a clearly bounded package that materially reduces Astra context or work. |
 
 The effective root owns deterministic acceptance in every normal branch. Keep an
 implementation child open through acceptance and return at most one ordinary
 repair to that same owner. There is at most one live child, no nesting, no
-separate verifier, and no second-opinion child. Sol closes before a rare Astra
-escalation.
+separate verifier, and no second-opinion child. Medium Astra closes before a
+rare Extra High escalation.
 
-Terra Medium Fast was selected after the three valid historical pairs documented
-below. The current Luna default was selected without a new benchmark. With this
-default, Direct reports `effective_route = luna-direct`, while successful
-delegation to Sol reports `effective_route = luna-sol`. Other normal labels are
-`terra-direct`, `terra-sol`, `sol-direct`, `sol-astra`, `astra-direct`, and `astra-sol`. Report
-`terra-sol-astra` or `luna-sol-astra` applies only when that root actually
-escalates from Sol to Astra. Report the actual root model, reasoning, and tier
-separately.
+The current default tests a Sol-orchestrated route with clean-context Astra
+implementation. Direct reports `effective_route = sol-direct`; successful
+delegation reports `effective_route = sol-astra`; a justified deep escalation
+reports `effective_route = sol-astra-xhigh`. Report the actual root model,
+reasoning, and tier separately.
 
-For Terra- or Luna-root Delegated work, `[agents].enabled = true`, and exactly one
-`senior_executor_standard` is mandatory when the session exposes native
+For Sol-root Delegated work, `[agents].enabled = true`, and exactly one
+`astra_executor_standard` is mandatory when the session exposes native
 collaboration and that exact role. Native collaboration means the session's
 internal subagent spawn mechanism. User-visible `create_thread`, `fork_thread`, and
 `send_message_to_thread` operations, as well as nested `codex exec`, are not
