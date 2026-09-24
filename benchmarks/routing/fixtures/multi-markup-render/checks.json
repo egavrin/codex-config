@@ -1,0 +1,41 @@
+{
+  "cases": [
+    {
+      "args": [
+        "Title|Body"
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": "<h1>Title</h1><p>Body</p>"
+      },
+      "function": "solve",
+      "name": "plain"
+    },
+    {
+      "args": [
+        "T|<script>x</script>"
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "value": "<h1>T</h1><p>&lt;script&gt;x&lt;/script&gt;</p>"
+      },
+      "function": "solve",
+      "name": "escape body"
+    },
+    {
+      "args": [
+        "A|B|C"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": "<h1>A</h1><p>B|C</p>"
+      },
+      "function": "solve",
+      "name": "pipe in body"
+    }
+  ],
+  "mode": "python"
+}

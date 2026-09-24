@@ -1,0 +1,84 @@
+{
+  "cases": [
+    {
+      "args": [
+        [
+          [
+            "on",
+            "a"
+          ],
+          [
+            "emit",
+            ""
+          ]
+        ]
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": [
+          "a"
+        ]
+      },
+      "function": "solve",
+      "name": "ordinary emit"
+    },
+    {
+      "args": [
+        [
+          [
+            "on",
+            "a"
+          ],
+          [
+            "on",
+            "b"
+          ],
+          [
+            "off",
+            "a"
+          ],
+          [
+            "emit",
+            ""
+          ]
+        ]
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": [
+          "b"
+        ]
+      },
+      "function": "solve",
+      "name": "unsubscribe one"
+    },
+    {
+      "args": [
+        [
+          [
+            "on",
+            "a"
+          ],
+          [
+            "off",
+            "a"
+          ],
+          [
+            "emit",
+            ""
+          ]
+        ]
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": []
+      },
+      "function": "solve",
+      "name": "unsubscribe all"
+    }
+  ],
+  "mode": "node"
+}

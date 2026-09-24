@@ -43,3 +43,4 @@ __pycache__/
 *.bak
 *.bak_*
 *.local.toml
+benchmarks/routing/artifacts/

@@ -1,0 +1,91 @@
+{
+  "cases": [
+    {
+      "args": [
+        10,
+        [
+          {
+            "id": "a",
+            "quantity": 3,
+            "state": "active"
+          }
+        ]
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": 7
+      },
+      "function": "solve",
+      "name": "unique reservations"
+    },
+    {
+      "args": [
+        10,
+        [
+          {
+            "id": "a",
+            "quantity": 3,
+            "state": "active"
+          },
+          {
+            "id": "a",
+            "quantity": 3,
+            "state": "cancelled"
+          }
+        ]
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": 10
+      },
+      "function": "solve",
+      "name": "latest state wins"
+    },
+    {
+      "args": [
+        10,
+        [
+          {
+            "id": "a",
+            "quantity": 3,
+            "state": "active"
+          },
+          {
+            "id": "a",
+            "quantity": 3,
+            "state": "active"
+          }
+        ]
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": 7
+      },
+      "function": "solve",
+      "name": "duplicate event"
+    },
+    {
+      "args": [
+        2,
+        [
+          {
+            "id": "a",
+            "quantity": 3,
+            "state": "active"
+          }
+        ]
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": null
+      },
+      "function": "solve",
+      "name": "over reservation"
+    }
+  ],
+  "mode": "node"
+}

@@ -1,0 +1,437 @@
+{
+  "tasks": [
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "6db55189af267b43e78d48574f4b5dc8dd47a0ad",
+      "category": "direct",
+      "checks": "fixtures/direct-size-parser/checks.json",
+      "checks_sha256": "20bb465cc06079eaec41f4e6fbb9ee1fbbd5ee717d3bed3b7a7dc29a2d237657",
+      "expected_route": "direct",
+      "id": "direct-size-parser",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/direct-size-parser/start",
+      "source_sha256": "885bf2bf219bdd3487f7284390d1d337ea962a8ee1048c4a1087fc24cad0ec1d",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "c7b4973ad196f26d56f541be0628cf0f52938625",
+      "category": "direct",
+      "checks": "fixtures/direct-route-path/checks.json",
+      "checks_sha256": "e06a3f99d7af5c0cae3c638fa9853576b669f091445dc473bad608de0a76076a",
+      "expected_route": "direct",
+      "id": "direct-route-path",
+      "language": "TypeScript",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/direct-route-path/start",
+      "source_sha256": "7505d18eb9b18d24127c2302251033863707c6fee68dca7198d422eeb1e0eb7a",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "8ecc08adc4a133e061ad267edc6529c4dab88dcb",
+      "category": "direct",
+      "checks": "fixtures/direct-config-defaults/checks.json",
+      "checks_sha256": "3dae2d74453c768a67ebb81a4f60977826613abd97380f4b4cc83b7f94941d9d",
+      "expected_route": "direct",
+      "id": "direct-config-defaults",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/direct-config-defaults/start",
+      "source_sha256": "6ef97b53aa7ec0347e4b0ce380be71c42a00520bb74f5de1c65e9a0806d0810c",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "8dc21f4963a61a7c7b7c9f44d0c7b8729ec1b00e",
+      "category": "direct",
+      "checks": "fixtures/direct-limit-flag/checks.json",
+      "checks_sha256": "424c91f4cadb0e5aadda07738167b30747a7288e3ef1318cb0b2b84a927d86e3",
+      "expected_route": "direct",
+      "id": "direct-limit-flag",
+      "language": "config/CLI",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/direct-limit-flag/start",
+      "source_sha256": "816e66f9499ba89af01f978e11ddf44aa47fb5f38bd4a87dce0ff3621bc180ed",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "a17c89721da50808cb0630131d1216eb0a209ce1",
+      "category": "local",
+      "checks": "fixtures/local-intervals/checks.json",
+      "checks_sha256": "cec7161c8b0574f595e301571029e354de13e29cb842b24bc0eb8a1b1905f628",
+      "expected_route": "direct",
+      "id": "local-intervals",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/local-intervals/start",
+      "source_sha256": "107fe57a42fa2ef16d29e9d723d5307c53efa1ab459925ac80ebdb2be9885394",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "810ad3ff66189d9309b4f21d1b7454dbef0f4269",
+      "category": "local",
+      "checks": "fixtures/local-utc-buckets/checks.json",
+      "checks_sha256": "b6536095057c2707272595027467a2612bd331674730dbdb9437a07f8883ccb9",
+      "expected_route": "direct",
+      "id": "local-utc-buckets",
+      "language": "TypeScript",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/local-utc-buckets/start",
+      "source_sha256": "e3e97584775decbc723883dfb32414ba6162a953a74c9f9c9f6bed5597424734",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "df08538bb95f876d551d81935737dee49355517a",
+      "category": "local",
+      "checks": "fixtures/local-csv-row/checks.json",
+      "checks_sha256": "fc80c9299525c1e928e61dc85fae638c06e9b9967f91aced8e9ab8d6fea0f34b",
+      "expected_route": "direct",
+      "id": "local-csv-row",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/local-csv-row/start",
+      "source_sha256": "64124916f10a82b794707c742824d49cb6947bb9aa5f521645f2fea278f8bde1",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "1c6e053b34c15e402f011c2e262beade252453bc",
+      "category": "local",
+      "checks": "fixtures/local-config-precedence/checks.json",
+      "checks_sha256": "0c6b7f4bdebd437035e81093b48c5e8b7ea6042b75b075e3193d00b0732f8986",
+      "expected_route": "direct",
+      "id": "local-config-precedence",
+      "language": "config/CLI",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/local-config-precedence/start",
+      "source_sha256": "e30876a95ea7413300aa2d6bbea584f8f17927c55c718f9e4fbc13f86114a590",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "be71e06ee17b0732c9ecdc9f7bfe4a6ef11dbed8",
+      "category": "multi",
+      "checks": "fixtures/multi-checkout-tax/checks.json",
+      "checks_sha256": "b5578e143cc6cbd9b771370c0c4c59cc4c8d873872e4be5d83cb79cacadf9a57",
+      "expected_route": "delegated",
+      "id": "multi-checkout-tax",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/multi-checkout-tax/start",
+      "source_sha256": "6f428bfbbc46b100fb213a6bbf3bd746715d50205636cc25a2c5a0abfb08a0e4",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "d8c7800d92f37afc849052b9700a22d16f58e347",
+      "category": "multi",
+      "checks": "fixtures/multi-reservation-count/checks.json",
+      "checks_sha256": "6ade19798abc6aad213cc53fad8d5ff60993e8c6d85f2e66728b52306b80d395",
+      "expected_route": "delegated",
+      "id": "multi-reservation-count",
+      "language": "TypeScript",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/multi-reservation-count/start",
+      "source_sha256": "adff0749c97a1ae375a223480effd1575535f983b78b22fa5b17e23206fd053b",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "965ca0593db5cd56b6b1ed7e84891f0f2f2c1873",
+      "category": "multi",
+      "checks": "fixtures/multi-markup-render/checks.json",
+      "checks_sha256": "df85dad8f306d7f93684f93c585459be85c7b8630d89837b61be0d64cdb74354",
+      "expected_route": "delegated",
+      "id": "multi-markup-render",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/multi-markup-render/start",
+      "source_sha256": "d582f52005c0fb36d92c92245673d27d3397b3f15c9e44e043ad0b273b41942b",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "32c93f843266040ba3187bd1dea81f27c28b4026",
+      "category": "multi",
+      "checks": "fixtures/multi-cache-expiry/checks.json",
+      "checks_sha256": "fa3edda074140149ba28c373ad1c0d6a9174330877e4a600c39d9aa02bbe3421",
+      "expected_route": "delegated",
+      "id": "multi-cache-expiry",
+      "language": "TypeScript",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/multi-cache-expiry/start",
+      "source_sha256": "bd01c84ce8ff916ceed0157faffe10054f9d63ef0d4ae4c300ca6d20018db935",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "090701727ed3f1e07ae50b8d4c0c26fb27fe483e",
+      "category": "diagnosis",
+      "checks": "fixtures/diagnosis-retry-budget/checks.json",
+      "checks_sha256": "5247ad5f8d72cd6b5f9d57259d3a40c2cb4099b98a08db58c2c7957fd4cf77dd",
+      "expected_route": "delegated",
+      "id": "diagnosis-retry-budget",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/diagnosis-retry-budget/start",
+      "source_sha256": "c9c8844f3907cf679a0afb85cf5e9085722460e10ab1484a2bf7e436f5dd509d",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "5ac181aa74c0f7adbb28a7460ca5c0cef86dd129",
+      "category": "diagnosis",
+      "checks": "fixtures/diagnosis-event-unsubscribe/checks.json",
+      "checks_sha256": "a8870796b7be57e382d127405d5bcce0d2fe64a79b216e110a1a7dbab7f114f0",
+      "expected_route": "delegated",
+      "id": "diagnosis-event-unsubscribe",
+      "language": "TypeScript",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/diagnosis-event-unsubscribe/start",
+      "source_sha256": "f07c978c9129e2a02654891f125b8fe539a82b622e7f05bb5a9c37a21c3a5fb2",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "3e3840485eb970afee3791864b1120142760f29e",
+      "category": "diagnosis",
+      "checks": "fixtures/diagnosis-version-cache/checks.json",
+      "checks_sha256": "494cadfb44b3f3ad67aaa0dcafb2f578aaa6d0b7870b4278053f7d21a830e32f",
+      "expected_route": "delegated",
+      "id": "diagnosis-version-cache",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/diagnosis-version-cache/start",
+      "source_sha256": "91e80148a8264689cc34e8718cb6eb867439a6cc5d453ee1a5ceb39dec8cd917",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "66cfbba9d36395ff99e1c6e2bafbbbc190d461de",
+      "category": "diagnosis",
+      "checks": "fixtures/diagnosis-mode-precedence/checks.json",
+      "checks_sha256": "63923d39e1f03c91926331f9294da0318a26ec7a8ade9516477a35841506dbef",
+      "expected_route": "delegated",
+      "id": "diagnosis-mode-precedence",
+      "language": "config/CLI",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/diagnosis-mode-precedence/start",
+      "source_sha256": "47675d8fe0aede5bdd69e5e4d09ab36454b6a640d9e09bf14ce4217670ede506",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "b01304b9e8337c0a41e2e073452285f2aaed98dc",
+      "category": "security",
+      "checks": "fixtures/security-archive-member/checks.json",
+      "checks_sha256": "f22d56b634b67c4d83f2359c60f64e1bb3195a85a03dfa6e7dedce71eb49fc83",
+      "expected_route": "delegated",
+      "id": "security-archive-member",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/security-archive-member/start",
+      "source_sha256": "7afc49897f1f9ae8b515de7ddbe8cd9f8e76795ea3b04741d630cd1d2da6d302",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "f99840230cd16f2d3eaf304fa8a2322dd8f6c454",
+      "category": "security",
+      "checks": "fixtures/security-redirect-origin/checks.json",
+      "checks_sha256": "26f330a6c6a9fca59ad23b8f9f3dcd73e139c44ab4fae796e432f5ce3b0750d2",
+      "expected_route": "delegated",
+      "id": "security-redirect-origin",
+      "language": "TypeScript",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/security-redirect-origin/start",
+      "source_sha256": "8c6f0b9c3d1e539f89f0829e0f4a11512d5f665a76cee3432f8c08d2fd74277a",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "cb73908c04dce1684e9db1695b2631b1dbf7060b",
+      "category": "security",
+      "checks": "fixtures/security-atomic-batch/checks.json",
+      "checks_sha256": "3768221f053e1e0b4cd0fdde2654f9a9b000c4cd21b5c322c3696ca7e2f40115",
+      "expected_route": "delegated",
+      "id": "security-atomic-batch",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/security-atomic-batch/start",
+      "source_sha256": "49e36c5ee89cfb8c04ed6d7dfc3ab0d1ddf7f8c1273955b8f4f10a855a107d3f",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "93e0c48f23c6311909ec38ae3d5ee81761a05b99",
+      "category": "security",
+      "checks": "fixtures/security-nested-redaction/checks.json",
+      "checks_sha256": "f2ae560d727919c49f0a2c6a5750eb892626548699d070f98700e3ec8bc1efd6",
+      "expected_route": "delegated",
+      "id": "security-nested-redaction",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/security-nested-redaction/start",
+      "source_sha256": "b3dbc57c9cc15ae08a853a05abd93a2408f8131b6fcfd78b3ce92881ed4a9b6b",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "ea2268dc1d02260983d36e1061a8406f19bfd904",
+      "category": "review",
+      "checks": "fixtures/review-python-query/checks.json",
+      "checks_sha256": "cfd39a6a4eb2390aeaf6d6f180d6ad30b68ebc6849ab44d89861901e9b7cd990",
+      "expected_route": "delegated",
+      "id": "review-python-query",
+      "language": "Python",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/review-python-query/start",
+      "source_sha256": "590d4e500790ed6907c7794b7511e2e7eec6eac363458bacbd7016fdad508211",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "0660e9f8be071f435b67f4a9bfa495167e76b875",
+      "category": "review",
+      "checks": "fixtures/review-typescript-session/checks.json",
+      "checks_sha256": "a51a5336bbba5dec3d11b2cc23cade7d2339557aff32671b6a514e875e878b0b",
+      "expected_route": "delegated",
+      "id": "review-typescript-session",
+      "language": "TypeScript",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/review-typescript-session/start",
+      "source_sha256": "e6dac25754b00f7fab620e1943d1f46b84a94db42d09f87faf92790e261e77fc",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "22e9756219b5f3f298c5b66589bb065431338ac0",
+      "category": "review",
+      "checks": "fixtures/review-cli-cleanup/checks.json",
+      "checks_sha256": "216e3554943e247c103226db312d165d4a0088660841d0765a3a0716b91768d6",
+      "expected_route": "delegated",
+      "id": "review-cli-cleanup",
+      "language": "config/CLI",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/review-cli-cleanup/start",
+      "source_sha256": "b9ed89023354fef85e4d31f3a9c593584968847c87c9a7eb384674928e334c5d",
+      "timeout_seconds": 600
+    },
+    {
+      "acceptance": "acceptance.py",
+      "acceptance_sha256": "086a219ad94f5e54098ce375c42521c0c5ab1a19b01bc8e0f3762a78cdb3d1c0",
+      "acceptance_timeout_seconds": 60,
+      "base_commit": "97d11aba3676f2f5ec2c64fb01987c8a32f719d6",
+      "category": "review",
+      "checks": "fixtures/review-typescript-fetch/checks.json",
+      "checks_sha256": "2f5865cc79066e4de080f1815ec5271b91e79dd87b88f863b9a6c1e5e8fbfc90",
+      "expected_route": "delegated",
+      "id": "review-typescript-fetch",
+      "language": "TypeScript",
+      "protected": [
+        "PROMPT.md"
+      ],
+      "source": "fixtures/review-typescript-fetch/start",
+      "source_sha256": "a2d4864d0a596f8804f1ac75005e41426eff966c48a5a74a7d2162beafe05ce9",
+      "timeout_seconds": 600
+    }
+  ],
+  "version": 1
+}

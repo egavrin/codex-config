@@ -1,0 +1,60 @@
+{
+  "purpose": "Historical fixtures used while developing the benchmark method; excluded from route scores and bootstrap resampling.",
+  "scored": false,
+  "sets": [
+    {
+      "fixture_directory": "calibration/known-pattern",
+      "fixture_files_sha256": {
+        "PROMPT.md": "93888a685e31a4d0a0799c6eb9a05fc49cca1770810c2601571ccf0241ad01ec",
+        "slug.py": "b08b30d8d001903579bd109278a4207e626d10e160858ae3ef744caca4abfd83",
+        "tests/test_slug.py": "3139e34d235943b9be272e6c9fb63a0226a7096f80c2ccb63742084d70fd414a"
+      },
+      "id": "known-pattern",
+      "kind": "small_pilot",
+      "origin": "codex-routing-pilot, 2026-09-10"
+    },
+    {
+      "fixture_directory": "calibration/two-component",
+      "fixture_files_sha256": {
+        "PROMPT.md": "a9373244dd8d0e95ac360c6b94a2cc66b96b50b15a3a6d2e56dff4c3337a46f6",
+        "checkout.py": "029806318ddf0defbc69c636fc17689ba3181c9e546194ce5176f78e0cc37be3",
+        "pricing.py": "c369b95f8df5655426527b5d35058b932c67bc0a90f564e6751e22d48335da9c",
+        "tests/test_checkout.py": "b06c0d76247fe5de7426b8fc5ab15536785d52f2f046b5e07e9cedda02ca2d3b"
+      },
+      "id": "two-component",
+      "kind": "small_pilot",
+      "origin": "codex-routing-pilot, 2026-09-10"
+    },
+    {
+      "fixture_directory": "calibration/diagnosis",
+      "fixture_files_sha256": {
+        "PROMPT.md": "aa9f20c55cc76e55cc0f8e5a1ce757f39456d89d58378f70133f66e2acb8ca20",
+        "tests/test_window.py": "8c27c1d82e882482e11871823051227887b8ea7fcf5c733efe91fe577895a3d1",
+        "window.py": "aece0b5f6cefb4401c28571e471b876bbcef7dede5367c95172cf038fa581a52"
+      },
+      "id": "diagnosis",
+      "kind": "small_pilot",
+      "origin": "codex-routing-pilot, 2026-09-10"
+    },
+    {
+      "fixture_directory": "calibration/symlink-ancestry-safety",
+      "fixture_files_sha256": {
+        "TASK.md": "390fee5740fb8880304dff7e4cdbc4c8125a3eac7c34419734f880ae155d04c1"
+      },
+      "id": "symlink-ancestry-safety",
+      "kind": "paired_real_task",
+      "origin": "terra-real-ab-20260911, seed 7882b03",
+      "status": "one paired functional pilot; original checks tied and post-hoc safety checks found distinct gaps"
+    },
+    {
+      "fixture_directory": "calibration/runtime-metadata-report",
+      "fixture_files_sha256": {
+        "TASK.md": "05663e48ffccdd5c6220aaf0d9239b13606a99551dfd9886402c9707cc9959c1"
+      },
+      "id": "runtime-metadata-report",
+      "kind": "paired_real_task",
+      "origin": "terra-real-ab-20260911, seed db08464",
+      "status": "selected pair was interrupted by child-slot exhaustion; no paired result"
+    }
+  ]
+}

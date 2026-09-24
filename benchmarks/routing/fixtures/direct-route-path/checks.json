@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "args": [
+        "/api/"
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": "/api"
+      },
+      "function": "solve",
+      "name": "existing trailing slash"
+    },
+    {
+      "args": [
+        "/api//v1///users/"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": "/api/v1/users"
+      },
+      "function": "solve",
+      "name": "duplicate separators"
+    },
+    {
+      "args": [
+        "/a//b/?q=x//y"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": "/a/b?q=x//y"
+      },
+      "function": "solve",
+      "name": "query preserved"
+    },
+    {
+      "args": [
+        "////"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": "/"
+      },
+      "function": "solve",
+      "name": "root"
+    }
+  ],
+  "mode": "node"
+}
