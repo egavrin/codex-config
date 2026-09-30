@@ -1,7 +1,7 @@
 # Codex config
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
-configuration snapshot updated on September 24, 2026.
+configuration snapshot updated on September 30, 2026.
 
 ## Contents
 
@@ -39,7 +39,7 @@ configuration snapshot updated on September 24, 2026.
   `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
   bundled licenses where present.
 
-The active default is `gpt-6-sol` with High reasoning on the Standard service
+The active default is `gpt-6.1-sol` with High reasoning on the Standard service
 tier. Direct work remains in Sol. Delegated production implementation or
 substantive review is assigned to one fresh `astra_executor_standard` at Astra
 Medium. `astra_executor_xhigh` is reserved for a narrow intrinsically hard
@@ -78,7 +78,7 @@ Four independent choices affect a session:
 | Service tier | Fast or Standard/default controls rollout service tier independently of model and reasoning. |
 | Orchestration route | Direct means the effective root owns bounded work; Delegated means a distinct implementation owner materially benefits substantive work. |
 
-The repository default is GPT-6 Sol High Standard. A Desktop or runtime override
+The repository default is GPT-6.1 Sol High Standard. A Desktop or runtime override
 is an authoritative user choice, so routing and completion reports use the
 actual effective root. When a
 temporary override is no longer intended, select **Reset to default** before

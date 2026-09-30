@@ -124,7 +124,7 @@ such sessions from valid delegated-route benchmarks.
 
 ## Root Selection, Reasoning, and Tier
 
-The local default is GPT-6 Sol with High reasoning on Standard service tier.
+The local default is GPT-6.1 Sol with High reasoning on Standard service tier.
 Desktop model, reasoning, and tier overrides are user choices: respect the
 effective values and never describe an effective Terra, Luna, or Astra root as
 Sol. Names such as Light, Medium, High, and Extra High describe reasoning
