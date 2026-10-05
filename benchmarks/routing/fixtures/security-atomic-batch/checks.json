@@ -1,0 +1,107 @@
+{
+  "cases": [
+    {
+      "args": [
+        {
+          "a": 1
+        },
+        [
+          [
+            "a",
+            2
+          ],
+          [
+            "b",
+            3
+          ]
+        ],
+        null
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": {
+          "a": 2,
+          "b": 3
+        }
+      },
+      "function": "solve",
+      "name": "successful batch"
+    },
+    {
+      "args": [
+        {
+          "a": 1
+        },
+        [
+          [
+            "a",
+            2
+          ],
+          [
+            "b",
+            3
+          ]
+        ],
+        0
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "input_unchanged": true,
+        "value": {
+          "a": 1
+        }
+      },
+      "function": "solve",
+      "input_unchanged": true,
+      "name": "failure after first"
+    },
+    {
+      "args": [
+        {
+          "a": 1
+        },
+        [
+          [
+            "a",
+            2
+          ],
+          [
+            "b",
+            3
+          ]
+        ],
+        1
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "value": {
+          "a": 1
+        }
+      },
+      "function": "solve",
+      "name": "failure after second"
+    },
+    {
+      "args": [
+        {
+          "a": 1
+        },
+        [],
+        null
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": {
+          "a": 1
+        }
+      },
+      "function": "solve",
+      "name": "empty batch"
+    }
+  ],
+  "mode": "python"
+}

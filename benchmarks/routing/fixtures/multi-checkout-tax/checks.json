@@ -1,0 +1,47 @@
+{
+  "cases": [
+    {
+      "args": [
+        1000,
+        0,
+        10
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": 1100
+      },
+      "function": "solve",
+      "name": "no discount"
+    },
+    {
+      "args": [
+        1000,
+        20,
+        10
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": 880
+      },
+      "function": "solve",
+      "name": "discount before tax"
+    },
+    {
+      "args": [
+        999,
+        10,
+        10
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": 989
+      },
+      "function": "solve",
+      "name": "non-round subtotal"
+    }
+  ],
+  "mode": "python"
+}

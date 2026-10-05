@@ -1,0 +1,57 @@
+{
+  "cases": [
+    {
+      "args": [
+        "https://example.test",
+        "https://example.test/account"
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": "https://example.test/account"
+      },
+      "function": "solve",
+      "name": "trusted absolute"
+    },
+    {
+      "args": [
+        "https://example.test",
+        "https://example.test.evil.invalid/"
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "value": null
+      },
+      "function": "solve",
+      "name": "host prefix attack"
+    },
+    {
+      "args": [
+        "https://example.test",
+        "http://example.test/account"
+      ],
+      "baseline": false,
+      "critical": true,
+      "expected": {
+        "value": null
+      },
+      "function": "solve",
+      "name": "http rejected"
+    },
+    {
+      "args": [
+        "https://example.test",
+        "/account"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": "https://example.test/account"
+      },
+      "function": "solve",
+      "name": "relative path"
+    }
+  ],
+  "mode": "node"
+}

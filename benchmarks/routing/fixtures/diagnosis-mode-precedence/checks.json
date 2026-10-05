@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "argv": [],
+      "baseline": true,
+      "env": {
+        "APP_MODE": "fast"
+      },
+      "expected": {
+        "exit": 0,
+        "value": {
+          "mode": "fast"
+        }
+      },
+      "name": "environment only",
+      "stdin": {}
+    },
+    {
+      "argv": [
+        "--mode",
+        "safe"
+      ],
+      "baseline": false,
+      "env": {
+        "APP_MODE": "fast"
+      },
+      "expected": {
+        "exit": 0,
+        "value": {
+          "mode": "safe"
+        }
+      },
+      "name": "CLI wins",
+      "stdin": {}
+    },
+    {
+      "argv": [],
+      "baseline": false,
+      "env": {},
+      "expected": {
+        "exit": 0,
+        "value": {
+          "mode": "audit"
+        }
+      },
+      "name": "config fallback",
+      "stdin": {
+        "mode": "audit"
+      }
+    }
+  ],
+  "mode": "cli"
+}

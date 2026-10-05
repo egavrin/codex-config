@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "critical": false,
+      "expected": {
+        "value": true
+      },
+      "name": "sequential calls",
+      "term_groups": [
+        [
+          "candidate.mjs"
+        ],
+        [
+          "sequential",
+          "serial",
+          "one at a time",
+          "each iteration",
+          "before"
+        ],
+        [
+          "getuser",
+          "user"
+        ]
+      ],
+      "terms": []
+    },
+    {
+      "critical": false,
+      "expected": {
+        "value": true
+      },
+      "name": "duplicate settings fetch",
+      "term_groups": [
+        [
+          "candidate.mjs"
+        ],
+        [
+          "settings"
+        ],
+        [
+          "once",
+          "repeated",
+          "each"
+        ]
+      ],
+      "terms": []
+    }
+  ],
+  "mode": "review"
+}

@@ -1,0 +1,71 @@
+{
+  "cases": [
+    {
+      "args": [
+        [
+          {
+            "createdAt": 0,
+            "key": "a",
+            "ttl": 10
+          }
+        ],
+        9
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": [
+          "a"
+        ]
+      },
+      "function": "solve",
+      "name": "not expired"
+    },
+    {
+      "args": [
+        [
+          {
+            "createdAt": 0,
+            "key": "a",
+            "ttl": 10
+          }
+        ],
+        10
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": []
+      },
+      "function": "solve",
+      "name": "boundary expired"
+    },
+    {
+      "args": [
+        [
+          {
+            "createdAt": 0,
+            "key": "a",
+            "ttl": 10
+          },
+          {
+            "createdAt": 5,
+            "key": "a",
+            "ttl": 10
+          }
+        ],
+        6
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": [
+          "a"
+        ]
+      },
+      "function": "solve",
+      "name": "new write replaces old"
+    }
+  ],
+  "mode": "node"
+}

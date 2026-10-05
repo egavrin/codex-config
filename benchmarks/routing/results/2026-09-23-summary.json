@@ -1,0 +1,1291 @@
+{
+  "bootstrap": {
+    "delta": 14.210643245575355,
+    "interval_95": [
+      10.055874228841063,
+      17.54528719580348
+    ],
+    "quality_delta": -0.01388888888888889,
+    "quality_interval_95": [
+      -0.041666666666666664,
+      0.0
+    ],
+    "reason": null
+  },
+  "completeness": {
+    "malformed_rollouts": [],
+    "missing_acceptance": [],
+    "missing_expected_child": [],
+    "missing_root": [],
+    "missing_runs": [],
+    "missing_usage": [],
+    "planned": 144,
+    "recorded": 144,
+    "skipped_runs": [],
+    "unknown_tier": [
+      [
+        "diagnosis-event-unsubscribe",
+        "luna",
+        1
+      ],
+      [
+        "diagnosis-event-unsubscribe",
+        "terra",
+        1
+      ],
+      [
+        "diagnosis-event-unsubscribe",
+        "luna",
+        2
+      ],
+      [
+        "diagnosis-event-unsubscribe",
+        "terra",
+        2
+      ],
+      [
+        "diagnosis-event-unsubscribe",
+        "luna",
+        3
+      ],
+      [
+        "diagnosis-event-unsubscribe",
+        "terra",
+        3
+      ],
+      [
+        "diagnosis-mode-precedence",
+        "luna",
+        1
+      ],
+      [
+        "diagnosis-mode-precedence",
+        "terra",
+        1
+      ],
+      [
+        "diagnosis-mode-precedence",
+        "luna",
+        2
+      ],
+      [
+        "diagnosis-mode-precedence",
+        "terra",
+        2
+      ],
+      [
+        "diagnosis-mode-precedence",
+        "luna",
+        3
+      ],
+      [
+        "diagnosis-mode-precedence",
+        "terra",
+        3
+      ],
+      [
+        "diagnosis-retry-budget",
+        "luna",
+        1
+      ],
+      [
+        "diagnosis-retry-budget",
+        "terra",
+        1
+      ],
+      [
+        "diagnosis-retry-budget",
+        "luna",
+        2
+      ],
+      [
+        "diagnosis-retry-budget",
+        "terra",
+        2
+      ],
+      [
+        "diagnosis-retry-budget",
+        "luna",
+        3
+      ],
+      [
+        "diagnosis-retry-budget",
+        "terra",
+        3
+      ],
+      [
+        "diagnosis-version-cache",
+        "luna",
+        1
+      ],
+      [
+        "diagnosis-version-cache",
+        "terra",
+        1
+      ],
+      [
+        "diagnosis-version-cache",
+        "luna",
+        2
+      ],
+      [
+        "diagnosis-version-cache",
+        "terra",
+        2
+      ],
+      [
+        "diagnosis-version-cache",
+        "luna",
+        3
+      ],
+      [
+        "diagnosis-version-cache",
+        "terra",
+        3
+      ],
+      [
+        "direct-config-defaults",
+        "luna",
+        1
+      ],
+      [
+        "direct-config-defaults",
+        "terra",
+        1
+      ],
+      [
+        "direct-config-defaults",
+        "luna",
+        2
+      ],
+      [
+        "direct-config-defaults",
+        "terra",
+        2
+      ],
+      [
+        "direct-config-defaults",
+        "luna",
+        3
+      ],
+      [
+        "direct-config-defaults",
+        "terra",
+        3
+      ],
+      [
+        "direct-limit-flag",
+        "luna",
+        1
+      ],
+      [
+        "direct-limit-flag",
+        "terra",
+        1
+      ],
+      [
+        "direct-limit-flag",
+        "luna",
+        2
+      ],
+      [
+        "direct-limit-flag",
+        "terra",
+        2
+      ],
+      [
+        "direct-limit-flag",
+        "luna",
+        3
+      ],
+      [
+        "direct-limit-flag",
+        "terra",
+        3
+      ],
+      [
+        "direct-route-path",
+        "luna",
+        1
+      ],
+      [
+        "direct-route-path",
+        "terra",
+        1
+      ],
+      [
+        "direct-route-path",
+        "luna",
+        2
+      ],
+      [
+        "direct-route-path",
+        "terra",
+        2
+      ],
+      [
+        "direct-route-path",
+        "luna",
+        3
+      ],
+      [
+        "direct-route-path",
+        "terra",
+        3
+      ],
+      [
+        "direct-size-parser",
+        "luna",
+        1
+      ],
+      [
+        "direct-size-parser",
+        "terra",
+        1
+      ],
+      [
+        "direct-size-parser",
+        "luna",
+        2
+      ],
+      [
+        "direct-size-parser",
+        "terra",
+        2
+      ],
+      [
+        "direct-size-parser",
+        "luna",
+        3
+      ],
+      [
+        "direct-size-parser",
+        "terra",
+        3
+      ],
+      [
+        "local-config-precedence",
+        "luna",
+        1
+      ],
+      [
+        "local-config-precedence",
+        "terra",
+        1
+      ],
+      [
+        "local-config-precedence",
+        "luna",
+        2
+      ],
+      [
+        "local-config-precedence",
+        "terra",
+        2
+      ],
+      [
+        "local-config-precedence",
+        "luna",
+        3
+      ],
+      [
+        "local-config-precedence",
+        "terra",
+        3
+      ],
+      [
+        "local-csv-row",
+        "luna",
+        1
+      ],
+      [
+        "local-csv-row",
+        "terra",
+        1
+      ],
+      [
+        "local-csv-row",
+        "luna",
+        2
+      ],
+      [
+        "local-csv-row",
+        "terra",
+        2
+      ],
+      [
+        "local-csv-row",
+        "luna",
+        3
+      ],
+      [
+        "local-csv-row",
+        "terra",
+        3
+      ],
+      [
+        "local-intervals",
+        "luna",
+        1
+      ],
+      [
+        "local-intervals",
+        "terra",
+        1
+      ],
+      [
+        "local-intervals",
+        "luna",
+        2
+      ],
+      [
+        "local-intervals",
+        "terra",
+        2
+      ],
+      [
+        "local-intervals",
+        "luna",
+        3
+      ],
+      [
+        "local-intervals",
+        "terra",
+        3
+      ],
+      [
+        "local-utc-buckets",
+        "luna",
+        1
+      ],
+      [
+        "local-utc-buckets",
+        "terra",
+        1
+      ],
+      [
+        "local-utc-buckets",
+        "luna",
+        2
+      ],
+      [
+        "local-utc-buckets",
+        "terra",
+        2
+      ],
+      [
+        "local-utc-buckets",
+        "luna",
+        3
+      ],
+      [
+        "local-utc-buckets",
+        "terra",
+        3
+      ],
+      [
+        "multi-cache-expiry",
+        "luna",
+        1
+      ],
+      [
+        "multi-cache-expiry",
+        "terra",
+        1
+      ],
+      [
+        "multi-cache-expiry",
+        "luna",
+        2
+      ],
+      [
+        "multi-cache-expiry",
+        "terra",
+        2
+      ],
+      [
+        "multi-cache-expiry",
+        "luna",
+        3
+      ],
+      [
+        "multi-cache-expiry",
+        "terra",
+        3
+      ],
+      [
+        "multi-checkout-tax",
+        "luna",
+        1
+      ],
+      [
+        "multi-checkout-tax",
+        "terra",
+        1
+      ],
+      [
+        "multi-checkout-tax",
+        "luna",
+        2
+      ],
+      [
+        "multi-checkout-tax",
+        "terra",
+        2
+      ],
+      [
+        "multi-checkout-tax",
+        "luna",
+        3
+      ],
+      [
+        "multi-checkout-tax",
+        "terra",
+        3
+      ],
+      [
+        "multi-markup-render",
+        "luna",
+        1
+      ],
+      [
+        "multi-markup-render",
+        "terra",
+        1
+      ],
+      [
+        "multi-markup-render",
+        "luna",
+        2
+      ],
+      [
+        "multi-markup-render",
+        "terra",
+        2
+      ],
+      [
+        "multi-markup-render",
+        "luna",
+        3
+      ],
+      [
+        "multi-markup-render",
+        "terra",
+        3
+      ],
+      [
+        "multi-reservation-count",
+        "luna",
+        1
+      ],
+      [
+        "multi-reservation-count",
+        "terra",
+        1
+      ],
+      [
+        "multi-reservation-count",
+        "luna",
+        2
+      ],
+      [
+        "multi-reservation-count",
+        "terra",
+        2
+      ],
+      [
+        "multi-reservation-count",
+        "luna",
+        3
+      ],
+      [
+        "multi-reservation-count",
+        "terra",
+        3
+      ],
+      [
+        "review-cli-cleanup",
+        "luna",
+        1
+      ],
+      [
+        "review-cli-cleanup",
+        "terra",
+        1
+      ],
+      [
+        "review-cli-cleanup",
+        "luna",
+        2
+      ],
+      [
+        "review-cli-cleanup",
+        "terra",
+        2
+      ],
+      [
+        "review-cli-cleanup",
+        "luna",
+        3
+      ],
+      [
+        "review-cli-cleanup",
+        "terra",
+        3
+      ],
+      [
+        "review-python-query",
+        "luna",
+        1
+      ],
+      [
+        "review-python-query",
+        "terra",
+        1
+      ],
+      [
+        "review-python-query",
+        "luna",
+        2
+      ],
+      [
+        "review-python-query",
+        "terra",
+        2
+      ],
+      [
+        "review-python-query",
+        "luna",
+        3
+      ],
+      [
+        "review-python-query",
+        "terra",
+        3
+      ],
+      [
+        "review-typescript-fetch",
+        "luna",
+        1
+      ],
+      [
+        "review-typescript-fetch",
+        "terra",
+        1
+      ],
+      [
+        "review-typescript-fetch",
+        "luna",
+        2
+      ],
+      [
+        "review-typescript-fetch",
+        "terra",
+        2
+      ],
+      [
+        "review-typescript-fetch",
+        "luna",
+        3
+      ],
+      [
+        "review-typescript-fetch",
+        "terra",
+        3
+      ],
+      [
+        "review-typescript-session",
+        "luna",
+        1
+      ],
+      [
+        "review-typescript-session",
+        "terra",
+        1
+      ],
+      [
+        "review-typescript-session",
+        "luna",
+        2
+      ],
+      [
+        "review-typescript-session",
+        "terra",
+        2
+      ],
+      [
+        "review-typescript-session",
+        "luna",
+        3
+      ],
+      [
+        "review-typescript-session",
+        "terra",
+        3
+      ],
+      [
+        "security-archive-member",
+        "luna",
+        1
+      ],
+      [
+        "security-archive-member",
+        "terra",
+        1
+      ],
+      [
+        "security-archive-member",
+        "luna",
+        2
+      ],
+      [
+        "security-archive-member",
+        "terra",
+        2
+      ],
+      [
+        "security-archive-member",
+        "luna",
+        3
+      ],
+      [
+        "security-archive-member",
+        "terra",
+        3
+      ],
+      [
+        "security-atomic-batch",
+        "luna",
+        1
+      ],
+      [
+        "security-atomic-batch",
+        "terra",
+        1
+      ],
+      [
+        "security-atomic-batch",
+        "luna",
+        2
+      ],
+      [
+        "security-atomic-batch",
+        "terra",
+        2
+      ],
+      [
+        "security-atomic-batch",
+        "luna",
+        3
+      ],
+      [
+        "security-atomic-batch",
+        "terra",
+        3
+      ],
+      [
+        "security-nested-redaction",
+        "luna",
+        1
+      ],
+      [
+        "security-nested-redaction",
+        "terra",
+        1
+      ],
+      [
+        "security-nested-redaction",
+        "luna",
+        2
+      ],
+      [
+        "security-nested-redaction",
+        "terra",
+        2
+      ],
+      [
+        "security-nested-redaction",
+        "luna",
+        3
+      ],
+      [
+        "security-nested-redaction",
+        "terra",
+        3
+      ],
+      [
+        "security-redirect-origin",
+        "luna",
+        1
+      ],
+      [
+        "security-redirect-origin",
+        "terra",
+        1
+      ],
+      [
+        "security-redirect-origin",
+        "luna",
+        2
+      ],
+      [
+        "security-redirect-origin",
+        "terra",
+        2
+      ],
+      [
+        "security-redirect-origin",
+        "luna",
+        3
+      ],
+      [
+        "security-redirect-origin",
+        "terra",
+        3
+      ]
+    ]
+  },
+  "paired": {
+    "by_category": {
+      "diagnosis": {
+        "luna": 91.5551440128786,
+        "terra": 80.18634018834722
+      },
+      "direct": {
+        "luna": 93.822781451004,
+        "terra": 70.73393690664324
+      },
+      "local": {
+        "luna": 93.033260716813,
+        "terra": 70.6939430331744
+      },
+      "multi": {
+        "luna": 91.27998932491408,
+        "terra": 79.62365413183542
+      },
+      "review": {
+        "luna": 68.97498512198695,
+        "terra": 58.15726831059328
+      },
+      "security": {
+        "luna": 87.0541138579499,
+        "terra": 81.06127244150085
+      }
+    },
+    "scores": {
+      "luna": 87.6200457475911,
+      "terra": 73.40940250201574
+    },
+    "tasks": {
+      "diagnosis-event-unsubscribe": {
+        "category": "diagnosis",
+        "scores": {
+          "luna": 89.54766892928943,
+          "terra": 81.16022715981612
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.7830171666666668,
+            117.76106468068126
+          ],
+          "terra": [
+            1.0,
+            7.481076666666667,
+            56.21718291658908
+          ]
+        }
+      },
+      "diagnosis-mode-precedence": {
+        "category": "diagnosis",
+        "scores": {
+          "luna": 92.3860385731367,
+          "terra": 79.16928614309992
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.0466478333333336,
+            104.61340202755916
+          ],
+          "terra": [
+            1.0,
+            6.696206666666666,
+            64.78728163902026
+          ]
+        }
+      },
+      "diagnosis-retry-budget": {
+        "category": "diagnosis",
+        "scores": {
+          "luna": 91.30451227261175,
+          "terra": 79.47788966037872
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.0297085,
+            92.29791398625821
+          ],
+          "terra": [
+            1.0,
+            6.424558333333334,
+            52.16914506970594
+          ]
+        }
+      },
+      "diagnosis-version-cache": {
+        "category": "diagnosis",
+        "scores": {
+          "luna": 92.98235627647654,
+          "terra": 80.93795779009412
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.1104613333333333,
+            85.46542341665675
+          ],
+          "terra": [
+            1.0,
+            5.788451666666667,
+            55.477128805747874
+          ]
+        }
+      },
+      "direct-config-defaults": {
+        "category": "direct",
+        "scores": {
+          "luna": 93.59563962437252,
+          "terra": 70.6872527477045
+        },
+        "values": {
+          "luna": [
+            1.0,
+            0.092874,
+            39.129222042082496
+          ],
+          "terra": [
+            1.0,
+            4.054141666666667,
+            26.59934008331038
+          ]
+        }
+      },
+      "direct-limit-flag": {
+        "category": "direct",
+        "scores": {
+          "luna": 94.91066477411523,
+          "terra": 70.92055723341693
+        },
+        "values": {
+          "luna": [
+            1.0,
+            0.08983283333333332,
+            32.31757012490804
+          ],
+          "terra": [
+            1.0,
+            2.9275583333333333,
+            24.09382272232324
+          ]
+        }
+      },
+      "direct-route-path": {
+        "category": "direct",
+        "scores": {
+          "luna": 91.39152006497405,
+          "terra": 70.56333791897973
+        },
+        "values": {
+          "luna": [
+            1.0,
+            0.096686,
+            60.99143177767595
+          ],
+          "terra": [
+            1.0,
+            5.148916666666667,
+            34.73925594434453
+          ]
+        }
+      },
+      "direct-size-parser": {
+        "category": "direct",
+        "scores": {
+          "luna": 95.39330134055423,
+          "terra": 70.7645997264718
+        },
+        "values": {
+          "luna": [
+            1.0,
+            0.13355433333333333,
+            49.17405670857988
+          ],
+          "terra": [
+            1.0,
+            5.240166666666666,
+            37.8475536526336
+          ]
+        }
+      },
+      "local-config-precedence": {
+        "category": "local",
+        "scores": {
+          "luna": 92.09313886898397,
+          "terra": 70.95794294687255
+        },
+        "values": {
+          "luna": [
+            1.0,
+            0.10777550000000001,
+            56.37176158356791
+          ],
+          "terra": [
+            1.0,
+            3.3752166666666668,
+            34.0855770559671
+          ]
+        }
+      },
+      "local-csv-row": {
+        "category": "local",
+        "scores": {
+          "luna": 95.80779295068358,
+          "terra": 70.80081390566487
+        },
+        "values": {
+          "luna": [
+            1.0,
+            0.09248800000000001,
+            43.85184145827467
+          ],
+          "terra": [
+            1.0,
+            3.464775,
+            34.66004151393039
+          ]
+        }
+      },
+      "local-intervals": {
+        "category": "local",
+        "scores": {
+          "luna": 92.51398136658027,
+          "terra": 70.49534087345558
+        },
+        "values": {
+          "luna": [
+            1.0,
+            0.06581566666666666,
+            44.375463319321476
+          ],
+          "terra": [
+            1.0,
+            3.986083333333333,
+            27.765686055567738
+          ]
+        }
+      },
+      "local-utc-buckets": {
+        "category": "local",
+        "scores": {
+          "luna": 91.71812968100423,
+          "terra": 70.52167440670462
+        },
+        "values": {
+          "luna": [
+            1.0,
+            0.08609033333333334,
+            60.91610201370592
+          ],
+          "terra": [
+            1.0,
+            4.950808333333334,
+            35.691139152894415
+          ]
+        }
+      },
+      "multi-cache-expiry": {
+        "category": "multi",
+        "scores": {
+          "luna": 86.91054822304757,
+          "terra": 78.57295877131638
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.0118343333333333,
+            200.19545013899915
+          ],
+          "terra": [
+            1.0,
+            7.040163333333333,
+            69.1730156110134
+          ]
+        }
+      },
+      "multi-checkout-tax": {
+        "category": "multi",
+        "scores": {
+          "luna": 93.0936600215075,
+          "terra": 80.82152375477295
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.7691966666666663,
+            94.32990730569388
+          ],
+          "terra": [
+            1.0,
+            7.676913333333334,
+            61.75618680605354
+          ]
+        }
+      },
+      "multi-markup-render": {
+        "category": "multi",
+        "scores": {
+          "luna": 90.65758515243259,
+          "terra": 79.75341165154519
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.0054856666666665,
+            103.51833358329411
+          ],
+          "terra": [
+            1.0,
+            6.168566666666667,
+            55.162772750093914
+          ]
+        }
+      },
+      "multi-reservation-count": {
+        "category": "multi",
+        "scores": {
+          "luna": 94.4581639026687,
+          "terra": 79.34672234970719
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.6011434999999996,
+            110.00157411132629
+          ],
+          "terra": [
+            1.0,
+            8.348841666666667,
+            79.52103940265563
+          ]
+        }
+      },
+      "review-cli-cleanup": {
+        "category": "review",
+        "scores": {
+          "luna": 92.21203682142549,
+          "terra": 76.35340787289044
+        },
+        "values": {
+          "luna": [
+            1.0,
+            1.7130418333333335,
+            136.99943913907433
+          ],
+          "terra": [
+            1.0,
+            8.088769999999998,
+            83.65210976405069
+          ]
+        }
+      },
+      "review-python-query": {
+        "category": "review",
+        "scores": {
+          "luna": 90.5415789552784,
+          "terra": 76.58287144950744
+        },
+        "values": {
+          "luna": [
+            1.0,
+            1.6472535,
+            113.51751995831728
+          ],
+          "terra": [
+            1.0,
+            7.506998333333333,
+            59.83269497239962
+          ]
+        }
+      },
+      "review-typescript-fetch": {
+        "category": "review",
+        "scores": {
+          "luna": 93.1463247112439,
+          "terra": 79.69279391997523
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.1424671666666666,
+            86.7322081386422
+          ],
+          "terra": [
+            1.0,
+            6.631113333333334,
+            57.01048855568903
+          ]
+        }
+      },
+      "review-typescript-session": {
+        "category": "review",
+        "scores": {
+          "luna": 0.0,
+          "terra": 0.0
+        },
+        "values": {
+          "luna": [
+            0.0,
+            null,
+            null
+          ],
+          "terra": [
+            0.0,
+            null,
+            null
+          ]
+        }
+      },
+      "security-archive-member": {
+        "category": "security",
+        "scores": {
+          "luna": 66.15755024896906,
+          "terra": 87.22908659519875
+        },
+        "values": {
+          "luna": [
+            0.6666666666666666,
+            4.09996075,
+            453.3766836664872
+          ],
+          "terra": [
+            1.0,
+            7.139021666666667,
+            64.02170495828614
+          ]
+        }
+      },
+      "security-atomic-batch": {
+        "category": "security",
+        "scores": {
+          "luna": 95.852491143068,
+          "terra": 78.62967057364216
+        },
+        "values": {
+          "luna": [
+            1.0,
+            1.673564,
+            77.20620054138514
+          ],
+          "terra": [
+            1.0,
+            5.817941666666667,
+            61.195530513611935
+          ]
+        }
+      },
+      "security-nested-redaction": {
+        "category": "security",
+        "scores": {
+          "luna": 92.07879931000204,
+          "terra": 81.66084630502142
+        },
+        "values": {
+          "luna": [
+            1.0,
+            2.260308,
+            99.99286312493496
+          ],
+          "terra": [
+            1.0,
+            5.815121666666667,
+            60.389686305929594
+          ]
+        }
+      },
+      "security-redirect-origin": {
+        "category": "security",
+        "scores": {
+          "luna": 94.1276147297605,
+          "terra": 76.72548629214107
+        },
+        "values": {
+          "luna": [
+            1.0,
+            1.8559849999999998,
+            102.96589166671038
+          ],
+          "terra": [
+            1.0,
+            8.278888333333333,
+            72.73312238867705
+          ]
+        }
+      }
+    }
+  },
+  "recommendation": "retain_current_default",
+  "recommendation_reasons": [
+    "critical acceptance defect",
+    "ranking changes under unknown tier"
+  ],
+  "tier_bounds": {
+    "luna_optimistic": {
+      "luna": 87.6200457475911,
+      "terra": 71.7790530745366
+    },
+    "luna_pessimistic": {
+      "luna": 82.18365055727908,
+      "terra": 87.32070827064338
+    }
+  },
+  "totals": {
+    "luna": {
+      "accepted": 68,
+      "astra_escalations": 0,
+      "child_followups": 2,
+      "delegated_accepted": 44,
+      "delegated_runs": 48,
+      "elapsed_seconds": 7008.363725000992,
+      "estimated_credits": 106.706511,
+      "fallbacks": 0,
+      "maximum_credits": 266.7662775,
+      "minimum_credits": 106.706511,
+      "repairs": 0,
+      "repairs_unknown": 72,
+      "runs": 72,
+      "runtime_failures": 1,
+      "skipped": 0,
+      "unknown_costs": 0
+    },
+    "terra": {
+      "accepted": 69,
+      "astra_escalations": 0,
+      "child_followups": 1,
+      "delegated_accepted": 45,
+      "delegated_runs": 48,
+      "elapsed_seconds": 3810.8711333794054,
+      "estimated_credits": 437.084145,
+      "fallbacks": 0,
+      "maximum_credits": 557.474775,
+      "minimum_credits": 222.98991,
+      "repairs": 0,
+      "repairs_unknown": 72,
+      "runs": 72,
+      "runtime_failures": 0,
+      "skipped": 0,
+      "unknown_costs": 0
+    }
+  }
+}

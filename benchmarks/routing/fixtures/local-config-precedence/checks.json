@@ -1,0 +1,86 @@
+{
+  "cases": [
+    {
+      "argv": [],
+      "baseline": true,
+      "env": {},
+      "expected": {
+        "exit": 0,
+        "value": {
+          "threads": 3
+        }
+      },
+      "name": "file layer",
+      "stdin": {
+        "defaults": {
+          "threads": 4
+        },
+        "file": {
+          "threads": 3
+        }
+      }
+    },
+    {
+      "argv": [],
+      "baseline": false,
+      "env": {},
+      "expected": {
+        "exit": 0,
+        "value": {
+          "threads": 0
+        }
+      },
+      "name": "file zero",
+      "stdin": {
+        "defaults": {
+          "threads": 4
+        },
+        "file": {
+          "threads": 0
+        }
+      }
+    },
+    {
+      "argv": [],
+      "baseline": false,
+      "env": {
+        "THREADS": "0"
+      },
+      "expected": {
+        "exit": 0,
+        "value": {
+          "threads": 0
+        }
+      },
+      "name": "environment zero",
+      "stdin": {
+        "defaults": {
+          "threads": 4
+        }
+      }
+    },
+    {
+      "argv": [
+        "--threads",
+        "0"
+      ],
+      "baseline": false,
+      "env": {
+        "THREADS": "2"
+      },
+      "expected": {
+        "exit": 0,
+        "value": {
+          "threads": 0
+        }
+      },
+      "name": "CLI zero",
+      "stdin": {
+        "defaults": {
+          "threads": 4
+        }
+      }
+    }
+  ],
+  "mode": "cli"
+}

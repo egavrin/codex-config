@@ -1,0 +1,79 @@
+{
+  "cases": [
+    {
+      "argv": [
+        "--limit",
+        "2"
+      ],
+      "baseline": true,
+      "env": {},
+      "expected": {
+        "exit": 0,
+        "value": [
+          1,
+          2
+        ]
+      },
+      "name": "positive limit",
+      "stdin": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "argv": [
+        "--limit",
+        "0"
+      ],
+      "baseline": false,
+      "env": {},
+      "expected": {
+        "exit": 0,
+        "value": []
+      },
+      "name": "zero limit",
+      "stdin": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "argv": [
+        "--limit",
+        "-1"
+      ],
+      "baseline": false,
+      "env": {},
+      "expected": {
+        "exit": 0,
+        "value": []
+      },
+      "name": "negative limit",
+      "stdin": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "argv": [],
+      "baseline": false,
+      "env": {},
+      "expected": {
+        "exit": 0,
+        "value": [
+          1,
+          2
+        ]
+      },
+      "name": "unlimited",
+      "stdin": [
+        1,
+        2
+      ]
+    }
+  ],
+  "mode": "cli"
+}

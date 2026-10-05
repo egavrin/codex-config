@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "args": [
+        "2K"
+      ],
+      "baseline": true,
+      "critical": false,
+      "expected": {
+        "value": 2048
+      },
+      "function": "solve",
+      "name": "existing K"
+    },
+    {
+      "args": [
+        " 3m "
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": 3145728
+      },
+      "function": "solve",
+      "name": "lowercase and spaces"
+    },
+    {
+      "args": [
+        "512"
+      ],
+      "baseline": false,
+      "critical": false,
+      "expected": {
+        "value": 512
+      },
+      "function": "solve",
+      "name": "plain bytes"
+    },
+    {
+      "args": [
+        "-2K"
+      ],
+      "expected": {
+        "error": "ValueError"
+      },
+      "name": "negative rejected"
+    }
+  ],
+  "mode": "python"
+}
