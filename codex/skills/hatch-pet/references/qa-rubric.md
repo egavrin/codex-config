@@ -6,7 +6,7 @@ Do not package a pet until every section passes.
 
 - Final atlas is exactly `1536x2288`, 8 columns x 11 rows, with `192x208` cells.
 - `pet.json` contains `spriteVersionNumber: 2` and points to the packaged spritesheet.
-- Used cells are non-empty; unused standard-row cells are transparent.
+- Used cells are non-empty. Unused standard-row cells are transparent.
 - Fully transparent pixels have zero RGB residue.
 - The 8x9 intermediate atlas is never packaged.
 - `qa/review.json` has no errors.
@@ -29,7 +29,7 @@ Do not package a pet until every section passes.
 ## Look Directions
 
 - All 16 directions are present in fixed clockwise order and visibly distinct from neutral/rest.
-- Cardinal directions read unmistakably as up, right, down, and left; diagonals and intermediates read in the correct quadrant.
+- Cardinal directions read unmistakably as up, right, down, and left. Diagonals and intermediates read in the correct quadrant.
 - `qa/look-directions.png` includes full-body and zoomed head/upper-body views.
 - `qa/direction-semantics.json` records `pass`, `expected`, `observed`, and `reason` for every direction.
 - `qa/look-continuity.json` has no unexplained holes, center jumps, area jumps, or local difference outliers.
@@ -39,4 +39,4 @@ Do not package a pet until every section passes.
 
 ## Repair Policy
 
-Repair the smallest packaging-eligible scope: one standard row or one complete coherent look row. Never mix an individually generated repair cell into a new pet's final look row. Re-run assembly, deterministic validation, direction QA, continuity measurement, and semantic review after every relevant repair.
+Repair the smallest packaging-eligible scope: one standard row or one complete coherent look row. Never mix an individually generated repair cell into a new pet's final look row. Run again assembly, deterministic validation, direction QA, continuity measurement, and semantic review after every relevant repair.

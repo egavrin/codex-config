@@ -1,6 +1,6 @@
 # {{REPO_NAME}}
 
-This file provides guidance to AI agents working in this repository.
+This file guides AI agents that work in this repository.
 
 ## Repository Identity
 

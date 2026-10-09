@@ -21,7 +21,7 @@ SCRIPT = Path(__file__).with_name('bridge.py')
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--case', default='all', choices=['all', 'review', 'repair', 'stream', 'init'])
+    parser.add_argument('--case', default='all', choices=['all', 'review', 'repair', 'stream', 'init', 'profile'])
     args = parser.parse_args()
     root = Path(tempfile.mkdtemp(prefix='claude-collab-e2e-'))
     root.chmod(0o700)
@@ -36,6 +36,11 @@ def main():
         (skills / 'sample/references').mkdir(parents=True)
         (skills / 'sample/SKILL.md').write_text('---\nname: sample\ndescription: fixture\n---\nRead [detail](references/detail.md).\n')
         (skills / 'sample/references/detail.md').write_text('REFERENCE_SENTINEL\n')
+        policy = skills / 'writing-for-agents/references'
+        policy.mkdir(parents=True)
+        (policy.parent/'SKILL.md').write_text('---\nname: writing-for-agents\ndescription: Write agent instructions.\n---\n')
+        for policy_name, sentinel in [('controlled-english.md','PROFILE_SENTINEL'), ('ste-rule-map.md','RULE_MAP_SENTINEL'), ('software-terms.md','TERMS_SENTINEL')]:
+            (policy/policy_name).write_text(sentinel+'\n')
         project = home / 'project'
         project.mkdir()
         (project / 'a.txt').write_text('old\n')
@@ -68,7 +73,11 @@ assert not any(k.startswith(('ANTHROPIC_', 'CLAUDE_CODE_OAUTH', 'AWS_', 'OPENAI_
 assert 'FIXTURE_SENTINEL' not in ' '.join(args)
 if scenario == 'duplex': sys.stderr.write('x'*60000); sys.stderr.flush()
 payload = sys.stdin.read()
-assert 'REFERENCE_SENTINEL' in payload and 'name: sample' in payload
+bundle = json.loads(payload)
+if bundle['skills']: assert 'REFERENCE_SENTINEL' in payload and 'name: sample' in payload
+for sentinel in ('PROFILE_SENTINEL','RULE_MAP_SENTINEL','TERMS_SENTINEL'): assert sentinel in payload
+assert 'communication_policy' in bundle
+
 if (base / '.codex/skills/related').exists(): assert 'SIBLING_SENTINEL' in payload and 'Related detail' in payload
 (base / 'request-observed.json').write_text(json.dumps({'args': args, 'stdin_sha256': __import__('hashlib').sha256(payload.encode()).hexdigest(), 'bundled_reference': True, 'env_restricted': True}))
 if scenario in ('timeout', 'cancel'):
@@ -183,6 +192,19 @@ if scenario == 'final-hang': time.sleep(10)
         entry.write_text(entry.read_text() + '[sibling](../related/SKILL.md)\n')
 
     try:
+        if args.case in ('all','profile'):
+            case('profile-with-skill')
+            case('profile-without-skill', extra={'skills':[]})
+            missing = case('profile-missing', expected=1, setup=lambda h,p:(h/'.codex/skills/writing-for-agents/references/controlled-english.md').unlink())
+            missing_map = case('profile-missing-map', expected=1, setup=lambda h,p:(h/'.codex/skills/writing-for-agents/references/ste-rule-map.md').unlink())
+            missing_terms = case('profile-missing-terms', expected=1, setup=lambda h,p:(h/'.codex/skills/writing-for-agents/references/software-terms.md').unlink())
+            oversized = case('profile-combined-boundary', expected=1, extra={'objective':'Review FIXTURE_SENTINEL '+'x'*100000}, setup=lambda h,p:(h/'.codex/skills/writing-for-agents/references/software-terms.md').write_text('TERMS_SENTINEL '+'x'*180000))
+            for home in (missing,missing_map,missing_terms,oversized):
+                calls=[json.loads(line) for line in (home/'calls.jsonl').read_text().splitlines()]
+                assert not any('-p' in call for call in calls), 'invalid policy must stop before request'
+        if args.case == 'profile':
+            report['status']='pass'
+            return
         case('review')
         if args.case in ('all', 'stream', 'init'):
             case('plugin-builtin','plugin-builtin')

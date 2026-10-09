@@ -1,4 +1,4 @@
 interface:
   display_name: "Repo Modernizer"
-  short_description: "Audit and modernize repo agent guidance"
-  default_prompt: "Use $repo-modernizer to audit this repository and propose a canonical AGENTS.md and repo-local skills modernization plan."
+  short_description: "Audit and update repository agent guidance"
+  default_prompt: "Use $repo-modernizer to audit this repository. Propose a plan for canonical AGENTS.md files and updated repository-local skills."

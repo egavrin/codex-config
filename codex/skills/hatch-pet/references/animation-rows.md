@@ -1,6 +1,6 @@
 # V2 Animation Rows
 
-Every newly hatched pet uses an 8-column x 11-row atlas with 192x208 cells. The final atlas is 1536x2288 and uses `spriteVersionNumber: 2`.
+Every new pet uses an 8-column x 11-row atlas with 192x208 cells. The final atlas is 1536x2288 and uses `spriteVersionNumber: 2`.
 
 | Row | State             | Used columns | Durations                                              |
 | --- | ----------------- | -----------: | ------------------------------------------------------ |
@@ -16,15 +16,15 @@ Every newly hatched pet uses an 8-column x 11-row atlas with 192x208 cells. The 
 | 9   | look directions A |          0-7 | 000, 022.5, 045, 067.5, 090, 112.5, 135, 157.5 degrees |
 | 10  | look directions B |          0-7 | 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5 degrees |
 
-Unused cells after each standard animation row's final used column must be fully transparent. All look-row cells are used.
+Keep all cells after each standard animation row's last used column fully transparent. All look-row cells are used.
 
-`000` degrees means looking up / 12 o'clock. Neutral/front is the pointer deadzone and falls back to the normal idle animation.
+`000` degrees means looking up / 12 o'clock. Neutral/front is the pointer deadzone. It uses the normal idle animation.
 
 ## Row Purposes
 
 - `idle`: calm, low-distraction breathing/blinking loop and reduced-motion first frame.
 - `running-right`: locomotion to the right with a readable alternating cadence.
-- `running-left`: locomotion to the left; mirror only when identity and prop handedness remain correct, preserving frame order.
+- `running-left`: locomotion to the left. Mirror only when identity and prop handedness stay correct. Keep the frame order.
 - `waving`: greeting or attention gesture with a clear start, raised gesture, and return.
 - `jumping`: anticipation, lift, peak, descent, and settle.
 - `failed`: readable error, sad, or deflated reaction without noisy detached effects.

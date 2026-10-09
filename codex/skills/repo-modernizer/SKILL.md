@@ -1,13 +1,13 @@
 ---
 name: repo-modernizer
-description: Audit and modernize repository guidance for AI agents, including root and component AGENTS.md files, contributor-facing agent docs, repo-local Codex skills, and legacy SKILLS systems. Use when Codex is asked to study a repository from its root, inventory existing guidance, standardize or rewrite AGENTS.md coverage, propose repo or component skills, or migrate older skill layouts to modern Codex-compatible structures.
+description: "Audit and update repository guidance for AI agents. Include root and component AGENTS.md files, contributor guidance, repository-local Codex skills, and legacy SKILLS systems. Use for repository study from its root, guidance inventory, or standardization and revision of AGENTS.md coverage. Also use for proposed repository or component skills and migration from older skill layouts to current Codex-compatible structures."
 ---
 
 # Repo Modernizer
 
-Inspect a repository from its root, build an evidence-backed map of the repo and its components, then either return a structured modernization plan or apply the approved rewrite.
+Inspect the repository from its root. Map the repository and its components with supporting evidence. Return a structured modernization plan or apply the approved rewrite.
 
-Default mode is `audit`. Only enter `apply` mode when the user explicitly asks to create or rewrite files after reviewing the plan.
+Default mode is `audit`. Enter `apply` mode only after the user reviews the plan and explicitly requests file creation or revision.
 
 ## Inputs
 
@@ -22,18 +22,22 @@ Default mode is `audit`. Only enter `apply` mode when the user explicitly asks t
      - `python "<path-to-skill>/scripts/inventory_repo.py" --root "." --coverage exhaustive --format json`
    - Use `key-components` or `root-only` only if the user requests a narrower pass.
 2. Ground the plan in real artifacts before writing recommendations.
-   - Read the top-level manifests and docs identified by the inventory.
+   - Read the top-level manifests and documentation identified by the inventory.
    - Read existing `AGENTS.md` files at the root and in representative components.
    - Read build or test configuration files for the major detected ecosystems.
    - Read representative source files and, when present, component-local `README*`, `docs/`, or `tests/`.
 3. Classify component roots.
-   - Treat a directory as a component root when it has its own build manifest, existing `AGENTS.md`, legacy skill directory, or a clear app/library/package boundary.
+   - Treat a directory as a component root if any of these conditions applies:
+     - It has its own build manifest.
+     - It has an existing `AGENTS.md`.
+     - It has a legacy skill directory.
+     - It has a clear app/library/package boundary.
    - Leave small leaf directories without those signals documented under the nearest stronger parent.
    - Use [references/discovery-heuristics.md](references/discovery-heuristics.md) when the boundary is unclear.
 4. Inventory current agent guidance and skills.
    - Record root and component `AGENTS.md` coverage.
    - Distinguish modern Codex skills from legacy repo-local skill systems such as uppercase `SKILLS/` directories or slash-command markdown collections.
-   - Preserve repo facts even when planning a canonical rewrite.
+   - Preserve repository facts even when planning a canonical rewrite.
 5. Produce the audit response in this shape:
    - `Repo profile`
    - `Component inventory`
@@ -50,12 +54,12 @@ Default mode is `audit`. Only enter `apply` mode when the user explicitly asks t
 
 Use `apply` mode only after the user approves the modernization direction.
 
-1. Re-run the inventory and re-read the decisive source artifacts so the edits reflect current repo state.
+1. Run again the inventory and read again the decisive source artifacts so the edits reflect current repository state.
 2. Rewrite or create canonical `AGENTS.md` files using:
    - [references/agents-canonical-spec.md](references/agents-canonical-spec.md)
    - [assets/root-agents-template.md](assets/root-agents-template.md)
    - [assets/component-agents-template.md](assets/component-agents-template.md)
-3. Create repo-local skills only when the workflow is repo-specific and repeated or fragile enough to justify dedicated instructions, scripts, references, or assets.
+3. Create repo-local skills only for a repo-specific workflow that is repeated or fragile. It must justify dedicated instructions, scripts, references, or assets.
    - Use [references/skill-migration-rubric.md](references/skill-migration-rubric.md).
    - Use [assets/skill-template/SKILL.md](assets/skill-template/SKILL.md) and [assets/skill-template/agents/openai.yaml](assets/skill-template/agents/openai.yaml) as scaffolding.
 4. Use the hybrid skill layout.
@@ -63,13 +67,13 @@ Use `apply` mode only after the user approves the modernization direction.
    - Highly specialized workflows go in `<component>/skills/`.
    - Treat uppercase `SKILLS/` directories as migration sources.
    - Update references to point at lowercase `skills/`, but do not delete legacy directories unless the user explicitly asks.
-5. Summarize what changed, which paths were rewritten or created, what was intentionally preserved, and what still needs manual review.
+5. Summarize what changed, which paths were rewritten or created, what was intentionally preserved, and what remains subject to manual review.
 
 ## Decision Rules
 
 ### Action Matrix
 
-- `keep`: existing doc or skill already matches the repo reality and only needs minor follow-up outside this pass.
+- `keep`: existing doc or skill already matches the repository reality and has only minor remaining work outside this pass.
 - `rewrite`: existing path should stay, but its structure or content should be standardized.
 - `create`: missing but warranted by component importance or workflow repetition.
 - `migrate`: legacy skill or agent-doc system should be replaced or mirrored in modern Codex form.
@@ -89,7 +93,7 @@ Do not create skills for generic workflows that Codex already handles well witho
 
 - Root and component `AGENTS.md` files should follow the canonical schema from [references/agents-canonical-spec.md](references/agents-canonical-spec.md).
 - Cite concrete evidence paths when recommending structural changes.
-- Keep the audit response in chat by default; do not create a repo-local report file unless the user asks.
+- Keep the audit response in chat by default. Create a repo-local report file only when the user asks.
 - Prefer lowercase `skills/` for new Codex-compatible skill directories.
 - When migrating legacy skills, preserve behavior and discoverability before optimizing layout.
 

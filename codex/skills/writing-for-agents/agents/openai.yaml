@@ -1,6 +1,6 @@
 interface:
   display_name: "Writing for Agents"
-  short_description: "Write clear and reliable agent instructions"
-  default_prompt: "Use $writing-for-agents to improve these instructions while preserving all material requirements."
+  short_description: "Write precise instructions with visible completion criteria"
+  default_prompt: "Use $writing-for-agents to revise these instructions. Preserve all material requirements. Apply the shared controlled English profile."
 policy:
   allow_implicit_invocation: true

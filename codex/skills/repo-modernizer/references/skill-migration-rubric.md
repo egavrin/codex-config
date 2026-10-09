@@ -13,7 +13,7 @@ Choose `keep` when a repo-local skill:
 
 ## Rewrite
 
-Choose `rewrite` when a skill should continue to exist but needs one or more of:
+Choose `rewrite` when a skill should continue to exist but one or more of these changes is necessary:
 
 - clearer trigger language
 - lower-noise instructions
@@ -55,7 +55,7 @@ Merge multiple skills when they are only superficially different and duplicate t
 
 Choose `skip` when the workflow is:
 
-- generic enough that Codex does not need extra repo context
+- generic enough that extra repository context is unnecessary for Codex
 - too narrow or one-off to justify maintenance
 - fully generated or vendor-owned
 - already covered cleanly by a parent `AGENTS.md`

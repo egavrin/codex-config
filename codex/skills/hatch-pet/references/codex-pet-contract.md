@@ -12,7 +12,7 @@
 - Rows `9-10`: 16 clockwise look directions.
 - Unused standard-row cells: fully transparent.
 
-The 8x9 `1536x1872` atlas is an intermediate assembly artifact only. Never package it as a newly hatched pet.
+Use the 8x9 `1536x1872` atlas only as an intermediate assembly artifact. Never package it as a new pet.
 
 ## Look Directions
 
@@ -43,4 +43,4 @@ Required manifest shape:
 }
 ```
 
-The app derives the 11-row layout and look-direction behavior from `spriteVersionNumber: 2`. Omitting it defaults the pet to v1 and causes the 2288-pixel-tall spritesheet to be rejected.
+The app derives the 11-row layout and look-direction behavior from `spriteVersionNumber: 2`. Without it, the app selects v1 and rejects the 2288-pixel-tall spritesheet.

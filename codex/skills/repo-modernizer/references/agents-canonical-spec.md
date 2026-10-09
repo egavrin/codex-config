@@ -1,6 +1,6 @@
 # AGENTS Canonical Spec
 
-Use this schema when rewriting or creating `AGENTS.md`. Adapt the wording to the repository, but keep the section order stable unless the repo has a strong existing convention worth preserving.
+Use this schema when rewriting or creating `AGENTS.md`. Adapt the wording to the repository. Keep the section order stable unless a strong existing repository convention justifies its preservation.
 
 ## Root `AGENTS.md`
 
@@ -45,11 +45,11 @@ Required sections:
 - Prefer factual, repo-specific guidance over generic advice.
 - Keep command examples copy-pastable.
 - Use references to parent `AGENTS.md` only for shared rules that truly apply unchanged.
-- Preserve substantive facts from existing docs even when rewriting the layout.
-- Do not claim coverage for workflows you did not verify from source artifacts.
+- Preserve substantive facts from existing documentation even when rewriting the layout.
+- Do not claim coverage for workflows you did not test from source artifacts.
 
 ## Rewrite Guidance
 
-- If the existing file already has strong repo facts but weak structure, rewrite in place.
-- If the file is very small and redundant with the parent, consider skipping the child file and documenting the area in the parent instead.
-- If the repo has many components, keep each component file scoped to the local area rather than re-explaining the whole repository.
+- If the existing file already has strong repository facts but weak structure, rewrite in place.
+- If the file is very small and redundant with the parent, consider omitting the child file. Consider documenting that area in the parent instead.
+- If the repository has many components, scope each component file to its local area. Do not explain the whole repository again.

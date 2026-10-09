@@ -1,6 +1,6 @@
 interface:
   display_name: "Codebase Design"
-  short_description: "Design deep modules and clear interfaces"
-  default_prompt: "Use $codebase-design to compare module interfaces and choose a behavior-preserving design."
+  short_description: "Design modules that hide complexity"
+  default_prompt: "Use $codebase-design to compare module interfaces. Select a design that preserves behavior."
 policy:
   allow_implicit_invocation: true

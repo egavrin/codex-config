@@ -2,7 +2,50 @@
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
 configuration snapshot. Global instructions and shared skills were updated on
-October 9, 2026; the machine configuration retains its existing snapshot.
+October 9, 2026. The machine configuration retains its existing snapshot.
+
+## Shared writing profile
+
+The user instructions derive from ASD-STE100 Issue 9, dated 15 January 2025.
+The profile applies to agent messages, responses, skills, and new technical documents.
+An explicit request for another output language takes precedence.
+
+The source is the [official Issue 9 standard](https://asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf).
+Its SHA-256 is recorded in the rule map.
+This repository contains original explanations and software examples.
+It does not contain the standard PDF or a copy of its dictionary.
+The derived profile has no ASD approval or certification.
+
+Read these documents:
+
+- [Shared profile](codex/skills/writing-for-agents/references/controlled-english.md).
+- [Map of all 53 writing rules](codex/skills/writing-for-agents/references/ste-rule-map.md).
+- [Software terms and agent extensions](codex/skills/writing-for-agents/references/software-terms.md).
+
+The instructions preserve exact commands, identifiers, source data, quotations, and required product text.
+The profile does not change task scope, permissions, model settings, or routing.
+Codex loads the profile through its global instructions.
+Claude imports the same files through [personal instructions](claude/CLAUDE.md).
+Every companion request includes the profile, rule map, and terms.
+The complete bundle must fit the existing 256 KiB packet limit.
+
+The snapshot contains 18 user skills across two discovery roots:
+
+- `codex/skills/` contains ten user skills, including the Film Studio snapshot.
+- `agents/skills/` contains eight Runpod skills.
+- `claude/CLAUDE.md` contains personal Claude instructions.
+
+The live Film Studio skill remains linked to its original repository.
+The snapshot contains its files so that publication does not depend on an external link.
+No Film Studio commit or push forms part of this update.
+Built-in skills, plugin caches, and Claude's provider-managed `synced` directory remain outside this snapshot.
+
+To restore the added discovery root and personal Claude instructions, first preserve existing destination files.
+Then copy `agents/skills/` to `~/.agents/skills/` and `claude/CLAUDE.md` to `~/.claude/CLAUDE.md`.
+Review independent Claude instructions before replacement.
+Run the bridge's `sync-skills` action after the Codex user skills are installed.
+Keep existing independent Claude skills when names conflict.
+Start new Codex and Claude sessions to load persistent instructions.
 
 ## Contents
 
@@ -39,8 +82,11 @@ October 9, 2026; the machine configuration retains its existing snapshot.
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, `repo-modernizer`, `code-simplifier`, `codebase-design`,
-  `improve-codebase-architecture`, `writing-for-agents`, and `claude-collab`,
+  `improve-codebase-architecture`, `writing-for-agents`, `claude-collab`, and `film-studio-workflow`,
   including their scripts, resources, provenance, and bundled licenses where present.
+- `agents/skills/` — eight Runpod skills from the existing `~/.agents/skills` discovery root.
+- `claude/CLAUDE.md` — personal instructions with shared profile imports.
+- `docs/controlled-english-verification.md` — migration checks, limitations, and reproduction commands.
 
 The active default is `gpt-6.1-sol` with High reasoning on the Standard service
 tier. Direct work remains in Sol. Delegated production implementation or
@@ -57,8 +103,8 @@ remains `never`, and the sandbox remains `danger-full-access`.
 
 The repository intentionally excludes authentication data, tokens, task
 history, databases, memories, attachments, automations, downloaded plugins,
-system skills, and project-specific instructions or skills from other
-repositories. The assets for the selected `custom:rivet` pet are not included;
+system skills, and other project-specific instructions. The requested Film Studio
+skill snapshot is included. The assets for the selected `custom:rivet` pet are not included;
 only its selection remains in the configuration snapshot.
 
 The global guide favors the simplest maintainable solution that meets the
@@ -733,11 +779,15 @@ cp "$codex_source/terra-luna-sol-astra.config.toml" codex/terra-luna-sol-astra.c
 for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci \
   skills/hatch-pet skills/repo-modernizer skills/code-simplifier \
   skills/codebase-design skills/improve-codebase-architecture \
-  skills/writing-for-agents skills/claude-collab; do
+  skills/writing-for-agents skills/claude-collab skills/film-studio-workflow; do
   mkdir -p "codex/$codex_part"
   rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' --exclude='.state' \
     "$codex_source/$codex_part/" "codex/$codex_part/"
 done
+mkdir -p agents/skills claude
+rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' \
+  "$HOME/.agents/skills/" agents/skills/
+cp "$HOME/.claude/CLAUDE.md" claude/CLAUDE.md
 git diff --stat
 git diff
 ```
@@ -749,7 +799,7 @@ rules. `.gitignore` excludes common generated files, but it cannot detect
 secrets embedded inside tracked TOML or other text files.
 
 ```sh
-git add codex README.md
+git add codex agents claude docs README.md
 git commit -m "Update Codex configuration"
 git push
 ```

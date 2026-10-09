@@ -40,7 +40,7 @@ Do not promote tiny leaf directories unless they carry one of the stronger signa
 
 - `exhaustive`: inspect all candidate component roots that meet the rules above
 - `key-components`: keep the strongest component roots, always retaining any existing `AGENTS.md` or skill roots
-- `root-only`: audit only the repo root and summarize component discovery at a high level
+- `root-only`: audit only the repository root and summarize component discovery at a high level
 
 ## Skill System Detection
 

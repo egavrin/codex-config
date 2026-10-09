@@ -1,6 +1,6 @@
 # {{COMPONENT_NAME}}
 
-This file provides guidance to AI agents working in this component.
+This file guides AI agents that work in this component.
 
 ## Purpose and Scope
 

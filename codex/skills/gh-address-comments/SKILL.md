@@ -1,25 +1,25 @@
 ---
 name: gh-address-comments
-description: Help address review/issue comments on the open GitHub PR for the current branch using gh CLI; verify gh auth first and prompt the user to authenticate if not logged in.
+description: "Address review/issue comments on the open GitHub PR for the current branch with the gh CLI. First, do a check of gh authentication. If authentication is absent, ask the user to authenticate."
 metadata:
   short-description: Address comments in a GitHub PR review
 ---
 
 # PR Comment Handler
 
-Guide to find the open PR for the current branch and address its comments with gh CLI. Run all `gh` commands with elevated network access.
+Find the open PR for the current branch. Address its comments with gh CLI. Run all `gh` commands with elevated network access.
 
-Prereq: ensure `gh` is authenticated (for example, run `gh auth login` once), then run `gh auth status` with escalated permissions (include workflow/repo scopes) so `gh` commands succeed. If sandboxing blocks `gh auth status`, rerun it with `sandbox_permissions=require_escalated`.
+First, authenticate `gh` (for example, run `gh auth login` once). Then, run `gh auth status` with escalated permissions (include workflow/repo scopes). This check shows that access is available for `gh` commands. If sandboxing blocks `gh auth status`, run it again with `sandbox_permissions=require_escalated`.
 
 ## 1) Inspect comments needing attention
-- Run scripts/fetch_comments.py which will print out all the comments and review threads on the PR
+- Run scripts/fetch_comments.py. It prints all comments and review threads on the PR.
 
 ## 2) Ask the user for clarification
-- Number all the review threads and comments and provide a short summary of what would be required to apply a fix for it
+- Number all review threads and comments. For each item, summarize the required fix.
 - Ask the user which numbered comments should be addressed
 
 ## 3) If user chooses comments
 - Apply fixes for the selected comments
 
 Notes:
-- If gh hits auth/rate issues mid-run, prompt the user to re-authenticate with `gh auth login`, then retry.
+- If gh encounters authentication or rate issues during work, ask the user to authenticate again with `gh auth login`. Then, retry.

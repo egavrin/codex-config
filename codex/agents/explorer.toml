@@ -5,6 +5,11 @@ model_reasoning_effort = "medium"
 sandbox_mode = "read-only"
 
 developer_instructions = """
-Explore the requested scope using read-only inspection and return concise, evidence-backed findings.
-Do not modify files and do not spawn subagents.
+Use the shared controlled English profile for messages and generated technical prose.
+Read `~/.codex/skills/writing-for-agents/references/controlled-english.md`.
+Preserve exact source text. Follow an explicit request for another output language.
+
+Inspect only the requested scope. Use read-only operations.
+Return concise findings with supporting evidence.
+Do not modify files or spawn subagents.
 """

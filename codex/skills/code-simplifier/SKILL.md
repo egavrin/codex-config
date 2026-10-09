@@ -1,27 +1,21 @@
 ---
 name: code-simplifier
-description: Simplify recently changed or explicitly scoped code for readability and maintainability without changing behavior. Use for code cleanup and focused refinements during implementation or refactoring.
+description: "Simplify recently changed or explicitly scoped code so it is easier to read and maintain. Preserve behavior. Use for code cleanup and focused improvements during implementation or refactoring."
 license: Apache-2.0
 ---
 
 # Code Simplifier
 
-Improve the clarity of code within the current task while preserving its behavior.
-Choose understandable structure over minimum line count.
+Make code clearer within the current task. Preserve its behavior. Prefer a structure that is easy to understand over fewer lines.
 
 ## Scope and operating mode
 
-Work on code changed in the current task unless the user explicitly names a file,
-component, or broader scope. Use the available diff and task context to identify
-the relevant sections; a file-level diff is not permission to rewrite the entire
-file. Preserve pre-existing user changes and keep refinements within the requested
+Work on code changed in the current task. An explicit user request for a file, component, or broader scope takes precedence. Use the available diff and task context to identify relevant sections. A file-level diff gives no permission to rewrite the complete file. Preserve pre-existing user changes and keep refinements within the requested
 scope.
 
-Apply useful refinements during authorized implementation or refactoring without
-requiring a separate cleanup request. When the task is analysis-only or the
+During authorized implementation or refactoring, make useful improvements. A separate cleanup request is not required. When the task is analysis-only or the
 session is in Plan Mode, inspect and propose changes without editing files.
-This skill does not select a model or spawn agents; follow the active routing
-instructions.
+Follow the active routing instructions. This skill does not select a model or spawn agents.
 
 ## Refinement criteria
 
@@ -29,18 +23,13 @@ instructions.
   meaningful side effects. Keep evaluation order and asynchronous behavior intact
   when restructuring expressions or control flow.
 - Follow applicable `AGENTS.md` instructions, formatter and linter configuration,
-  and the conventions in nearby code. Module syntax, import ordering, function
-  style, type annotations, and React patterns depend on the project; do not
-  impose JavaScript conventions on other languages or change conventions just
-  for personal preference.
+  and the conventions in nearby code. Module syntax, import order, function style, type annotations, and React patterns depend on the project. Do not impose JavaScript conventions on other languages. Do not change conventions merely for personal preference.
 - Reduce needless nesting, duplicated work, and abstractions that obscure the
   logic. Use descriptive names and group closely related operations when that
   makes the code easier to follow.
-- Prefer readable conditionals to nested ternaries or dense one-liners. Keep
-  useful boundaries, abstractions, and comments explaining intent or constraints;
-  remove comments only when they add no information beyond the code.
+- Prefer readable conditionals to nested ternaries or dense one-liners. Keep useful boundaries, abstractions, and comments that explain intent or constraints. Remove a comment only when it adds no information beyond the code.
 - Avoid clever transformations, merging unrelated concerns, and speculative
-  generalization. Leave clear code alone. If a refinement needs a behavior or
+  generalization. Leave clear code alone. If a refinement makes a behavior or
   interface change, omit it from the simplification and report it separately.
 
 ## Verification and delivery
@@ -51,8 +40,7 @@ verification requirements. Do not rewrite tests or weaken assertions to make a
 refinement pass. If behavior preservation is uncertain, keep the original
 structure until there is enough evidence to justify the change.
 
-Report only meaningful refinements, the checks actually run and their results,
-and remaining uncertainty or checks that could not be performed. A no-change
+Report only meaningful improvements, actual checks and results, remaining uncertainty, and checks that you could not perform. A no-change
 result is valid when the scoped code is already clear.
 
 ## Source and adaptation

@@ -1,32 +1,49 @@
 # Design It Twice
 
-Explore contrasting interfaces for a chosen candidate before committing to a structural change. Use [SKILL.md](SKILL.md) for vocabulary and [DEEPENING.md](DEEPENING.md) for dependency considerations. Keep project domain terminology and present the discussion in the user's conversation language.
+Compare different interfaces for the selected candidate before a structural change.
+Use [SKILL.md](SKILL.md) for vocabulary and [DEEPENING.md](DEEPENING.md) for dependency decisions.
+Keep project domain terms.
+Use English unless the user explicitly requests another output language.
 
 ## Frame the decision
 
-State the observed problem, caller workflows, behavior and compatibility contracts, constraints, and material dependencies. A small illustrative sketch can ground the problem without choosing the answer. Resolve only uncertainties that would change the decision.
+State the observed problem, caller workflows, behavior and compatibility contracts, constraints, and material dependencies.
+A small example can explain the problem without selection of a solution.
+Resolve only uncertainties that would change the decision.
 
 ## Develop contrasting alternatives
 
-Develop at least two meaningfully different designs sequentially. Add another only when it explores a material tradeoff. Useful contrasting priorities include:
+Develop at least two meaningfully different designs, one after another.
+Add another design only to examine a material design difference.
+Possible priorities include these items:
 
-- Minimize what callers must learn while preserving required distinctions.
-- Support justified variation and extension without speculative features.
-- Make the common caller's workflow simple while retaining explicit exceptional behavior.
-- Move a dependency seam when that would localize real complexity.
+- Reduce the knowledge necessary for callers. Preserve necessary distinctions.
+- Support justified variation and extension. Do not invent features.
+- Simplify the common caller workflow. Keep exceptional behavior explicit.
+- Move a dependency seam when that change concentrates real complexity in one location.
 
-Direct sequential analysis is sufficient. Delegate only when the active AGENTS instructions and routing allow or require it, respecting their ownership, model, concurrency, and acceptance rules. This pattern requires neither parallel agents nor a particular model, and never authorizes a child to delegate further.
+Direct sequential analysis is sufficient.
+Delegate only when delegation is permitted or mandatory under the active AGENTS instructions and routing.
+Follow their ownership, model, concurrency, and acceptance rules.
+This pattern mandates neither parallel agents nor a particular model.
+It never gives a child permission to delegate further.
 
-For each alternative show:
+For each alternative, show these items:
 
-1. The interface and full contract: types, parameters, invariants, ordering, errors, compatibility, and relevant operational behavior.
-2. A realistic usage example for the common workflow and any material exceptional case.
-3. The logic and complexity hidden behind the interface.
-4. The dependency strategy, seam placement, and adapters actually justified by the task.
-5. Tradeoffs in leverage, locality, testability, migration cost, and other material constraints.
+1. The interface and complete contract. Include types, parameters, invariants, order, errors, compatibility, and relevant operational behavior.
+2. A realistic example of the common workflow and each material exceptional case.
+3. The logic and complexity behind the interface.
+4. The dependency strategy, seam placement, and adapters justified by the task.
+5. Differences in leverage, locality, testability, migration cost, and other material constraints.
 
 ## Compare and recommend
 
-Present alternatives in sequence, then compare them against the same observable criteria. Explain depth, caller burden, locality of change, seam placement, preserved contracts, and verification implications. Recommend the strongest design with evidence; propose a hybrid only when the combination remains coherent. State assumptions and unresolved decisions explicitly.
+Present the alternatives in sequence.
+Then, compare them against the same observable criteria.
+Explain depth, caller burden, locality of change, seam placement, preserved contracts, and verification effects.
+Recommend the strongest design with evidence.
+Propose a hybrid only when the combination remains coherent.
+State assumptions and unresolved decisions explicitly.
 
-Continue into implementation only when it is already authorized and the active mode permits writes. A design or review request alone does not expand permission to edit code or documentation.
+Continue to implementation only with existing authorization and a mode in which writes are permitted.
+A design or review request alone gives no additional permission to edit code or documentation.

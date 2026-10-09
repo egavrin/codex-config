@@ -1,19 +1,19 @@
 # Skill Mechanics for Codex
 
-Read this reference when writing or revising a skill. The shared writing criteria
-are in [SKILL.md](SKILL.md); the bundled `skill-creator` is authoritative for
-current packaging, metadata, and validation requirements.
+Read this reference when you write or revise a skill.
+Read [SKILL.md](SKILL.md) for the shared criteria for instructions.
+The bundled `skill-creator` defines current packaging, metadata, and validation requirements.
 
 ## Discovery and invocation
 
-A skill is a directory containing `SKILL.md` with YAML `name` and `description`.
-Use the description to explain the capability and when it applies. The host
-initially exposes discovery metadata and loads the full instructions when the
-skill is selected; linked references can be read as needed.
+A skill is a directory with a `SKILL.md` file that contains YAML `name` and `description` fields.
+Use the description to state the capability and its trigger conditions.
+The host first exposes discovery metadata. When it selects the skill, it loads the complete instructions.
+The agent can read linked references when necessary.
 
-Codex supports explicit invocation with `$skill-name` and automatic selection
-when the request matches the skill's description. Optional UI and invocation
-settings belong in `agents/openai.yaml`:
+Codex supports explicit invocation with `$skill-name`.
+It also selects a skill automatically when a request matches the description.
+Put optional UI and invocation settings in `agents/openai.yaml`:
 
 ```yaml
 interface:
@@ -24,37 +24,38 @@ policy:
   allow_implicit_invocation: true
 ```
 
-Keep automatic selection enabled for a new skill unless the user requests
-explicit-only invocation. Preserve an existing skill's invocation policy unless
-the user asks to change it. For explicit-only invocation, set
-`policy.allow_implicit_invocation: false`; keep the required `name` and
-`description` in `SKILL.md`. Do not use provider-specific frontmatter switches.
+For a new skill, keep automatic selection enabled unless the user requests explicit-only invocation.
+Preserve an existing skill's invocation policy unless the user asks to change it.
+For explicit-only invocation, set `policy.allow_implicit_invocation: false`.
+Keep the required `name` and `description` in `SKILL.md`.
+Do not use provider-specific frontmatter switches.
 
-Invocation policy is about skill selection, not permission to mutate files,
-authorization for external actions, or whether linked reference files can be
-read. Do not promise zero context cost: discovery details and context budgets
-depend on the host. An explicit-only skill may still have a human-facing summary.
+The invocation policy controls skill selection. It gives no permission for file writes or external actions.
+It does not control permission to read linked reference files.
+Do not promise zero context cost. Discovery details and context budgets depend on the host.
+An explicit-only skill may still have a summary for humans.
 
-## Shared reference and splitting
+## Shared references and document divisions
 
-Keep shared reference in one place and give callers an explicit link with a
-reading condition. A plain linked file can serve several workflows without
-requiring another independently discoverable skill. Explicit-only invocation
-does not prohibit reading that file when the current task requires it.
+Keep each shared reference in one location.
+Give callers an explicit link and a condition that tells them when to read it.
+One linked file can serve several workflows without a separate discoverable skill.
+Explicit-only invocation does not prohibit access to that file when it is necessary for the current task.
 
-Create a separate skill when it has a distinct useful capability and a meaningful
-independent trigger. Otherwise use a reference inside the current skill.
-Keep common requirements in the entrypoint and read specialized material only
-for its relevant branch.
+Create a separate skill when it has a distinct useful capability and a meaningful independent trigger.
+Otherwise, use a reference inside the current skill.
+Keep common requirements in the entry document.
+Read specialized material only for the applicable branch.
 
-A router is useful only when selecting among several real workflows is itself a
-repeated task. It may describe the choices and link to their instructions, but
-does not automatically invoke tools, bypass invocation policy, grant permission,
-or create subagents. Avoid adding a router solely because multiple files exist.
+A router is useful only when selection among several real workflows is itself a repeated task.
+It may describe the choices and link to their instructions.
+It does not automatically invoke tools, bypass invocation policy, grant permission, or create subagents.
+Do not add a router merely because several files exist.
 
 ## Validate
 
-Use `skill-creator`'s `quick_validate.py` on the skill directory. Check that
-local links resolve, metadata matches the skill, and a default prompt names the
-correct `$skill-name`. Structural validation does not establish correct behavior;
-review realistic trigger and completion scenarios when warranted.
+Run `skill-creator`'s `quick_validate.py` on the skill directory.
+Make sure that local links resolve. Make sure that metadata matches the skill.
+Make sure that the default prompt names the correct `$skill-name`.
+Structural validation does not prove correct behavior.
+When necessary, review realistic trigger and completion cases.
