@@ -1,7 +1,8 @@
 # Codex config
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
-configuration snapshot updated on September 30, 2026.
+configuration snapshot. Global instructions and shared skills were updated on
+October 9, 2026; the machine configuration retains its existing snapshot.
 
 ## Contents
 
@@ -36,8 +37,9 @@ configuration snapshot updated on September 30, 2026.
   acceptance roles, Standard Sol implementation, and evidence-gated Astra.
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
-  `hatch-pet`, and `repo-modernizer`, including their scripts, resources, and
-  bundled licenses where present.
+  `hatch-pet`, `repo-modernizer`, `code-simplifier`, `codebase-design`,
+  `improve-codebase-architecture`, `writing-for-agents`, and `claude-collab`,
+  including their scripts, resources, provenance, and bundled licenses where present.
 
 The active default is `gpt-6.1-sol` with High reasoning on the Standard service
 tier. Direct work remains in Sol. Delegated production implementation or
@@ -567,6 +569,61 @@ service tier, child sequence, repairs, acceptance results, and whether Astra was
 used. Do not infer general latency or quota savings from this single small-task
 run.
 
+## Shared skills and Claude companion
+
+The global user-skill library lives in `~/.codex/skills`. Codex uses `$skill-name`;
+ordinary Claude Code sessions use `/skill-name` through individual symlinks under
+`~/.claude/skills`. The companion creates these links after installation and before
+requests, preserves independent Claude skills on name conflicts, and excludes
+hidden/system directories and plugin caches.
+
+| Skill | Purpose |
+|---|---|
+| [code-simplifier](codex/skills/code-simplifier/SKILL.md) | Simplify scoped code while preserving behavior and public contracts. |
+| [codebase-design](codex/skills/codebase-design/SKILL.md) | Evaluate module interfaces, architectural seams, dependencies, and alternatives. |
+| [improve-codebase-architecture](codex/skills/improve-codebase-architecture/SKILL.md) | Find evidenced architecture improvements and present a visual report. |
+| [writing-for-agents](codex/skills/writing-for-agents/SKILL.md) | Improve skills, AGENTS.md, and linked agent instructions without dropping requirements. |
+| [claude-collab](codex/skills/claude-collab/SKILL.md) | Send bounded review or patch packages to subscription-authenticated Claude Opus; Codex validates and integrates results. |
+
+All five allow automatic selection and explicit invocation. For example:
+
+```text
+Use $claude-collab and $codebase-design to get Claude's alternative view of the architecture.
+Use $claude-collab and $code-simplifier to simplify the current changes without changing behavior.
+```
+
+After restoring the skills to `~/.codex/skills`, create the shared links and check
+the installed CLI without sending a model request:
+
+```sh
+python3 ~/.codex/skills/claude-collab/scripts/bridge.py sync-skills
+python3 ~/.codex/skills/claude-collab/scripts/bridge.py doctor
+```
+
+Claude Collab requires Python 3.9+, Git, a supported installed Claude Code CLI,
+and an existing `claude.ai` subscription login. It uses Opus, fresh restricted
+requests without tools, explicit skill/source packets, a 300-second timeout, and
+one initial request plus at most one focused follow-up per package. Codex checks
+returned patches before applying and testing them. The companion and a native
+child never work concurrently on the same task; opt-in experimental routes keep
+their own rules. This external route is reported as `<effective-root>-claude`.
+
+For other services, the global guide preserves a non-empty environment credential
+and loads only missing required variables from `~/.env` as dotenv data. Claude
+Collab is a subscription-only exception: it never reads that file or falls back
+to API credentials. It does not change billing or enable Extra Usage; subscription
+authentication cannot disable overages already enabled on the account.
+
+The Jev shadow policy retains preview-and-digest approval and permits an existing
+`TYPESAFE_API_KEY` without rotation before each request. It is opt-in and requires
+the separately installed local `~/.codex/jev_router.py`; this repository does not
+ship or automatically activate that experimental client.
+
+Private companion state, results, ownership manifests, authentication data, and
+machine-specific Claude symlinks are excluded from Git. Restart the relevant agent
+if a new session does not discover the installed skills. See the skill references
+for source revisions, licenses, packet format, and acceptance rules.
+
 ## Restore
 
 The active user configuration normally lives at `~/.codex/config.toml`. See the
@@ -656,9 +713,12 @@ cp "$codex_source/luna-astra-implementer.config.toml" codex/luna-astra-implement
 cp "$codex_source/luna-sol-astra-escalation.config.toml" codex/luna-sol-astra-escalation.config.toml
 cp "$codex_source/luna-terra-context-sol-astra.config.toml" codex/luna-terra-context-sol-astra.config.toml
 cp "$codex_source/terra-luna-sol-astra.config.toml" codex/terra-luna-sol-astra.config.toml
-for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci skills/hatch-pet skills/repo-modernizer; do
+for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci \
+  skills/hatch-pet skills/repo-modernizer skills/code-simplifier \
+  skills/codebase-design skills/improve-codebase-architecture \
+  skills/writing-for-agents skills/claude-collab; do
   mkdir -p "codex/$codex_part"
-  rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' \
+  rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' --exclude='.state' \
     "$codex_source/$codex_part/" "codex/$codex_part/"
 done
 git diff --stat

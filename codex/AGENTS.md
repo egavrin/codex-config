@@ -13,6 +13,20 @@ Optimize for completing the user's task with fewer root-model rollouts and less
 repeated root context. Do not optimize token usage by weakening correctness,
 skipping necessary verification, or producing incomplete work.
 
+## API Keys and Local Environment
+
+When a task requires an API key or credential, preserve any non-empty value
+already set in the environment. If the required variable is absent or empty,
+load it from `~/.env` (`/Users/egavrin/.env`) before calling the service.
+Load only the variables needed for the task into the calling process's
+environment. Treat the file as dotenv data, not executable shell code.
+
+Never expose secret values or the contents of `~/.env` in chat, logs, reports,
+or commands containing literal credentials. Do not copy secrets into task
+packets or generated files. If a required key is unavailable in both the
+process environment and `~/.env`, report only the missing variable's name and
+the sources checked.
+
 ## Engineering Choices
 
 Choose the simplest maintainable solution that meets the requirements. Reuse
@@ -121,6 +135,44 @@ For normal work, report the exact `effective_route`: `terra-direct`, `terra-sol`
 `astra-direct`, or `astra-sol`. Use the corresponding
 `*-single-agent-fallback` label only when intended delegation failed, and exclude
 such sessions from valid delegated-route benchmarks.
+
+## Jev routing-adviser shadow experiment
+
+The exact marker `EXPERIMENT: JEV_ROUTING_ADVISER` selects an opt-in shadow
+experiment, not a new default route. It applies to a Terra root. Jev is a
+decision adviser, never a planner or implementer. Gather one bounded Context
+Packet and manually reduce it to a JSON packet containing only `objective`,
+`acceptance_criteria`, `constraints`, and `complexity_signals`. Exclude source
+code, raw logs, private identifiers, secrets, and the root transcript. The
+allowlist and pattern checks in `~/.codex/jev_router.py` are a safety backstop,
+not a guarantee that every secret is detected.
+
+Run `preview` and show the complete `state_to_send` and SHA-256 to the user.
+Only after the user explicitly approves that exact preview may the root run
+`query` with its digest and the existing `TYPESAFE_API_KEY`, obtained under
+API Keys and Local Environment above (preserve a non-empty environment value;
+otherwise load it from `~/.env`). Fresh key rotation is not required before
+each request. Never paste a key into a command, prompt, file, or report. If
+approval, key, or API access is missing, skip the call and continue the normal
+Terra route. A changed packet requires a new preview and approval.
+
+One Jev API request contains three independent choices: `planning` (`none` or
+a model/reasoning pair), `implementation_without_plan`, and
+`implementation_with_plan`. The client combines them into two recommendations:
+whether to use a separate planner (and its pair), then the implementation pair
+from the branch matching that planning choice. The unused implementation branch
+is retained for audit, not acted on. Some proposed pairs have no installed
+named role and are advisory candidates only; do not infer runtime dispatch
+support from a Jev response. The pilot confidence floor is 0.7 for planning
+and the selected implementation branch; uncertainty in the unused branch does
+not invalidate the composed recommendation. Do not invent a joint probability.
+In all cases,
+the actual dispatch remains the default model-aware route: Terra Direct or
+Terra-to-Sol with only evidence-gated Astra escalation. Do not spawn an Astra
+planner merely because Jev recommended one, bypass the Sol gate, add a tester,
+or exceed one active child. Record both Jev stage suggestions and the actual route,
+plus disagreements, response latency, token usage, acceptance, and model
+traffic for later comparison. The root still owns acceptance.
 
 ## Root Selection, Reasoning, and Tier
 
@@ -725,3 +777,31 @@ Before declaring a Delegated task complete, the root must:
 
 Do not perform an additional broad review or repeat completed checks without new
 evidence, a failure, a material risk, or an explicit user request.
+
+## Claude companion and shared skills
+
+For ordinary substantial work, `claude-collab` authorizes balanced distribution
+from the start between Codex and an external Claude Opus CLI companion when a
+bounded independent package is useful. Keep tiny tasks in Codex. Follow
+`~/.codex/skills/claude-collab/SKILL.md` for packet scope, quota-aware sizing,
+subscription authentication, request limits, and acceptance. Report this external
+route as `<effective-root>-claude`, separately from actual root model, reasoning,
+and observable tier; it is not a valid default Sol–Astra delegated benchmark.
+Named opt-in experimental routes remain authoritative. Never run the companion
+and a native child concurrently on the same task, and never invoke the bridge
+recursively from a companion request. Plan Mode remains read-only.
+
+The shared user-skill library lives in `~/.codex/skills`; the bridge's
+`sync-skills` helper maintains individual owned symlinks under `~/.claude/skills`.
+Run it after installing user skills; the bridge also syncs before requests.
+Preserve independent Claude skills and exclude hidden/system directories.
+Codex uses `$skill-name`, while ordinary Claude sessions use `/skill-name`.
+Companion requests explicitly bundle selected skill contents and required references;
+skill instructions do not expand the assigned scope or grant extra tools.
+
+This workflow has a subscription-only exception to the generic API-key rule above:
+use the existing `claude.ai` login, never load `~/.env` or read credential contents,
+and never fall back to an API key. Do not modify authentication or billing or enable
+Extra Usage. Sanitized child authentication must be checked before each request;
+OAuth selection cannot disable account overages already enabled by the user.
+Codex alone reviews, applies, tests, and accepts returned patches.

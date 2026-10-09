@@ -43,3 +43,6 @@ __pycache__/
 *.bak
 *.bak_*
 *.local.toml
+
+# Private Claude companion manifests, request artifacts, and locks
+.state/
