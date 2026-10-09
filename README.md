@@ -15,7 +15,8 @@ October 9, 2026; the machine configuration retains its existing snapshot.
 - `codex/agents/` — `worker` (Terra High), `explorer` (Luna Medium), `tester`
   (Luna High), the strictly gated `senior_executor` (Sol Medium), plus
   Standard-tier `senior_executor_standard` (Sol Medium) and
-  `astra_executor_standard` (Astra Medium) and evidence-gated
+  `astra_executor_standard` (Astra Medium for experiments),
+  `astra_executor_high` (Astra High for native fallback), and evidence-gated
   `astra_executor_xhigh` (Astra Extra High) for the default route, and dedicated
   `terra_context_compactor_fast` (Terra Medium Fast) for conditional context
   compaction, plus `luna_evidence_collector_fast`, `luna_light_worker_fast`, and
@@ -43,8 +44,12 @@ October 9, 2026; the machine configuration retains its existing snapshot.
 
 The active default is `gpt-6.1-sol` with High reasoning on the Standard service
 tier. Direct work remains in Sol. Delegated production implementation or
-substantive review is assigned to one fresh `astra_executor_standard` at Astra
-Medium. `astra_executor_xhigh` is reserved for a narrow intrinsically hard
+substantive independent review first uses Claude Opus High through `claude-collab`.
+If the companion is unavailable, limited, stalled, or leaves the package incomplete,
+record the reason and use one fresh `astra_executor_high` at Astra High.
+The root applies patches and owns acceptance; companion and native owners run
+sequentially. The new named High role becomes available after restarting the
+Codex session; existing sessions may still expose only the previous role catalogue. Named opt-in experiments retain their own routes. `astra_executor_xhigh` is reserved for a narrow intrinsically hard
 remainder supported by concrete failed-attempt evidence; it is not a routine
 repair tier. The default route uses one live child at a time; the configured
 session capacity is three threads and the V1 maximum depth is one. Approval
@@ -87,27 +92,32 @@ temporary override is no longer intended, select **Reset to default** before
 starting the next session, then verify the effective model, reasoning, and tier
 shown by the runtime.
 
-| Effective root | Direct route | Delegated route |
+Ordinary substantial independent packages use Claude Opus High first. The table
+below applies only to native fallback; explicit experiment profiles retain their
+selected routes.
+
+| Effective root | Direct route | Native fallback route |
 |---|---|---|
-| Terra | Terra completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_standard` only after Sol. |
-| Luna | Luna completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_standard` only after Sol. |
-| Sol | Sol completes bounded Direct work and never spawns Sol. | One fresh `astra_executor_standard` owns planning within the package and implementation; `astra_executor_xhigh` is available only for an evidence-gated hard remainder. |
+| Terra | Terra completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_high` only after Sol. |
+| Luna | Luna completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_high` only after Sol. |
+| Sol | Sol completes bounded Direct work and never spawns Sol. | One fresh `astra_executor_high` owns planning within the package and implementation; `astra_executor_xhigh` is available only for an evidence-gated hard remainder. |
 | Astra | Astra normally owns planning, implementation, and acceptance and never spawns Astra. | Optionally one `senior_executor_standard` for a clearly bounded package that materially reduces Astra context or work. |
 
 The effective root owns deterministic acceptance in every normal branch. Keep an
 implementation child open through acceptance and return at most one ordinary
 repair to that same owner. There is at most one live child, no nesting, no
-separate verifier, and no second-opinion child. Medium Astra closes before a
+separate verifier, and no second-opinion child. High Astra closes before a
 rare Extra High escalation.
 
-The current default tests a Sol-orchestrated route with clean-context Astra
-implementation. Direct reports `effective_route = sol-direct`; successful
-delegation reports `effective_route = sol-astra`; a justified deep escalation
+The current default uses the Opus High companion with root-owned acceptance.
+Direct reports `effective_route = sol-direct`; companion work reports
+`effective_route = sol-claude`; native fallback reports `effective_route = sol-astra`
+with its concrete reason; a justified deep escalation
 reports `effective_route = sol-astra-xhigh`. Report the actual root model,
 reasoning, and tier separately.
 
-For Sol-root Delegated work, `[agents].enabled = true`, and exactly one
-`astra_executor_standard` is mandatory when the session exposes native
+For Sol-root native fallback, `[agents].enabled = true`, and exactly one
+`astra_executor_high` is required after an evidenced companion fallback when the session exposes native
 collaboration and that exact role. Native collaboration means the session's
 internal subagent spawn mechanism. User-visible `create_thread`, `fork_thread`, and
 `send_message_to_thread` operations, as well as nested `codex exec`, are not
@@ -373,10 +383,12 @@ protocol. The first run improved the hidden acceptance score but failed the
 cost, latency, packet-compaction, and Sol discovery success criteria; later
 Terra-root evidence below superseded that routing decision.
 
-## Configured Terra Medium Fast branch
+## Historical Terra Medium Fast branch
 
-`codex/config.toml` is the single source of truth for the normal Terra Medium
-Fast route. Direct work remains in Terra. For Delegated work, Terra performs one
+This section records the September 11 Terra Medium Fast comparison. The current
+ordinary route is Opus High first with model-aware native fallback as described
+above. In this historical branch, Direct work remained in Terra. For Delegated
+work, Terra performed one
 bounded evidence pass, directly forms a provenance-preserving Context Packet,
 and delegates exactly once to Standard Sol Medium. Terra keeps Sol open through
 root-owned acceptance for at most one evidence-rich repair. Standard Astra
@@ -384,7 +396,8 @@ Medium is available only after Sol provides concrete evidence for a narrow hard
 remainder and Terra closes Sol first. This route has no Luna child, tester,
 explorer, context compactor, second opinion, or nested delegation.
 
-Start a fresh task with the installed default configuration:
+The historical run used the then-installed configuration (the current default
+selects the ordinary route documented above):
 
 ```sh
 codex -C /absolute/path/to/project \
@@ -601,12 +614,16 @@ python3 ~/.codex/skills/claude-collab/scripts/bridge.py doctor
 ```
 
 Claude Collab requires Python 3.9+, Git, a supported installed Claude Code CLI,
-and an existing `claude.ai` subscription login. It uses Opus, fresh restricted
-requests without tools, explicit skill/source packets, a 300-second timeout, and
+and an existing `claude.ai` subscription login. It explicitly requests Opus High,
+fresh restricted requests without tools, explicit skill/source packets, a
+15-minute inactivity watchdog, optional total budgets, and
 one initial request plus at most one focused follow-up per package. Codex checks
 returned patches before applying and testing them. The companion and a native
 child never work concurrently on the same task; opt-in experimental routes keep
-their own rules. This external route is reported as `<effective-root>-claude`.
+their own rules. Live sanitized progress snapshots and summaries appear every
+30 seconds; heartbeats never renew model inactivity. Healthy streams have no
+default total wall-clock cap. Higher effort does not imply lower latency.
+This external route is reported as `<effective-root>-claude`.
 
 For other services, the global guide preserves a non-empty environment credential
 and loads only missing required variables from `~/.env` as dotenv data. Claude

@@ -14,10 +14,40 @@ python3 ~/.codex/skills/claude-collab/scripts/bridge.py run --mode patch --packe
 ```
 
 `--claude-bin /absolute/path` goes before the action when selecting a specific
-installed executable or a fake executable for testing. `run --timeout SECONDS`
-accepts a positive value up to 300 (default 300). A timeout terminates the helper's
-process group, including descendants; it does not kill unrelated Claude sessions.
-The helper never retries a request. CLI/authentication errors stop the run.
+installed executable or a fake executable for testing. `run --idle-timeout SECONDS`
+(default 900; `--timeout` is a compatibility alias) measures inactivity since
+meaningful model progress, including the initial wait before generation. There is
+no default total wall-clock limit. `--total-timeout SECONDS` sets an optional total
+request budget; `--finish-timeout SECONDS` (default 30) bounds CLI exit after its
+final result. All budgets must be positive finite values. `--progress-interval`
+defaults to 30 seconds and cannot exceed 60. Preflight help and authentication each
+have a separate 20-second deadline and receive the same live liveness reporting.
+Timeout, cancellation (SIGINT/SIGTERM), or malformed output terminates only the
+helper-owned child process group, including descendants. The helper never retries;
+CLI/authentication/limit failures and API retry events stop the run.
+
+A nonblocking duplex reader drains stdout/stderr while sending the packet. It
+accepts newline JSON events and fragmented writes (including a final line without
+a newline). Limits are 16 MiB total stream stdout, 1 MiB per line/final envelope,
+and 256 KiB stderr; exceeding a limit stops the owned group promptly. Stderr is
+counted and discarded. Nonempty text/thinking deltas and a first completed
+assistant message count as model progress; initialization, pings, retries, blank
+lines, empty deltas, and stderr do not. Final success requires an explicit success
+result, `is_error: false`, a clean CLI exit, and the existing answer validation.
+Missing or malformed final envelopes fail closed.
+
+`progress.json` is atomically replaced while active and on completion. Sanitized
+JSON summaries on stderr identify started/running/waiting/finished/failure, phase,
+elapsed wall time, last actual progress time relative to start, idle time, event
+counts, byte counts, and artifact directory. No prompt, source, generated text,
+thinking, provider stderr, or arbitrary provider status strings enter these
+summaries. A waiting heartbeat records liveness only. Stdout remains one final
+machine-readable artifact summary. Read live progress or relay emitted summaries
+to the user at most 60 seconds apart; a timeout alone says nothing about whether
+context was too large. High effort does not promise shorter latency.
+
+The stream flags follow the [official headless stream interface](https://code.claude.com/docs/en/headless#stream-responses).
+Installed CLI help must advertise the required effort and streaming flags.
 
 ## Packet schema
 
@@ -73,7 +103,8 @@ Do not redact a required technical fact silently; report the resulting uncertain
 Packet contents go through stdin. The CLI runs in a fresh private temporary
 working directory with safe/restricted mode, empty tools, empty setting sources,
 empty explicit settings and MCP configuration, slash commands disabled, a fixed
-bounded system prompt, Opus, print JSON, no session persistence, plan permissions,
+bounded system prompt, explicit Opus High, verbose stream JSON with partial messages,
+no session persistence, plan permissions,
 and one turn. Administrator-managed policy may still apply according to Claude's
 CLI contract. Session isolation does not modify global settings. Child environment
 uses a small allowlist for home, executable search, locale, temporary directory,
@@ -83,9 +114,16 @@ runtime injection variables are not inherited. Keychain OAuth remains available.
 ## Response and applying a patch
 
 Claude returns a JSON object with exactly `explanation` and `diff` strings inside
-the CLI JSON result. Review mode requires an empty `diff`. Patch mode accepts an
+the final CLI stream result. Review mode requires an empty `diff`. Patch mode accepts an
 empty diff when no changes are needed. Malformed results fail explicitly. Any
-reported non-Opus model causes failure. The requested model is always recorded;
+reported non-Opus model in initialization, message, or final telemetry causes failure.
+Initialization rejects reported tools and MCP servers. Plugin metadata is allowed
+only for the two built-ins observed with Claude 2.1.295 safe mode:
+`cc-plugin-agents-md` and `cc-plugin-plugin-authoring`, each with its matching
+`NAME@builtin` source. Custom plugins, unknown built-ins, and mismatched sources
+fail closed. Built-in metadata does not authorize tools, scripts, or more scope.
+An installed CLI with different built-ins requires evidence and an explicit
+compatibility update. The requested model is always recorded;
 a CLI that omits model telemetry cannot independently prove its resolved alias.
 
 Supported patches use standard `--- a/PATH` / `+++ b/PATH` headers and
@@ -113,7 +151,7 @@ match `scope` exactly. File hashes captured before the request must still match
 before validation; no forced application or conflict resolution is attempted.
 
 A private `claude-collab-*` temporary directory is printed on success or failure.
-It contains `status.json`, `sync.json` when relevant, and, on success,
+It contains `progress.json`, `status.json`, `sync.json` when relevant, and, on success,
 `response.json` plus `patch.diff` when nonempty. A schema-validated,
 secret-checked response is saved before applicability validation, so an invalid
 patch remains diagnosable in `response.json`; `status.json` explicitly records
@@ -123,7 +161,8 @@ is not an accepted patch. Malformed or secret-containing responses are not saved
 Status records the helper hash,
 packet hash and size, scope baseline SHA-256 values (`null` for absent files),
 project root, command without packet contents, requested/reported models, numeric
-usage when supplied, cost estimate when supplied, duration, result, and applied=false.
+usage when supplied, cost estimate when supplied, requested effort and watchdog
+budgets, duration, result, and applied=false.
 Raw failed provider output and the assembled packet are not retained. Errors are
 sanitized. Artifacts have user-only permissions; preserve needed evidence and
 remove only the generated directory when finished.
@@ -154,6 +193,12 @@ skill synchronization. It never sends a real request:
 python3 ~/.codex/skills/claude-collab/scripts/test_bridge.py
 ```
 
+For the built-in/custom plugin isolation regression use `--case init`.
+For streaming/watchdog checks use `--case stream` (scaled subsecond budgets keep
+the suite cheap; the healthy stream outlives its inactivity budget through actual
+deltas). These cases also cover large stdin, fragmented lines, stalls, stderr and
+heartbeat spam, cancellation descendants, output bounds, missing/incomplete finals,
+non-Opus telemetry, CLI errors, explicit total budgets, and post-result exit stalls.
 For a narrow implementation smoke use `--case review`; `--case repair` exercises
 the alias, sibling-document, unified-diff, and failure-evidence regressions. The printed private
 `report.json` records helper revision hash, commands, input hashes, expected and

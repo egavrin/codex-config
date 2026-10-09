@@ -54,8 +54,9 @@ benefit.
 
 Use Delegated for substantive implementation or review when a distinct
 implementation owner materially improves reliability or reduces root context and
-work under the model-aware branches below. For Terra, Luna, and Sol this means a
-stronger owner; Astra may instead offload a clearly bounded package to Sol.
+work. For ordinary substantial independent work, use Claude Opus High first
+under the companion policy below. The native model-aware branches apply only
+when that companion route is unavailable or cannot complete the bounded package.
 Signals include meaningful repository discovery plus implementation,
 cross-component behavior, non-mechanical multi-file changes, a material design
 decision, important security or regression risk, or a substantive read-only
@@ -66,16 +67,29 @@ default.
 
 The marker `EXPERIMENT: SOL_HIGH_ASTRA_MEDIUM_XHIGH` selects the normal policy.
 The local default is Sol High on the Standard tier, but Desktop or runtime root
-overrides remain authoritative user choices:
+overrides remain authoritative user choices.
+
+For ordinary substantial independent review or patch packages, first use
+`claude-collab` with explicit Opus High effort. The table and native lifecycle
+rules below are the fallback, not a requirement to bypass Claude. Fall back when
+Claude is unavailable, authentication or usage limits prevent work, progress
+supervision detects a stall, or the bounded package remains incomplete. Record
+the specific reason and carry forward completed evidence. Stop the companion
+before starting one native owner; never run both concurrently. The root retains
+scope, integration, patch application, and acceptance. Tiny Direct work stays in
+the root. Named opt-in experiments retain their exact routes. High effort is not
+evidence that latency will improve.
+
+Native fallback branches:
 
 | Effective root | Direct and ordinary root-owned work | Delegated behavior |
 |---|---|---|
-| Terra | Complete Direct work in Terra. | Give exactly one Context Packet to `senior_executor_standard`; use `astra_executor_standard` only for a narrow evidence-gated remainder after Sol. |
-| Luna | Complete Direct work in Luna. | Give exactly one Context Packet to `senior_executor_standard`; use `astra_executor_standard` only for a narrow evidence-gated remainder after Sol. |
-| Sol | Complete Direct work in Sol. Never spawn another Sol. | Give exactly one Context Packet to `astra_executor_standard`; use `astra_executor_xhigh` only for an evidence-gated intrinsically hard remainder after Medium Astra. |
+| Terra | Complete Direct work in Terra. | Give exactly one Context Packet to `senior_executor_standard`; use `astra_executor_high` only for a narrow evidence-gated remainder after Sol. |
+| Luna | Complete Direct work in Luna. | Give exactly one Context Packet to `senior_executor_standard`; use `astra_executor_high` only for a narrow evidence-gated remainder after Sol. |
+| Sol | Complete Direct work in Sol. Never spawn another Sol. | Give exactly one Context Packet to `astra_executor_high`; use `astra_executor_xhigh` only for an evidence-gated intrinsically hard remainder after High Astra. |
 | Astra | Normally own planning, implementation, and acceptance directly. Never spawn Astra from Astra. | Optionally give one clearly bounded package to `senior_executor_standard` only when doing so materially reduces Astra context or work. |
 
-For Terra- and Luna-root Delegated work, the root performs one bounded evidence
+For Terra- and Luna-root native fallback work, the root performs one bounded evidence
 pass, forms the Context Packet, and assigns exactly one fresh
 `senior_executor_standard`. A substantive review package is explicitly read-only.
 Sol treats the packet as working context: exact edit locations and directly
@@ -83,16 +97,16 @@ connected definitions are allowed, while broad repeated discovery requires the
 specific deficient packet field, evidence for the deficiency, and why expansion
 is necessary. The root must not duplicate the delegated package.
 
-For the default Sol-root Delegated route, Sol performs one bounded evidence pass,
+For the default Sol-root native fallback, Sol performs one bounded evidence pass,
 forms the Context Packet, and assigns exactly one fresh
-`astra_executor_standard`. Astra Medium owns technical planning within the
+`astra_executor_high`. Astra High owns technical planning within the
 package, implementation or an explicitly read-only review, and one lightweight
 focused check. Sol must not prescribe a detailed implementation plan or duplicate
 the package. A routine acceptance defect returns once to that same still-open
-Medium Astra owner. Extra High is not a repair tier: use `astra_executor_xhigh`
-only when Medium Astra provides a concrete attempted failure, unresolved
+High Astra owner. Extra High is not a repair tier: use `astra_executor_xhigh`
+only when High Astra provides a concrete attempted failure, unresolved
 criterion, smallest remaining ownership surface, and why deeper reasoning is
-needed. Close Medium Astra before starting Extra High and give Extra High a delta
+needed. Close High Astra before starting Extra High and give Extra High a delta
 packet rather than the full original packet.
 
 The effective root always owns final acceptance. Inspect the diff and affected
@@ -106,7 +120,7 @@ evidence, not a runtime lifecycle guarantee.
 
 Never run more than one child concurrently, permit nested agents, add a separate
 verifier or second-opinion child, spawn Sol from Sol, or allow a child to spawn
-another agent. Medium Astra is the normal Sol-root implementation owner; Extra
+another agent. High Astra is the Sol-root native fallback owner; Extra
 High Astra remains rare and evidence-gated. When route choice is uncertain, use
 Direct only if the effective root can safely complete the task and deterministic
 acceptance without a distinct implementation owner; otherwise use the
@@ -416,6 +430,10 @@ only for a narrow unresolved package after evidence-based escalation.
 
 ### Context Packet contract
 
+For ordinary Claude packages, use the companion skill’s bounded packet schema
+and explicit source/skill bundle. The following native Context Packet contract
+applies after native fallback or when an opt-in experiment selects native work.
+
 For default Terra- or Luna-root Delegated work and the Luna-root experiments
 above, the root gathers decision-relevant facts before the implementation agent
 starts. In the
@@ -494,6 +512,7 @@ the configured values explicitly on every initial spawn:
 |------|-------|-----------|--------------|
 | `senior_executor_standard` | `gpt-6-sol` | `medium` | `default` |
 | `astra_executor_standard` | `gpt-6-astra` | `medium` | `default` |
+| `astra_executor_high` | `gpt-6-astra` | `high` | `default` |
 | `astra_executor_xhigh` | `gpt-6-astra` | `xhigh` | `default` |
 | `terra_context_compactor_fast` | `gpt-5.6-terra` | `medium` | `fast` |
 | `explorer` | `gpt-5.6-luna` | `medium` | inherited |
@@ -525,17 +544,22 @@ route never creates a tester and never has more than one child open.
 
 ## Delegated Route Entry
 
-For a Sol-root Delegated package in the default route:
+First route ordinary substantial independent work through Claude Opus High using
+`claude-collab`. Keep the root responsible for acceptance. On an evidenced
+companion failure or incomplete package, stop it, report the fallback reason, and
+pass only the remaining bounded work and relevant evidence to the native branch.
+
+For a Sol-root native fallback package:
 
 1. State the intended outcome and acceptance criteria.
 2. Perform one bounded evidence pass over the smallest decision-critical
    context and form the Context Packet.
 3. Give exactly one bounded implementation or read-only review package to a
-   fresh `astra_executor_standard`.
-4. Keep Medium Astra open while Sol inspects the result and runs acceptance.
+   fresh `astra_executor_high`.
+4. Keep High Astra open while Sol inspects the result and runs acceptance.
 5. Return one ordinary repair to that same owner, if required; otherwise close
    it after acceptance.
-6. Only for a concrete intrinsically hard unresolved remainder, close Medium
+6. Only for a concrete intrinsically hard unresolved remainder, close High
    Astra and give one narrow delta packet to `astra_executor_xhigh`.
 
 Exact experimental marker sections override this sequence only for their named
@@ -570,6 +594,9 @@ independent verification.
   change for a material reason.
 
 ## Context Transfer
+
+Ordinary companion requests follow the selected skill’s packet schema. The native
+capsules below apply only to native fallback and the named experiments.
 
 Initial subagents should normally start without inherited conversation history.
 Use `fork_turns="none"` and provide a compact, self-contained task capsule. Do
@@ -780,9 +807,11 @@ evidence, a failure, a material risk, or an explicit user request.
 
 ## Claude companion and shared skills
 
-For ordinary substantial work, `claude-collab` authorizes balanced distribution
-from the start between Codex and an external Claude Opus CLI companion when a
-bounded independent package is useful. Keep tiny tasks in Codex. Follow
+For ordinary substantial work, `claude-collab` selects the external Claude Opus
+High CLI companion first when a bounded independent review or patch package is
+useful. Keep tiny tasks in Codex. Use the existing native model-aware branch only
+when the companion is unavailable, limited, stalled, or unable to complete the
+package; record why and stop the companion before starting the fallback owner. Follow
 `~/.codex/skills/claude-collab/SKILL.md` for packet scope, quota-aware sizing,
 subscription authentication, request limits, and acceptance. Report this external
 route as `<effective-root>-claude`, separately from actual root model, reasoning,

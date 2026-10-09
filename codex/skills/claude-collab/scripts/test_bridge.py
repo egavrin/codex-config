@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -20,7 +21,7 @@ SCRIPT = Path(__file__).with_name('bridge.py')
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--case', default='all', choices=['all', 'review', 'repair'])
+    parser.add_argument('--case', default='all', choices=['all', 'review', 'repair', 'stream', 'init'])
     args = parser.parse_args()
     root = Path(tempfile.mkdtemp(prefix='claude-collab-e2e-'))
     root.chmod(0o700)
@@ -50,30 +51,65 @@ base = Path(__file__).parent
 with (base / 'calls.jsonl').open('a') as f: f.write(json.dumps(args)+'\\n')
 scenario = SCENARIO
 if '--help' in args:
- print('--safe-mode --restricted --tools --no-session-persistence --setting-sources --strict-mcp-config --settings --max-turns --permission-mode --disable-slash-commands --model --output-format'); sys.exit(0)
+ print('--safe-mode --restricted --tools --no-session-persistence --setting-sources --strict-mcp-config --settings --max-turns --permission-mode --disable-slash-commands --model --effort --output-format --verbose --include-partial-messages'); sys.exit(0)
 if 'auth' in args:
  print(json.dumps({'loggedIn': True, 'authMethod': 'api_key' if scenario == 'auth' else 'claude.ai', 'apiProvider': 'firstParty'})); sys.exit(0)
 assert '--safe-mode' in args and '--restricted' in args and '--strict-mcp-config' in args
 assert args[args.index('--tools')+1] == ''
 assert args[args.index('--model')+1] == 'opus'
+assert args[args.index('--effort')+1] == 'high'
+assert args[args.index('--output-format')+1] == 'stream-json'
+assert '--verbose' in args and '--include-partial-messages' in args
 assert args[args.index('--max-turns')+1] == '1'
 assert args[args.index('--setting-sources')+1] == ''
 assert '--no-session-persistence' in args and '--disable-slash-commands' in args
 assert args[args.index('--permission-mode')+1] == 'plan'
 assert not any(k.startswith(('ANTHROPIC_', 'CLAUDE_CODE_OAUTH', 'AWS_', 'OPENAI_')) or k == 'NODE_OPTIONS' for k in os.environ)
 assert 'FIXTURE_SENTINEL' not in ' '.join(args)
+if scenario == 'duplex': sys.stderr.write('x'*60000); sys.stderr.flush()
 payload = sys.stdin.read()
 assert 'REFERENCE_SENTINEL' in payload and 'name: sample' in payload
 if (base / '.codex/skills/related').exists(): assert 'SIBLING_SENTINEL' in payload and 'Related detail' in payload
 (base / 'request-observed.json').write_text(json.dumps({'args': args, 'stdin_sha256': __import__('hashlib').sha256(payload.encode()).hexdigest(), 'bundled_reference': True, 'env_restricted': True}))
-if scenario == 'timeout':
+if scenario in ('timeout', 'cancel'):
  subprocess.Popen([sys.executable, '-c', "import time; from pathlib import Path; time.sleep(2); Path("+repr(str(base/'descendant-survived'))+").write_text('bad')"])
  time.sleep(10)
+def event(value): print(json.dumps(value), flush=True)
+if scenario == 'init-stall': time.sleep(10)
+plugins = []
+if scenario.startswith('plugin-'):
+ plugins = [{'name':name,'source':name+'@builtin'} for name in ('cc-plugin-agents-md','cc-plugin-plugin-authoring')]
+ if scenario == 'plugin-custom': plugins.append({'name':'custom','source':'custom@marketplace'})
+ if scenario == 'plugin-spoof-source': plugins[0]['source'] = 'cc-plugin-agents-md@marketplace'
+ if scenario == 'plugin-spoof-name': plugins[0]['name'] = 'custom'
+ if scenario == 'plugin-unknown-builtin': plugins.append({'name':'unknown','source':'unknown@builtin'})
+ if scenario == 'plugin-malformed': plugins = {'name':'cc-plugin-agents-md','source':'cc-plugin-agents-md@builtin'}
+event({'type':'system','subtype':'init','model':'claude-sonnet-fixture' if scenario == 'nonopus-init' else 'claude-opus-fixture','plugins':plugins,'tools':['Read'] if scenario == 'plugin-tools' else [],'mcp_servers':[{'name':'custom'}] if scenario == 'plugin-mcp' else []})
+if scenario in ('progress', 'total', 'noise', 'empty', 'stderr', 'retry', 'cancel'):
+ for i in range(12):
+  if scenario in ('progress','total'): event({'type':'stream_event','event':{'type':'content_block_delta','delta':{'type':'thinking_delta','thinking':'PRIVATE_INTERMEDIATE'}}})
+  elif scenario == 'noise': event({'type':'system','subtype':'status','status':'heartbeat'})
+  elif scenario == 'empty': print('',flush=True)
+  elif scenario == 'stderr': print('PRIVATE_STDERR',file=sys.stderr,flush=True)
+  elif scenario == 'retry': event({'type':'system','subtype':'api_retry','error_status':429,'attempt':1})
+  time.sleep(.1)
+if scenario == 'oversize': print('x'*(2*1024*1024),flush=True); time.sleep(10)
+if scenario == 'stderr-oversize': print('x'*(300*1024),file=sys.stderr,flush=True); time.sleep(10)
+if scenario == 'missing-final': sys.exit(0)
+if scenario == 'empty-event': event({}); sys.exit(0)
+if scenario == 'bad-delta': event({'type':'stream_event','event':{'type':'content_block_delta','delta':{'type':'text_delta','text':23}}}); sys.exit(0)
 if scenario == 'malformed': print('broken'); sys.exit(0)
 if scenario == 'limit': print(json.dumps({'type':'result','is_error':True,'result':'Rate limit reached'})); sys.exit(0)
 if scenario == 'stale': (base / 'project/a.txt').write_text('concurrent edit\\n')
 answer = {'explanation': 'Review complete', 'diff': PATCH}
-print(json.dumps({'type':'result','subtype':'success','is_error':False,'result':json.dumps(answer),'modelUsage':{'claude-opus-fixture':{}},'usage':{'input_tokens':2,'output_tokens':3},'total_cost_usd':0.01}))
+result = {'type':'result','subtype':'success','is_error':False,'result':json.dumps(answer),'modelUsage':{'claude-sonnet-fixture' if scenario == 'nonopus-final' else 'claude-opus-fixture':{}},'usage':{'input_tokens':2,'output_tokens':3},'total_cost_usd':0.01}
+if scenario == 'incomplete': result.pop('subtype')
+encoded = json.dumps(result)
+if scenario == 'fragmented':
+ for i in range(0,len(encoded),7): sys.stdout.write(encoded[i:i+7]); sys.stdout.flush()
+else: print(encoded,flush=True)
+if scenario == 'cli-error': sys.exit(2)
+if scenario == 'final-hang': time.sleep(10)
 '''.replace('SCENARIO', repr(scenario)).replace('PATCH', repr(patch or '')))
         fake.chmod(0o700)
         if setup:
@@ -81,16 +117,40 @@ print(json.dumps({'type':'result','subtype':'success','is_error':False,'result':
         packet_file = home / 'packet.json'
         packet_file.write_text(json.dumps(packet))
         mode = 'patch' if patch is not None else 'review'
-        cmd = [sys.executable, str(own/'bridge.py'), '--claude-bin', str(fake), 'run', '--mode', mode, '--packet', str(packet_file), '--timeout', '0.4' if scenario == 'timeout' else '10']
+        cmd = [sys.executable, str(own/'bridge.py'), '--claude-bin', str(fake), 'run', '--mode', mode, '--packet', str(packet_file), '--timeout', '0.4' if scenario in ('timeout','cancel','init-stall','progress','total','noise','empty','stderr','retry') else '10', '--progress-interval', '0.1']
+        if scenario == 'total': cmd += ['--total-timeout','0.4']
+        if scenario == 'final-hang': cmd += ['--finish-timeout','0.3']
         env = dict(os.environ, HOME=str(home), ANTHROPIC_API_KEY='fixture-not-real', CLAUDE_CODE_OAUTH_TOKEN='fixture-not-real', AWS_SECRET_ACCESS_KEY='fixture-not-real', NODE_OPTIONS='--trace-warnings')
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env)
+        if scenario == 'cancel':
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
+            deadline = time.monotonic()+5
+            while not (home/'request-observed.json').exists() and time.monotonic()<deadline: time.sleep(.02)
+            assert (home/'request-observed.json').exists(), 'request never started'
+            process.send_signal(signal.SIGTERM)
+            stdout, stderr = process.communicate(timeout=5)
+            result = subprocess.CompletedProcess(cmd, process.returncode, stdout, stderr)
+        else:
+            result = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=15)
         (home/'stdout.txt').write_text(result.stdout)
         (home/'stderr.txt').write_text(result.stderr)
         assert result.returncode == expected, (name, result.returncode, result.stdout, result.stderr)
+        artifact = Path(json.loads(result.stdout)['artifact'])
+        progress = json.loads((artifact/'progress.json').read_text())
+        assert progress['status'] in ('finished','failure')
+        assert (artifact/'progress.json').stat().st_mode & 0o777 == 0o600
+        assert 'PRIVATE_INTERMEDIATE' not in result.stderr and 'PRIVATE_STDERR' not in result.stderr
+        assert 'PRIVATE_INTERMEDIATE' not in (artifact/'progress.json').read_text()
+        if scenario == 'progress':
+            assert progress['elapsed_seconds'] > .4 and progress['meaningful_events'] >= 12
+            events = [json.loads(line) for line in result.stderr.splitlines()]
+            assert any(event['status']=='running' for event in events)
+            assert max(b['elapsed_seconds']-a['elapsed_seconds'] for a,b in zip(events,events[1:])) < 1
+        if scenario in ('noise','empty','stderr','init-stall'):
+            assert progress['meaningful_events'] == 0
         calls = [json.loads(line) for line in (home/'calls.jsonl').read_text().splitlines()] if (home/'calls.jsonl').exists() else []
         if scenario == 'auth':
             assert not any('-p' in call for call in calls)
-        if scenario == 'timeout':
+        if scenario in ('timeout', 'cancel'):
             time.sleep(2.2)
             assert not (home/'descendant-survived').exists()
         if expected == 0 and patch is not None:
@@ -124,6 +184,16 @@ print(json.dumps({'type':'result','subtype':'success','is_error':False,'result':
 
     try:
         case('review')
+        if args.case in ('all', 'stream', 'init'):
+            case('plugin-builtin','plugin-builtin')
+            for scenario in ('plugin-custom','plugin-spoof-source','plugin-spoof-name','plugin-unknown-builtin','plugin-malformed','plugin-tools','plugin-mcp'):
+                case(scenario,scenario,1)
+        if args.case in ('all', 'stream'):
+            for scenario in ('progress','fragmented'):
+                case('stream-'+scenario, scenario)
+            case('stream-duplex','duplex',extra={'objective':'Review FIXTURE_SENTINEL '+ 'x'*120000})
+            for scenario in ('init-stall','noise','empty','stderr','retry','oversize','stderr-oversize','missing-final','empty-event','bad-delta','nonopus-init','nonopus-final','incomplete','cli-error','final-hang','total','cancel'):
+                case('stream-'+scenario,scenario,1)
         if args.case in ('all', 'repair'):
             alias_home = case('source-root-alias', setup=alias_setup)
             assert (alias_home/'.claude/skills/sample').is_symlink()
