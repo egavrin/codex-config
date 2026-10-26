@@ -1,0 +1,6 @@
+interface:
+  display_name: "Graphify"
+  short_description: "Local code graphs for repository discovery"
+  default_prompt: "Use $graphify to inspect this project's architecture and cross-file dependencies."
+policy:
+  allow_implicit_invocation: true

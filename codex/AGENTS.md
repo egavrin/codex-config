@@ -11,6 +11,13 @@ Preserve scope, permissions, exceptions, and verification requirements when you 
 
 This language rule does not authorize a document edit or change an orchestration route.
 
+## Ponytail compatibility
+
+When Ponytail applies, read ~/.codex/ponytail-policy.md.
+Its solution preferences supplement the active scope, language, verification, and routing instructions.
+Ponytail modes do not change permissions or authorize another agent.
+The off mode does not disable existing instructions.
+
 ## Objective
 
 Use the root model for understanding the request, bounded evidence collection,
@@ -59,9 +66,7 @@ benefit.
 
 ### Delegated route
 
-Use Delegated for substantive implementation or review when a distinct owner materially improves reliability or reduces root context and work. For ordinary substantial independent work, use Claude Opus High first
-under the companion policy below. The native model-aware branches apply only
-when that companion route is unavailable or cannot complete the bounded package.
+Use Delegated for substantive implementation or review when a distinct owner materially improves reliability or reduces root context and work. For ordinary substantial independent work, use the native model-aware branches below.
 Signals include repository discovery plus implementation, cross-component behavior, and non-mechanical multi-file changes. Other signals include material design decisions, important security or regression risks, and substantive read-only reviews. Route by the actual effective root model, not merely the configured
 default.
 
@@ -71,20 +76,15 @@ The marker `EXPERIMENT: SOL_HIGH_ASTRA_MEDIUM_XHIGH` selects the normal policy.
 The local default is Sol High on the Standard tier, but Desktop or runtime root
 overrides remain authoritative user choices.
 
-For ordinary substantial independent review or patch packages, first use
-`claude-collab` with explicit Opus High effort. The table and native lifecycle
-rules below are the fallback, not a requirement to bypass Claude. Fall back if Claude is unavailable, authentication/usage limits block work, supervision detects a stall, or the package remains incomplete. Record
-the specific reason and carry forward completed evidence.
+For ordinary substantial implementation or review, use the native model-aware branch directly.
+Claude is excluded from automatic primary, fallback, and review routes.
+The root retains scope, integration, and acceptance.
 
-Stop the companion
-before starting one native owner. Never run both concurrently. The root retains
-scope, integration, patch application, and acceptance.
+Tiny Direct work stays in the root.
+Named opt-in experiments retain their exact native routes.
+High effort is not evidence that latency will improve.
 
-Tiny Direct work stays in
-the root. Named opt-in experiments retain their exact routes. High effort is not
-evidence that latency will improve.
-
-Native fallback branches:
+Native Delegated branches:
 
 | Effective root | Direct and ordinary root-owned work | Delegated behavior |
 |---|---|---|
@@ -93,12 +93,12 @@ Native fallback branches:
 | Sol | Complete Direct work in Sol. Never spawn another Sol. | Give exactly one Context Packet to `astra_executor_high`. Use `astra_executor_xhigh` only for an evidence-gated intrinsically hard remainder after High Astra. |
 | Astra | Normally own planning, implementation, and acceptance directly. Never spawn Astra from Astra. | Optionally give one clearly bounded package to `senior_executor_standard` only when doing so materially reduces Astra context or work. |
 
-For Terra- and Luna-root native fallback, the root performs one bounded evidence pass and forms the Context Packet. It assigns exactly one fresh `senior_executor_standard`. A substantive review package is explicitly read-only.
+For Terra- and Luna-root Delegated work, the root performs one bounded evidence pass and forms the Context Packet. It assigns exactly one fresh `senior_executor_standard`. A substantive review package is explicitly read-only.
 Sol uses the packet as working context.
 
 It may open exact edit locations and directly connected definitions. Before broader discovery, it must identify the deficient packet field, evidence for the deficiency, and the reason for expansion. The root must not duplicate the delegated package.
 
-For default Sol-root native fallback, Sol performs one bounded evidence pass and forms the Context Packet. It assigns exactly one fresh `astra_executor_high`. Astra High owns technical planning within the
+For default Sol-root Delegated work, Sol performs one bounded evidence pass and forms the Context Packet. It assigns exactly one fresh `astra_executor_high`. Astra High owns technical planning within the
 package, implementation or an explicitly read-only review, and one lightweight
 focused check. Sol must not prescribe a detailed implementation plan or duplicate
 the package.
@@ -121,7 +121,7 @@ evidence, not a runtime lifecycle guarantee.
 
 Never run more than one child concurrently. Prohibit nested agents. Do not add a separate verifier or second-opinion child. Never spawn Sol from Sol or let a child spawn another agent.
 
-High Astra is the Sol-root native fallback owner. Extra
+High Astra is the Sol-root Delegated owner. Extra
 High Astra remains rare and evidence-gated. When route choice is uncertain, examine whether the effective root can safely complete the task and deterministic acceptance alone.
 
 Use Direct only in that case. Otherwise, use the model-aware Delegated branch.
@@ -441,9 +441,7 @@ marker `EXPERIMENT: LUNA_SOL_ASTRA_ESCALATION`, supplied by the
 
 ### Context Packet contract
 
-For ordinary Claude packages, use the companion skill’s bounded packet schema
-and explicit source/skill bundle. The following native Context Packet contract
-applies after native fallback or when an opt-in experiment selects native work.
+This native Context Packet contract applies to ordinary Delegated work and the named native experiments.
 
 Before implementation, the root collects decision-relevant facts for these routes:
 - Default Sol-root Delegated work.
@@ -541,10 +539,11 @@ route never creates a tester and never has more than one child open.
 
 ## Delegated Route Entry
 
-First route ordinary substantial independent work through Claude Opus High using
-`claude-collab`. Keep the root responsible for acceptance. On an evidenced companion failure or incomplete package, stop the companion. Report the fallback reason. Pass only the remaining bounded work and relevant evidence to the native branch.
+Route ordinary substantial independent work through the native model-aware branch.
+Keep the root responsible for acceptance.
+Do not call Claude before native delegation or after a native failure.
 
-For a Sol-root native fallback package:
+For a Sol-root Delegated package:
 
 1. State the intended outcome and acceptance criteria.
 2. Perform one bounded evidence pass over the smallest decision-critical
@@ -557,7 +556,7 @@ For a Sol-root native fallback package:
 6. Only for a concrete intrinsically hard unresolved remainder, close High
    Astra and give one narrow delta packet to `astra_executor_xhigh`.
 
-For Terra- or Luna-root native fallback work,
+For Terra- or Luna-root Delegated work,
 retain the existing Context Packet to `senior_executor_standard` route, with
 only evidence-gated Astra escalation.
 
@@ -585,8 +584,7 @@ absolute lifetime cap. A genuinely large task may use many agents across its lif
 
 ## Context Transfer
 
-Ordinary companion requests follow the selected skill’s packet schema. The native
-capsules below apply only to native fallback and the named experiments.
+The native capsules below apply to ordinary Delegated work and the named native experiments.
 
 Initial subagents should normally start without inherited conversation history.
 Use `fork_turns="none"` and provide a compact, self-contained task capsule. Do
@@ -599,7 +597,7 @@ Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
 
 When a Terra- or Luna-root branch uses `senior_executor_standard`, use the Worker
-capsule structure and state `Research Slot: withheld`. For Sol-root native fallback with `astra_executor_high`, use the same Worker capsule structure. State that Sol owns acceptance. Explicitly prohibit child delegation.
+capsule structure and state `Research Slot: withheld`. For Sol-root Delegated work with `astra_executor_high`, use the same Worker capsule structure. State that Sol owns acceptance. Explicitly prohibit child delegation.
 
 ### Explorer capsule
 
@@ -773,27 +771,48 @@ Before declaring a Delegated task complete, the root must:
 
 Perform an additional broad review or repeat completed checks only with new evidence, failure, material risk, or explicit user request.
 
-## Claude companion and shared skills
+## Shared skills and explicit Claude requests
 
-For ordinary substantial work, `claude-collab` selects the external Claude Opus
-High CLI companion first when a bounded independent review or patch package is
-useful. Keep tiny tasks in Codex. Use the existing native model-aware branch only when the companion is unavailable, limited, stalled, or unable to complete the package. Record the reason. Stop the companion before the fallback owner starts. Follow
-`~/.codex/skills/claude-collab/SKILL.md` for packet scope, quota-aware sizing,
-subscription authentication, request limits, and acceptance.
+Automatic routes use native Codex models only.
+Do not select Claude because of task size, Codex quota, or a native failure.
+Do not run companion `doctor`, `preflight`, or `run` for an ordinary task.
+Use `claude-collab` only when the user explicitly requests Claude or invokes `$claude-collab`.
+The skill must keep `allow_implicit_invocation: false`.
 
-Report this external route as `<effective-root>-claude`, separately from actual root model, reasoning, and observable tier. It is not a valid default Sol–Astra delegated benchmark.
-Named opt-in experimental routes remain authoritative. Never run the companion and a native child concurrently on the same task. Never invoke the bridge recursively from a companion request. Plan Mode remains read-only.
+For an explicit Claude request, follow `~/.codex/skills/claude-collab/SKILL.md`.
+Report that manual external route as `<effective-root>-claude`, separately from root model, reasoning, and observable tier.
+It is not a default native-route benchmark.
+Never run the companion and a native child concurrently on the same task.
+Never invoke the bridge recursively from a companion request.
+Plan Mode remains read-only.
+Codex owns scope, integration, patch application, tests, and final acceptance.
 
-The shared user-skill library lives in `~/.codex/skills`. The bridge's
-`sync-skills` helper maintains individual owned symlinks under `~/.claude/skills`.
-Run it after installing user skills. The bridge also syncs before requests.
-
+The shared user-skill library lives in `~/.codex/skills`.
+The bridge's `sync-skills` action maintains owned symlinks under `~/.claude/skills` without a model request.
+Run it after installing user skills.
 Preserve independent Claude skills and exclude hidden/system directories.
 Codex uses `$skill-name`, while ordinary Claude sessions use `/skill-name`.
-Companion requests explicitly bundle selected skill contents and required references. Skill instructions do not expand scope or grant extra tools.
+Explicit companion requests bundle selected skill contents and required references.
+Skill instructions do not expand scope or grant extra tools.
 
-This workflow has a subscription-only exception to the generic API-key rule above. Use the existing `claude.ai` login. Never load `~/.env`, read credential contents, or use an API-key fallback. Do not modify authentication or billing or enable
-Extra Usage.
-
-Sanitized child authentication must pass a check before each request. OAuth selection cannot disable account overages already enabled by the user.
+Explicit companion requests have a subscription-only exception to the generic API-key rule.
+Use the existing `claude.ai` login.
+Never load `~/.env`, read credential contents, or use an API-key fallback.
+Do not modify authentication or billing or enable Extra Usage.
+Sanitized child authentication must pass a check before each explicit request.
+OAuth selection cannot disable account overages already enabled by the user.
 Codex alone reviews, applies, tests, and accepts returned patches.
+
+## Graphify code discovery
+
+For architecture, dependency tracing, or substantial repository discovery, use the shared `graphify` skill when appropriate.
+Read `~/.codex/skills/graphify/SKILL.md` before its first use.
+For a small edit at a known location, use focused source searches directly.
+Graphify does not change routing, permissions, or Plan Mode.
+
+## Mandatory Slopo commit review
+
+Before creating or amending any Git commit, follow `~/.codex/skills/slopo-review/SKILL.md`.
+Complete the review and resolve blocking findings before committing.
+This requirement includes documentation-only commits.
+It does not authorize commits or change Plan Mode, Git hooks, or manual workflows.

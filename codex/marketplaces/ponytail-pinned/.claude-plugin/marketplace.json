@@ -1,0 +1,13 @@
+{
+  "name": "ponytail",
+  "owner": {
+    "name": "Dietrich Gebert"
+  },
+  "plugins": [
+    {
+      "name": "ponytail",
+      "source": "./ponytail",
+      "description": "Pinned unchanged upstream Ponytail 5.1.0."
+    }
+  ]
+}

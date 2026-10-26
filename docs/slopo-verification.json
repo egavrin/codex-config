@@ -1,0 +1,161 @@
+{
+  "date": "2026-10-26",
+  "result": "PASS",
+  "upstream_revision": "cb63e8ee4c27d40f47999c96e75b18bd5816b249",
+  "package_version": "0.9.0",
+  "structural_checks": {
+    "result": "PASS",
+    "file_count": 7,
+    "local_references": 7,
+    "license_exact": true,
+    "shared_source": true,
+    "implicit_invocation": true,
+    "no_production_launcher": true
+  },
+  "profile_checks": {
+    "result": "Reviewed",
+    "criteria": [
+      "Mandatory pre-commit trigger",
+      "Scope and Plan Mode boundaries",
+      "Short procedural instructions",
+      "Preservation of requirements",
+      "Documented literals and technical terms"
+    ],
+    "limit": "Structural and word-count checks do not establish ASD-STE100 compliance."
+  },
+  "native_cli_workflow": {
+    "status": "PASS",
+    "upstream_revision": "cb63e8ee4c27d40f47999c96e75b18bd5816b249",
+    "fixture_revision": "017178a577c3ed387720cef35e8c482a8b76411e",
+    "checks": 35,
+    "indexed_paths": [
+      "original.py",
+      "tests/test_sample.py"
+    ],
+    "endpoint": "http://127.0.0.1:58993",
+    "limit": "Synthetic embeddings, no commit-policy enforcement."
+  },
+  "real_local_model": {
+    "result": "PASS",
+    "initial_index_embed_seconds": 1.574,
+    "incremental_review_seconds": 0.148,
+    "model_digest": "9fe680d4d58b475099d91e0d08a1eaea6cef087b0a0770f4165581a7e366afec",
+    "embedding_dimensions": 768,
+    "clean_initial_review": true,
+    "duplicate_reported": true,
+    "endpoint": "http://127.0.0.1:11434",
+    "limit": "One synthetic code example with real local embeddings; not an accuracy benchmark."
+  },
+  "timing_limit": "Small warm-model fixture only. The duplicate body reused its existing vector; these times do not predict repository performance.",
+  "host_checks": [
+    {
+      "host": "codex",
+      "case": "positive",
+      "result": "PASS",
+      "acceptance": {
+        "result": "PASS",
+        "head_changed": true,
+        "index_and_source_preserved": true
+      },
+      "elapsed_seconds": 95.657,
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "observed_service_tier": null
+    },
+    {
+      "host": "codex",
+      "case": "negative",
+      "result": "PASS",
+      "acceptance": {
+        "result": "PASS",
+        "head_changed": false,
+        "index_and_source_preserved": true
+      },
+      "elapsed_seconds": 31.511,
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "observed_service_tier": null
+    },
+    {
+      "host": "claude",
+      "case": "positive",
+      "result": "PASS",
+      "acceptance": {
+        "result": "PASS",
+        "head_changed": true,
+        "index_and_source_preserved": true
+      },
+      "elapsed_seconds": 25.672,
+      "model": [
+        "claude-opus-5-5"
+      ],
+      "reasoning": null,
+      "observed_service_tier": "standard"
+    },
+    {
+      "host": "claude",
+      "case": "negative",
+      "result": "PASS",
+      "acceptance": {
+        "result": "PASS",
+        "head_changed": false,
+        "index_and_source_preserved": true
+      },
+      "elapsed_seconds": 12.013,
+      "model": [
+        "claude-opus-5-5"
+      ],
+      "reasoning": null,
+      "observed_service_tier": "standard"
+    },
+    {
+      "host": "codex",
+      "case": "judgment",
+      "result": "PASS",
+      "acceptance": {
+        "result": "PASS",
+        "head_index_source_preserved": true
+      },
+      "elapsed_seconds": 101.183,
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "observed_service_tier": null
+    },
+    {
+      "host": "codex",
+      "case": "model-drift",
+      "result": "PASS",
+      "acceptance": {
+        "result": "PASS",
+        "head_index_source_identity_preserved": true
+      },
+      "elapsed_seconds": 57.075,
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "observed_service_tier": null
+    }
+  ],
+  "cleanup": {
+    "global_config_restored_exactly": true,
+    "claude_settings_unchanged": true,
+    "global_hook_setting_unchanged": true,
+    "owned_ollama_stopped": true
+  },
+  "preservation": {
+    "global_instruction_delta": "Mandatory Slopo section only",
+    "codex_config": "Original bytes restored after test trust entries",
+    "claude_settings": "Original bytes preserved",
+    "existing_skills": "No source edits",
+    "git_hooks": "Unchanged",
+    "snapshot_existing_changes": "Preserved"
+  },
+  "private_evidence": "~/.codex/verification/slopo-install-20261026",
+  "source_lock": "slopo-source-lock.json",
+  "installation_commit_or_push": false,
+  "limits": [
+    "Instruction gate, not Git-hook enforcement.",
+    "Similar embeddings require contextual judgment.",
+    "Unsupported syntax, parsing failures, and size filters can leave coverage gaps.",
+    "Large production repositories and broad accuracy were not tested."
+  ]
+}

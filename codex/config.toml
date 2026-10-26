@@ -9,6 +9,9 @@ model_verbosity = "high"
 personality = "pragmatic"
 
 developer_instructions = """
+When Ponytail context applies, read `~/.codex/ponytail-policy.md`.
+Its solution preferences do not replace the active writing, verification, scope, or routing requirements.
+
 Use English for responses, agent messages, and generated technical prose.
 An explicit request for another output language takes precedence.
 Use the shared profile in `~/.codex/skills/writing-for-agents/references/controlled-english.md`.
@@ -26,17 +29,16 @@ Report their effective values.
 
 Direct work is bounded work that the effective root can safely complete with focused operations and deterministic acceptance.
 With the default Sol root, keep Direct work in Sol.
-For ordinary substantial independent implementation or review, first use the Claude Opus High companion through `claude-collab`.
-Use subscription authentication.
-Codex owns scope, integration, patch application, and acceptance.
-
-Stop the companion after unavailable authentication or CLI, usage limits, a supervised stall, or an incomplete bounded package.
-Record the concrete fallback reason. Then, use the native model-aware branch in AGENTS.md.
+For ordinary substantial independent implementation or review, use the native model-aware branch in AGENTS.md.
+Automatic routes exclude Claude, including fallback and independent review.
+Use `claude-collab` only after an explicit user request for Claude or `$claude-collab`.
+Do not run companion checks or requests merely because of task size or quota.
+The root owns scope, integration, and acceptance.
 For a Sol root, perform one bounded evidence pass.
 
 Prepare a Context Packet with source provenance for exactly one fresh `astra_executor_high` Astra High owner.
 Sol must not duplicate the delegated package.
-Never run the companion and a native child concurrently.
+Keep at most one native child open and prohibit nested agents.
 Named opt-in experiments retain their selected routes and Medium roles.
 
 High effort is not evidence of shorter latency.
@@ -69,9 +71,8 @@ Wait, reuse it, or close it as appropriate.
 
 Report the actual root model, reasoning, and tier separately.
 For the default Sol root, report the exact normal `effective_route`:
-`sol-direct`, `sol-claude`, `sol-astra`, or `sol-astra-xhigh`.
-Report a companion-to-native fallback and its concrete reason.
-It is not a pure delegated-route benchmark.
+`sol-direct`, `sol-astra`, or `sol-astra-xhigh`.
+An explicitly requested Claude call is a manual exception, not an automatic route or a native-route benchmark.
 Use `sol-single-agent-fallback` only when intended delegation failed.
 Exclude fallback sessions from valid delegated-route benchmarks.
 """
@@ -300,3 +301,10 @@ skill = "#000080"
 
 [shell_environment_policy.set]
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "091a81603ff202a16ed56557709bf42d97caf8f0dd2e07ae9e26d7c014d71035"
+
+[plugins."ponytail@ponytail"]
+enabled = true
+
+[marketplaces.ponytail]
+source_type = "local"
+source = "/Users/egavrin/.codex/marketplaces/ponytail-pinned"

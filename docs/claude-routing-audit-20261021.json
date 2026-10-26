@@ -1,0 +1,52 @@
+{
+  "period": "2026-10-15 through 2026-10-21 10:36 Europe/Moscow",
+  "distinct_helper_operations": 139,
+  "model_requests": 49,
+  "outcomes": {
+    "patch": {
+      "success": 23,
+      "failure": 12
+    },
+    "review": {
+      "success": 14
+    }
+  },
+  "daily_requests": {
+    "2026-10-15": 14,
+    "2026-10-16": 16,
+    "2026-10-17": 1,
+    "2026-10-19": 5,
+    "2026-10-20": 9,
+    "2026-10-21": 4
+  },
+  "helper_actions": {
+    "preflight": 76,
+    "doctor": 14,
+    "run": 49
+  },
+  "patch_failure_details": {
+    "git apply --check rejected patch; stopped without applying": 2,
+    "Request cancelled; owned process group stopped": 1,
+    "Explicit total timeout reached; request stopped": 1,
+    "Patch must use standard unified --- a/path and +++ b/path headers": 1,
+    "Incorrect unified hunk line counts": 1,
+    "invalid_patch": 2,
+    "cancelled": 1,
+    "apply_check_failed": 3
+  },
+  "complete_recent_requests": 18,
+  "complete_recent_elapsed_seconds": 6129.201,
+  "recent_rejected_patch_seconds": 2973.574,
+  "recent_usage": {
+    "input_tokens": 34,
+    "cache_creation_input_tokens": 1073818,
+    "cache_read_input_tokens": 5950,
+    "output_tokens": 722139
+  },
+  "recent_rejected_patch_usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 438762,
+    "cache_read_input_tokens": 2380,
+    "output_tokens": 376869
+  }
+}

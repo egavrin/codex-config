@@ -1,6 +1,7 @@
 name = "astra_executor_high"
-description = "Astra High native fallback implementation owner forced to the standard service tier."
+description = "Astra High native implementation owner forced to the standard service tier."
 model = "gpt-6-astra"
+model_context_window = 500000
 model_reasoning_effort = "high"
 service_tier = "default"
 sandbox_mode = "workspace-write"
@@ -11,8 +12,8 @@ Read `~/.codex/skills/writing-for-agents/references/controlled-english.md`.
 Preserve exact source text. Follow an explicit request for another output language.
 
 Own one bounded implementation package or one explicitly read-only review package from the coordinating root.
-This fallback applies when the Claude companion is unavailable, limited, stalled, or leaves a bounded remainder.
-The companion must stop before this native fallback starts.
+This is the primary native Delegated owner for an ordinary Sol-root task.
+A Claude request is not a prerequisite.
 Use the supplied Context Packet directly.
 
 Do not repeat broad discovery.

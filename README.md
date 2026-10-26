@@ -2,7 +2,7 @@
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
 configuration snapshot. Global instructions and shared skills were updated on
-October 9, 2026. The machine configuration retains its existing snapshot.
+October 26, 2026. The machine configuration retains its existing snapshot.
 
 ## Shared writing profile
 
@@ -29,9 +29,9 @@ Claude imports the same files through [personal instructions](claude/CLAUDE.md).
 Every companion request includes the profile, rule map, and terms.
 The complete bundle must fit the existing 256 KiB packet limit.
 
-The snapshot contains 18 user skills across two discovery roots:
+The snapshot contains 20 user skills across two discovery roots:
 
-- `codex/skills/` contains ten user skills, including the Film Studio snapshot.
+- `codex/skills/` contains twelve user skills, including the Film Studio snapshot.
 - `agents/skills/` contains eight Runpod skills.
 - `claude/CLAUDE.md` contains personal Claude instructions.
 
@@ -47,6 +47,37 @@ Run the bridge's `sync-skills` action after the Codex user skills are installed.
 Keep existing independent Claude skills when names conflict.
 Start new Codex and Claude sessions to load persistent instructions.
 
+
+## Ponytail plugin
+
+The pinned upstream Ponytail 5.1.0 plugin is installed for Codex and Claude.
+Read [the installation guide](docs/ponytail-installation.md) for source, modes, hooks, restoration, and verification.
+The [compatibility policy](codex/ponytail-policy.md) preserves existing writing and engineering requirements.
+The companion reads selected upstream instructions from the verified source.
+It executes no Ponytail scripts or hooks.
+The [source lock](docs/ponytail-source-lock.json) records the reviewed revision and file hashes.
+
+## Graphify code discovery
+
+Graphify 0.9.95 is installed globally from revision `92741d162b2094ffc2fed58cfbd8ee823e9da62c`.
+Codex and ordinary Claude sessions share the [Graphify skill](codex/skills/graphify/SKILL.md).
+Its trigger covers architecture, dependency tracing, and substantial repository discovery.
+Tiny edits at known locations use direct source searches.
+
+The launcher uses local code-only extraction, guarded queries, and nonblocking per-project locks.
+It uses no model backend, API keys, hooks, watcher, or MCP service.
+Read [installation and verification](docs/graphify-installation.md) for restoration, evidence, and limitations.
+The [source lock](docs/graphify-source-lock.json) records the revision, dependencies, and adapted file hashes.
+
+## Mandatory Slopo commit review
+
+Codex and ordinary Claude sessions must use the shared [Slopo review skill](codex/skills/slopo-review/SKILL.md) before commits and amendments.
+The installed Slopo 0.9.0 CLI uses local Ollama code embeddings with 768 dimensions.
+Failed checks, unresolved actionable new duplication, and partial staging block agent commits.
+Manual commits and Git hooks remain unchanged.
+Read [installation and verification](docs/slopo-installation.md) for restoration, scope, and limits.
+The [source lock](docs/slopo-source-lock.json) records the pinned revision, dependencies, model digest, and skill hashes.
+
 ## Contents
 
 - `codex/config.toml` — model, MCP, plugin, trusted-project, application, and
@@ -59,7 +90,7 @@ Start new Codex and Claude sessions to load persistent instructions.
   (Luna High), the strictly gated `senior_executor` (Sol Medium), plus
   Standard-tier `senior_executor_standard` (Sol Medium) and
   `astra_executor_standard` (Astra Medium for experiments),
-  `astra_executor_high` (Astra High for native fallback), and evidence-gated
+  `astra_executor_high` (Astra High for native delegation), and evidence-gated
   `astra_executor_xhigh` (Astra Extra High) for the default route, and dedicated
   `terra_context_compactor_fast` (Terra Medium Fast) for conditional context
   compaction, plus `luna_evidence_collector_fast`, `luna_light_worker_fast`, and
@@ -82,7 +113,7 @@ Start new Codex and Claude sessions to load persistent instructions.
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, `repo-modernizer`, `code-simplifier`, `codebase-design`,
-  `improve-codebase-architecture`, `writing-for-agents`, `claude-collab`, and `film-studio-workflow`,
+  `improve-codebase-architecture`, `writing-for-agents`, `claude-collab`, `graphify`, `slopo-review`, and `film-studio-workflow`,
   including their scripts, resources, provenance, and bundled licenses where present.
 - `agents/skills/` — eight Runpod skills from the existing `~/.agents/skills` discovery root.
 - `claude/CLAUDE.md` — personal instructions with shared profile imports.
@@ -90,11 +121,11 @@ Start new Codex and Claude sessions to load persistent instructions.
 
 The active default is `gpt-6.1-sol` with High reasoning on the Standard service
 tier. Direct work remains in Sol. Delegated production implementation or
-substantive independent review first uses Claude Opus High through `claude-collab`.
-If the companion is unavailable, limited, stalled, or leaves the package incomplete,
-record the reason and use one fresh `astra_executor_high` at Astra High.
-The root applies patches and owns acceptance; companion and native owners run
-sequentially. The new named High role becomes available after restarting the
+substantive independent review uses one fresh `astra_executor_high` at Astra High.
+Automatic primary, fallback, and review routes exclude Claude.
+The root integrates changes and owns acceptance.
+`claude-collab` remains available only after an explicit user request.
+The [October 21 routing audit](docs/claude-routing-audit-20261021.md) records the evidence for this change. The new named High role becomes available after restarting the
 Codex session; existing sessions may still expose only the previous role catalogue. Named opt-in experiments retain their own routes. `astra_executor_xhigh` is reserved for a narrow intrinsically hard
 remainder supported by concrete failed-attempt evidence; it is not a routine
 repair tier. The default route uses one live child at a time; the configured
@@ -138,11 +169,10 @@ temporary override is no longer intended, select **Reset to default** before
 starting the next session, then verify the effective model, reasoning, and tier
 shown by the runtime.
 
-Ordinary substantial independent packages use Claude Opus High first. The table
-below applies only to native fallback; explicit experiment profiles retain their
-selected routes.
+Ordinary substantial independent packages use the native branches below.
+Explicit experiment profiles retain their selected native routes.
 
-| Effective root | Direct route | Native fallback route |
+| Effective root | Direct route | Native Delegated route |
 |---|---|---|
 | Terra | Terra completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_high` only after Sol. |
 | Luna | Luna completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_high` only after Sol. |
@@ -155,16 +185,14 @@ repair to that same owner. There is at most one live child, no nesting, no
 separate verifier, and no second-opinion child. High Astra closes before a
 rare Extra High escalation.
 
-The current default uses the Opus High companion with root-owned acceptance.
-Direct reports `effective_route = sol-direct`; companion work reports
-`effective_route = sol-claude`; native fallback reports `effective_route = sol-astra`
-with its concrete reason; a justified deep escalation
-reports `effective_route = sol-astra-xhigh`. Report the actual root model,
-reasoning, and tier separately.
+The current default uses Sol with one Astra High owner for Delegated work.
+Direct reports `effective_route = sol-direct`.
+Native delegation reports `effective_route = sol-astra`.
+A justified deep escalation reports `effective_route = sol-astra-xhigh`.
+Report the actual root model, reasoning, and tier separately.
 
-For Sol-root native fallback, `[agents].enabled = true`, and exactly one
-`astra_executor_high` is required after an evidenced companion fallback when the session exposes native
-collaboration and that exact role. Native collaboration means the session's
+For Sol-root Delegated work, `[agents].enabled = true`, and exactly one
+`astra_executor_high` is required when the session exposes native collaboration and that exact role. Native collaboration means the session's
 internal subagent spawn mechanism. User-visible `create_thread`, `fork_thread`, and
 `send_message_to_thread` operations, as well as nested `codex exec`, are not
 automatic substitutes; a separate user-visible task is created only when the
@@ -432,8 +460,7 @@ Terra-root evidence below superseded that routing decision.
 ## Historical Terra Medium Fast branch
 
 This section records the September 11 Terra Medium Fast comparison. The current
-ordinary route is Opus High first with model-aware native fallback as described
-above. In this historical branch, Direct work remained in Terra. For Delegated
+ordinary route uses native model-aware delegation as described above. In this historical branch, Direct work remained in Terra. For Delegated
 work, Terra performed one
 bounded evidence pass, directly forms a provenance-preserving Context Packet,
 and delegates exactly once to Standard Sol Medium. Terra keeps Sol open through
@@ -628,7 +655,7 @@ service tier, child sequence, repairs, acceptance results, and whether Astra was
 used. Do not infer general latency or quota savings from this single small-task
 run.
 
-## Shared skills and Claude companion
+## Shared skills and explicit Claude requests
 
 The global user-skill library lives in `~/.codex/skills`. Codex uses `$skill-name`;
 ordinary Claude Code sessions use `/skill-name` through individual symlinks under
@@ -642,7 +669,7 @@ hidden/system directories and plugin caches.
 | [codebase-design](codex/skills/codebase-design/SKILL.md) | Evaluate module interfaces, architectural seams, dependencies, and alternatives. |
 | [improve-codebase-architecture](codex/skills/improve-codebase-architecture/SKILL.md) | Find evidenced architecture improvements and present a visual report. |
 | [writing-for-agents](codex/skills/writing-for-agents/SKILL.md) | Improve skills, AGENTS.md, and linked agent instructions without dropping requirements. |
-| [claude-collab](codex/skills/claude-collab/SKILL.md) | Send bounded review or patch packages to subscription-authenticated Claude Opus; Codex validates and integrates results. |
+| [claude-collab](codex/skills/claude-collab/SKILL.md) | Send bounded packages to Claude Opus only after an explicit user request. Automatic invocation is disabled. Codex owns acceptance. |
 
 All five allow automatic selection and explicit invocation. For example:
 
@@ -659,6 +686,8 @@ python3 ~/.codex/skills/claude-collab/scripts/bridge.py sync-skills
 python3 ~/.codex/skills/claude-collab/scripts/bridge.py doctor
 ```
 
+Automatic routing never calls Claude Collab because of task size, quota, or a native failure.
+The following requirements apply only to explicit Claude requests.
 Claude Collab requires Python 3.9+, Git, a supported installed Claude Code CLI,
 and an existing `claude.ai` subscription login. It explicitly requests Opus High,
 fresh restricted requests without tools, explicit skill/source packets, a

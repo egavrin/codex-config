@@ -1,34 +1,41 @@
 ---
 name: claude-collab
-description: "Share substantial bounded coding or review work with a Claude Opus High CLI companion that uses subscription authentication. Supply shared global skills and explicit context. Codex owns acceptance. Select this skill automatically for suitable independent work. Keep tiny tasks in Codex."
+description: "Call a subscription-authenticated Claude Opus High companion only when the user explicitly requests Claude or invokes $claude-collab. Supply bounded review or patch work and shared skills. Codex owns acceptance. Automatic routing excludes this skill."
 ---
 
 # Claude Collab
 
-For ordinary substantial work with a useful independent package, select Claude Opus as the primary external owner. Use explicit High effort. The package may contain bounded implementation or review. Codex owns scope, integration,
-patch application, tests, and final acceptance. Keep tiny questions and local edits
-in Codex. The companion is an external CLI request, not a native child agent.
+Use this skill only when the user explicitly requests Claude or invokes `$claude-collab`.
+Automatic selection is disabled.
+Task size, Codex quota, and a native failure do not authorize a Claude request.
+Ordinary work follows the native routes in `AGENTS.md`.
 
-Report the route as `<effective-root>-claude`, separately from actual root model,
-reasoning, and observable service tier. Do not label it a Sol–Astra benchmark.
-Named opt-in orchestration experiments remain authoritative. If Claude is unavailable, limited, stalled, or cannot complete the bounded package, stop the request.
+For an explicit request, use Claude Opus with High effort for a bounded implementation or review package.
+Codex owns scope, integration, patch application, tests, and final acceptance.
+The companion is an external CLI request, not a native child agent.
+Report the manual route as `<effective-root>-claude`, separately from root model, reasoning, and observable service tier.
+Do not label it a native Sol–Astra benchmark.
+Named opt-in orchestration experiments remain authoritative.
 
-Then, use the existing native model-aware fallback (Astra High via `astra_executor_high` for a Sol root). Record the
-concrete fallback reason and preserve completed evidence. Never run both owners
-concurrently.
-
+If Claude cannot complete the explicit request, stop it and report the concrete reason.
+Preserve completed evidence.
+If authorized work remains, use the applicable native route with root-owned acceptance.
+Never run both owners concurrently.
 High effort is a quality choice, not a claim of lower latency.
+Do not poll quota or invent subscription usage figures.
 
-At the beginning of a task, examine available Codex quota once with the app's usage
-limits tool. If any available window has 20% or less remaining, favor a larger
-independent Claude package. Unknown quota remains unknown. Do not invent exact
-Claude quota or poll quota during the task. Balance useful ownership rather than
-splitting mechanically by lines or equal token counts.
+Use one request per package. After an invalid response, an invalid patch, or a
+report of missing context, you may send one focused repair request. Include the
+concrete evidence, such as `failure_stage`, `failure_reason`, and the unmet
+criterion. Also include the current source. If the failure is a stale baseline,
+examine the intervening edits before you prepare that repair. Do not force a patch
+or a rebase. Preserve completed work and send only the changed facts that the
+repair needs.
 
-Use one request per package and at most one focused repair or missing-context
-follow-up. Preserve completed work and send only the changed facts needed for the
-follow-up. Stop immediately on authentication or usage-limit errors. Avoid reciprocal
-review loops and repeated calls without a concrete unmet criterion.
+If authentication, quota, or inactivity stops the request, stop. If the repair is
+not successful, also stop. Then, follow the failure policy above. The helper never
+retries automatically. Avoid reciprocal review loops and repeated calls without a
+concrete unmet criterion.
 
 Never run a
 Claude companion and a native child concurrently on the same task. In Plan Mode,
@@ -38,7 +45,20 @@ use only read-only review. Do not request implementation or apply a patch.
 
 Read [the packet and command reference](references/bridge.md) before the first
 request. Use the standard-library helper at `scripts/bridge.py`. It exposes
-`doctor`, `sync-skills`, and `run --mode review|patch --packet FILE`.
+`doctor`, `sync-skills`, `preflight --mode review|patch --packet FILE`, and
+`run --mode review|patch --packet FILE`.
+
+Before each request, run `preflight` with the same mode and packet. Preflight does
+the complete bundle validation of `run`, but it calls no CLI and synchronizes no
+skills. If preflight fails, correct the packet locally. Use the reported field and
+index in `diagnostic`, `failure_reason`, and the section sizes in `packet_size`.
+Typical causes are an incorrect path, a missing Ponytail level, and an oversized
+bundle. `run` validates the current inputs again before the model request.
+
+Keep the mandatory policies and the scope. If the bundle is too large, divide the
+work into coherent packages. Do not remove required context. While Claude works,
+do not edit the scope files. Independent root work may use other paths. The input
+packet keeps its nine fields, and the response keeps `explanation` and `diff`.
 
 Select relevant skills and required related documents yourself. The helper bundles
 each selected skill's complete `SKILL.md`, linked local documents, and explicitly
@@ -62,6 +82,11 @@ nonpersistent print mode, and one turn. Stream events supervise progress. The
 default watchdog stops after 15 minutes without meaningful model progress. Healthy
 progress has no default total wall-clock cap. An explicit optional total budget
 can bound a package. The helper emits sanitized progress every 30 seconds and writes it to private `progress.json`.
+
+Nonempty text or thinking deltas and a first completed assistant message count as model progress.
+Strictly increasing positive thinking-token estimates also count after a validated Opus `message_start`.
+Status records `cli_version` and, on failure, the
+fixed codes `failure_stage` and `failure_reason`. Use these codes to select a repair or the fallback.
 
 While you supervise a request, send meaningful status to the user within 60 seconds. Heartbeats prove helper liveness only and
 do not renew inactivity. Never infer oversized context from a wall timeout alone. Safe/restricted mode
@@ -117,3 +142,32 @@ The complete encoded bundle, including this policy, must fit within the existing
 The policy changes prose only.
 
 It adds no permission or scope.
+
+
+## Ponytail plugin context
+
+The installed Ponytail plugin supplies instructions in ordinary Codex and Claude sessions.
+The restricted companion does not execute its hooks or scripts.
+Read [the source registry](references/ponytail-source.json) for its pinned identity.
+Select applicable plugin instructions through the existing skills array.
+
+Use the plain names ponytail, ponytail-review, ponytail-audit, ponytail-debt, ponytail-gain, or ponytail-help.
+The helper reads only registered, hashed documents from the pinned checkout.
+It keeps this catalogue separate from shared user-skill synchronization.
+A selected name that also exists as a user skill causes a conflict.
+Resolve that conflict without replacing user files.
+
+For an active core mode, select ponytail and state its level on a separate objective line:
+Ponytail level: full
+Use lite or ultra when that is the active level.
+With off, omit the core skill.
+If the current level is unknown, report that gap and omit the core skill.
+
+Select a one-shot skill only for the applicable requested task.
+Review, audit, debt, gain, and help remain independent of the core mode.
+The helper includes ~/.codex/ponytail-policy.md with selected plugin material.
+Missing policy, source changes, or unregistered instruction references stop the request.
+README and benchmark navigation links authorize no additional reads.
+All included text counts toward the existing 256 KiB limit.
+
+Ponytail preferences do not change scope, Plan Mode, tools, authentication, routing, supervision, or acceptance.

@@ -1,6 +1,7 @@
 name = "astra_builder_standard"
 description = "Fresh-context Astra Medium implementation owner for one planned package."
 model = "gpt-6-astra"
+model_context_window = 500000
 model_reasoning_effort = "medium"
 service_tier = "default"
 

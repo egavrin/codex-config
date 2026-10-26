@@ -1,6 +1,6 @@
 interface:
   display_name: "Claude Collab"
-  short_description: "Share a bounded package with Claude Opus"
+  short_description: "Call Claude Opus on explicit user request"
   default_prompt: "Use $claude-collab to assign a bounded package to Claude Opus. Validate the returned result."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

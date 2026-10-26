@@ -1,0 +1,941 @@
+{
+  "date": "2026-10-12",
+  "scope": "Claude companion bridge reliability",
+  "source_sha256": {
+    "scripts/bridge.py": "214624ee9fceb398cd4fac066c16b60c8bf3cc18096280f4dd3592dfe34b9546",
+    "scripts/test_bridge.py": "8f5d2e758af86c5b3d7266e5bdbc9152b742732b8489b38da1c71887712478fe",
+    "SKILL.md": "e97b692f2d06d4c261f8ad5a87b749a76f5770a337a731f602bf8863bd531978",
+    "references/bridge.md": "04aaa23f4c97cfa073e718f49cd2a2a12e125e39336bed7e65511c112ff5b870"
+  },
+  "structural_checks": {
+    "quick_validate_installed": "pass",
+    "quick_validate_snapshot": "pass",
+    "metadata_implicit_invocation": "preserved; pass",
+    "local_links": "pass",
+    "shared_claude_link": "pass",
+    "diff_whitespace": "pass"
+  },
+  "workflow_checks": {
+    "command": "python3 codex/skills/claude-collab/scripts/test_bridge.py",
+    "expected_exit": 0,
+    "observed_exit": 0,
+    "cases": 135,
+    "results": [
+      {
+        "case": "reliability-estimate-progress",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "reliability-estimate-reset",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "reliability-estimate-zero-reset",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-estimate-zero",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-estimate-repeat",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-estimate-decrease",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-estimate-invalid",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-estimate-no-message",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-estimate-total",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-noise",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-unknown",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-stderr",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-retry",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-malformed",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-limit",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-cli-error",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-final-hang",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-cancel",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-patch-bad-format",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-patch-conflict",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-patch-escape",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-stale",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-preflight-path",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-preflight-policy",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-preflight-mode",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-repair-first-True",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-one-focused-repair-True",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "reliability-repair-first-False",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-one-focused-repair-False",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reliability-preflight-boundary",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "reliability-exact-boundary-0",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "reliability-exact-boundary-1",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "profile-with-skill",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "profile-without-skill",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "profile-missing",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "profile-missing-map",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "profile-missing-terms",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "profile-combined-boundary",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-no-selection",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-level-full",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-level-lite",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-level-ultra",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-level-off",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-level-missing",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-level-unknown",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-level-conflict",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-level-inline",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-one-shot-ponytail-review",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-one-shot-ponytail-audit",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-one-shot-ponytail-debt",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-one-shot-ponytail-gain",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-one-shot-ponytail-help",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-one-shot-no-level",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-gain-references",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-gain-evidence-navigation",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-selection-unregistered",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-registered-reference",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-changed-policy",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "ponytail-missing-registry",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-missing-root",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-changed-revision",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-changed-root",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-changed-names",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-registry-traversal",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-missing-document",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-hash-mismatch",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-missing-policy",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-policy-symlink",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-document-symlink",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-root-symlink",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-non-regular",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-name-collision",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-reference-escape",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-unregistered-reference",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-selection-escape",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "ponytail-combined-size",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "review",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "plugin-builtin",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "plugin-custom",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "plugin-spoof-source",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "plugin-spoof-name",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "plugin-unknown-builtin",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "plugin-malformed",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "plugin-tools",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "plugin-mcp",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-progress",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "stream-fragmented",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "stream-duplex",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "stream-init-stall",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-noise",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-empty",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-stderr",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-retry",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-oversize",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-stderr-oversize",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-missing-final",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-empty-event",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-bad-delta",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-nonopus-init",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-nonopus-final",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-incomplete",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-cli-error",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-final-hang",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-total",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stream-cancel",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "source-root-alias",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "sibling-reference",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "excluded-plugin-alias",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "plain-unified",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "plain-add",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "plain-delete",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "plain-escape",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "plain-rename",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "retained-rejected-patch",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "no-retained-secret-response",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "sibling-outside-catalogue",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "nested-skill-symlink",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "patch",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "malformed",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "auth",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "limit",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "timeout",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "stale",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "conflict",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "escape",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "mode-change",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "binary",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "secret",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "secret-file",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "symlink",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "reference-escape",
+        "pass": true,
+        "expected_exit": 1,
+        "observed_exit": 1
+      },
+      {
+        "case": "addition",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "deletion",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "sync-start",
+        "pass": true,
+        "expected_exit": 0,
+        "observed_exit": 0
+      },
+      {
+        "case": "sync-idempotent-new-stale-conflict-unmanaged",
+        "pass": true,
+        "expected_exit": null,
+        "observed_exit": null
+      }
+    ]
+  },
+  "live_checks": [
+    {
+      "mode": "review",
+      "expected": "Identify the absent nonnegative quantity check; empty diff; no source mutation.",
+      "observed": "Identified negative quantities and cited source; empty diff; source unchanged.",
+      "status": "pass",
+      "duration_seconds": 16.21,
+      "packet_bytes": 41555,
+      "reported_models": [
+        "claude-opus-5-5"
+      ],
+      "cli_version": "2.1.296",
+      "thinking_estimate_events": 8
+    },
+    {
+      "mode": "patch",
+      "expected": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      "observed": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ],
+      "inputs": [
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "command": [
+        "python3",
+        "parity.py",
+        "-4",
+        "-3",
+        "-2",
+        "-1",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "status": "pass",
+      "duration_seconds": 13.151,
+      "packet_bytes": 39896,
+      "reported_models": [
+        "claude-opus-5-5"
+      ],
+      "cli_version": "2.1.296",
+      "thinking_estimate_events": 5
+    }
+  ],
+  "routing": {
+    "effective_root": "gpt-6.1-sol",
+    "reasoning": "high",
+    "observable_tier": null,
+    "sequence": [
+      "sol-claude",
+      "sol-astra"
+    ],
+    "fallback_reason": "The single focused Claude repair completed with CLI exit 0 but its patch failed git apply --check. No further companion repair is permitted.",
+    "valid_pure_delegated_benchmark": false
+  },
+  "preserved": [
+    "subscription-only authentication",
+    "Opus High",
+    "empty tools and custom-hook/MCP/plugin restrictions",
+    "900-second inactivity default",
+    "optional total timeout",
+    "one focused repair limit",
+    "scope, baseline SHA-256 and git apply checks",
+    "global Codex and Claude configuration"
+  ],
+  "limits": [
+    "Two real smoke checks do not establish a general success rate.",
+    "Historical discarded streams cannot be reconstructed.",
+    "Invalid patches and provider failures remain possible; acceptance and fallback stay required."
+  ],
+  "harness_note": "A healthy-progress fixture initially matched the heartbeat cadence and caused a timing-only assertion failure. Its cadence was offset. The bridge code and timeout/progress assertions remain unchanged.",
+  "instruction_review": {
+    "scope": "Preserved",
+    "Plan_Mode": "Read-only review; no patch application",
+    "repair_budget": "One root-owned focused repair; then native fallback",
+    "language": "Changed instructions reviewed against the shared controlled-English profile; no ASD certification or general reliability claim"
+  }
+}

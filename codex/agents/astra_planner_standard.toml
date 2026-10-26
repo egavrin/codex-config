@@ -1,6 +1,7 @@
 name = "astra_planner_standard"
 description = "Read-only Astra Medium technical planner for opt-in experiments."
 model = "gpt-6-astra"
+model_context_window = 500000
 model_reasoning_effort = "medium"
 service_tier = "default"
 sandbox_mode = "read-only"

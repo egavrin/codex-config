@@ -1,0 +1,129 @@
+{
+  "date": "2026-10-26",
+  "upstream_revision": "92741d162b2094ffc2fed58cfbd8ee823e9da62c",
+  "package_version": "graphify 0.9.95",
+  "result": "PASS",
+  "structural_checks": {
+    "result": "PASS",
+    "file_count": 10,
+    "local_reference_count": 12,
+    "licenses_match_pinned_source": true,
+    "metadata_valid": true,
+    "shared_link_matches": true,
+    "global_config_restored_exactly": true,
+    "claude_settings_unchanged": true,
+    "global_instructions_change": "Appended Graphify discovery section only"
+  },
+  "profile_checks": {
+    "result": "PASS with documented limits",
+    "reviewed": "Trigger scope, procedural structure, read-only behavior, technical terms, and command literals",
+    "limit": "A word-count review does not establish ASD-STE100 compliance."
+  },
+  "workflow_checks": {
+    "result": "PASS",
+    "recorded_runs": 35,
+    "all_expected_exits_match": true,
+    "launcher_sha256": "4f89071c2961865a06abe8279e82ecda29a55ec943ed99600ebfe87688e6d1cc",
+    "test_sha256": "66661425b3ca82cfdbed6d02ec2b78e0cdc0f0f4f111f4b7111452995efab64d",
+    "command": "python3 ~/.codex/skills/graphify/tests/workflow.py --real --evidence /absolute/private-evidence",
+    "symlink_targets_opened": false
+  },
+  "host_prompts": {
+    "positive": "Trace the cross-file dependency chain from submit_order to persist_order in this project. Cite source locations. Local graph maintenance is authorized. Preserve source files. Do not use the network or delegate. Keep the answer brief.",
+    "negative": "In settings.py, show the exact replacement line that changes DISPLAY_NAME to Purchase Desk. This is a tiny edit at a known location. Do not edit files or create artifacts. Keep the answer to one code line."
+  },
+  "host_checks": [
+    {
+      "host": "codex",
+      "case": "positive",
+      "result": "PASS",
+      "graphify_selected": true,
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "observed_service_tier": null,
+      "elapsed_seconds": 29.804,
+      "harness_permission_rejections": 0,
+      "source_hashes_preserved": true
+    },
+    {
+      "host": "codex",
+      "case": "negative",
+      "result": "PASS",
+      "graphify_selected": false,
+      "model": "gpt-6.1-sol",
+      "reasoning": "high",
+      "observed_service_tier": null,
+      "elapsed_seconds": 7.841,
+      "harness_permission_rejections": 0,
+      "source_hashes_preserved": true
+    },
+    {
+      "host": "claude",
+      "case": "positive",
+      "result": "PASS",
+      "graphify_selected": true,
+      "model": [
+        "claude-opus-5-5"
+      ],
+      "reasoning": null,
+      "observed_service_tier": "standard",
+      "elapsed_seconds": 22.495,
+      "harness_permission_rejections": 1,
+      "source_hashes_preserved": true
+    },
+    {
+      "host": "claude",
+      "case": "negative",
+      "result": "PASS",
+      "graphify_selected": false,
+      "model": [
+        "claude-opus-5-5"
+      ],
+      "reasoning": null,
+      "observed_service_tier": "standard",
+      "elapsed_seconds": 5.099,
+      "harness_permission_rejections": 0,
+      "source_hashes_preserved": true
+    }
+  ],
+  "fixture": "Temporary Git project with web.py -> service.py -> store.py; settings.py is unrelated. No production repository indexed.",
+  "preserved": "Existing skill files, routing, model settings, authentication, billing, tracked ignore rules, and unrelated snapshot changes.",
+  "private_evidence": "~/.codex/verification/graphify-install-20261026",
+  "snapshot_action": "Updated files only. No commit or push.",
+  "limits": [
+    "Static code graph can omit dynamic calls and unsupported syntax.",
+    "Community clustering and semantic document analysis are disabled.",
+    "Python audit guard is not an OS sandbox.",
+    "Credential filters cannot identify secrets embedded in source code.",
+    "Four small host cases do not establish general invocation reliability or savings."
+  ],
+  "worktree_fix": {
+    "result": "PASS",
+    "date": "2026-10-26",
+    "changed_skill_files": [
+      "SKILL.md",
+      "references/commands.md",
+      "references/provenance.md",
+      "tests/FAILURE_CASES.md",
+      "tests/workflow.py",
+      "scripts/graphify_local.py"
+    ],
+    "launcher_sha256": "112ea7282f2f7955432206b3a9c36e2892800bffc76a863a5c529f0769fb07ef",
+    "test_sha256": "d5ccb9fc24e91877171e4b713c7b42fa5bb6f418537aa0810bb8f820a2fa880a",
+    "workflow_runs": 43,
+    "worktree_cases": [
+      "Linked-worktree .git file and nested .git directory under .claude/worktrees do not block parent extraction.",
+      "Changes and new directories under .claude/worktrees do not invalidate the parent graph.",
+      "Unrelated nested Git repository still causes fallback.",
+      "State format 1 is stale and format 2 is created after update.",
+      "Real extraction omits worktree sources.",
+      "A worktree can receive its own graph without invalidating the parent graph."
+    ],
+    "film_studio_scope": "Root validation and metadata scan PASS. No production graph extraction.",
+    "global_instructions_and_settings": "Unchanged",
+    "shared_link": "Preserved",
+    "local_links_checked": 12,
+    "snapshot_matches": true,
+    "commit_or_push": false
+  }
+}

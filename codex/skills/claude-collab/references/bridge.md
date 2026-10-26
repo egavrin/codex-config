@@ -1,5 +1,9 @@
 # Bridge interface and acceptance
 
+This helper is available only for an explicit user request for Claude.
+Ordinary task routing uses native Codex models and does not invoke this helper for checks, review, or fallback.
+The local `sync-skills` action remains available without a model request.
+
 To use the helper, install Python 3.9+ (including `Path.is_relative_to`), Git, and Claude CLI.
 The installed Claude CLI must support `--safe-mode` and `--restricted`. It uses only
 Python's standard library and the existing subscription login. It never executes
@@ -9,6 +13,8 @@ than assuming online documentation matches the installed release.
 ```bash
 python3 ~/.codex/skills/claude-collab/scripts/bridge.py doctor
 python3 ~/.codex/skills/claude-collab/scripts/bridge.py sync-skills
+python3 ~/.codex/skills/claude-collab/scripts/bridge.py preflight --mode review --packet /absolute/private/packet.json
+python3 ~/.codex/skills/claude-collab/scripts/bridge.py preflight --mode patch --packet /absolute/private/packet.json
 python3 ~/.codex/skills/claude-collab/scripts/bridge.py run --mode review --packet /absolute/private/packet.json
 python3 ~/.codex/skills/claude-collab/scripts/bridge.py run --mode patch --packet /absolute/private/packet.json
 ```
@@ -24,7 +30,7 @@ request budget.
 final result. All budgets must be positive finite values. `--progress-interval`
 defaults to 30 seconds and cannot exceed 60.
 
-Preflight help and authentication each
+The CLI version, help, and authentication checks each
 have a separate 20-second deadline and receive the same live liveness reporting.
 Timeout, cancellation (SIGINT/SIGTERM), or malformed output terminates only the
 helper-owned child process group, including descendants. The helper never retries.
@@ -35,7 +41,12 @@ accepts newline JSON events and fragmented writes (including a final line withou
 a newline). Limits are 16 MiB total stream stdout, 1 MiB per line/final envelope, and 256 KiB stderr. Exceeding a limit stops the owned group promptly.
 
 Stderr is
-counted and discarded. Nonempty text/thinking deltas and a first completed assistant message count as model progress. Initialization, pings, retries, blank lines, empty deltas, and stderr do not. Final success is conditional on an explicit success
+counted and discarded. Nonempty text/thinking deltas and a first completed assistant message count as model progress.
+A `thinking_tokens` system event also counts when `estimated_tokens` is a positive integer that is
+strictly larger than the last accepted value. The helper accepts estimates only after a validated
+Opus `message_start`. Each new `message_start` resets the comparison. Zero never counts as progress or renews inactivity, including after a new `message_start`. Booleans, other non-integers,
+negative values, repeated values, and smaller values do not count and do not renew inactivity.
+Initialization, pings, retries, blank lines, empty deltas, and stderr do not count. Final success is conditional on an explicit success
 result, `is_error: false`, a clean CLI exit, and the existing answer validation.
 
 Missing or malformed final envelopes fail closed.
@@ -45,10 +56,35 @@ thinking, provider stderr, or arbitrary provider status strings enter these
 summaries. A waiting heartbeat records liveness only. Stdout remains one final
 machine-readable artifact summary.
 
+Progress also records `event_counts`, `last_transport_event_elapsed_seconds`,
+`progress_source`, and `estimated_thinking_tokens`. `event_counts` uses fixed event,
+subtype, and delta names, with one `unknown` bucket for other events. Every stream event
+updates `last_transport_event_elapsed_seconds`, but only meaningful progress renews inactivity.
+`progress_source` is `thinking_estimate`, `text_delta`, `thinking_delta`, `assistant_text`,
+or null. `estimated_thinking_tokens` is the last accepted provider estimate, not an exact count.
+
 Read live progress or relay emitted summaries to the user at intervals of at most 60 seconds. A timeout alone does not show that context was too large. High effort does not promise shorter latency.
 
 The stream flags follow the [official headless stream interface](https://code.claude.com/docs/en/headless#stream-responses).
 Installed CLI help must advertise the required effort and streaming flags.
+
+## Preflight
+
+`preflight --mode review|patch --packet FILE` runs the exact bundle validation of `run`.
+It makes no CLI help, version, authentication, or model call, and it does not synchronize skills.
+It writes `progress.json` and `status.json` to a new private artifact directory.
+
+Status and the stdout summary record `status`, `packet_bytes`, and `packet_size`.
+`packet_size` contains `total_bytes`, `limit_bytes` (262144), and `section_bytes`.
+`section_bytes` gives the encoded byte size of each top-level bundle section.
+These sizes stay available when the complete bundle exceeds the limit.
+
+On failure, `diagnostic` gives the packet field and, when one applies, the item index.
+It never contains the offending value. `failure_stage` and `failure_reason` give fixed codes.
+
+Run preflight before each request. Correct path, Ponytail level, and size problems locally.
+Keep the mandatory policies and the scope. Divide a large package into coherent packages.
+`run` validates the current inputs again before any model request. It never reuses a preflight result.
 
 ## Packet schema
 
@@ -167,6 +203,14 @@ Status records the helper hash, packet hash and size, scope baseline SHA-256 val
 Raw failed provider output and the assembled packet are not retained. Errors are
 sanitized.
 
+Status also records `cli_version`, the normalized result of one `--version` call in each
+`doctor` or `run` action. The value is null when the output has no recognized version format.
+On failure, status and the stdout summary record `failure_stage` and `failure_reason`. The stages are
+`packet`, `compatibility`, `authentication`, `request`, `response`, `patch`, and `cancellation`.
+Each reason is a fixed code, such as `inactivity_timeout`, `stale_baseline`, or `provider_rate_limit`.
+Only a recognized numeric provider status (401, 402, 403, 429, 500, 502, 503, 504, or 529) can set a provider reason.
+Other provider failures use `provider_unknown`. These fields never contain provider messages.
+
 Artifacts have user-only permissions. Preserve needed evidence and
 remove only the generated directory when finished.
 
@@ -191,6 +235,9 @@ python3 ~/.codex/skills/claude-collab/scripts/test_bridge.py
 ```
 
 For the built-in/custom plugin isolation regression use `--case init`.
+For preflight, thinking-token estimate progress, event counts, failure codes, and CLI version checks,
+use `--case reliability`. These cases also cover the exact 256 KiB boundary and rejected paths,
+policies, and Ponytail levels without CLI calls or skill synchronization.
 For streaming/watchdog checks use `--case stream` (scaled subsecond budgets keep
 the suite cheap, the healthy stream outlives its inactivity budget through actual
 deltas). These cases also cover large stdin, fragmented lines, stalls, stderr and heartbeat spam, cancellation descendants, and output bounds. They cover missing/incomplete finals, non-Opus telemetry, CLI errors, explicit total budgets, and post-result exit stalls.
@@ -240,3 +287,35 @@ The input packet schema does not accept a policy override.
 The complete encoded bundle remains subject to the existing 256 KiB limit, including the communication policy.
 Claude must apply the policy to its explanation and generated prose.
 It must preserve exact scoped source data and an explicit request for another output language.
+
+
+## Selected Ponytail plugin instructions
+
+The input schema stays unchanged.
+Use plain upstream names in skills selections, such as ponytail-review.
+Native host commands use the plugin namespace instead.
+The helper does not discover or execute installed plugin-cache contents.
+
+The fixed source is ~/.codex/third-party/ponytail at the revision in
+[ponytail-source.json](ponytail-source.json).
+The registry supplies the six allowed entry paths and document hashes.
+The helper verifies the identity, containment, regular files, and hashes before a request.
+A selected user/plugin name conflict fails closed.
+Requests without selected Ponytail material need no plugin checkout or compatibility file.
+
+Core selection requires one standalone objective line: Ponytail level: full, lite, or ultra.
+Missing, unknown, conflicting, inline, and off levels fail for core selection.
+One-shot skills do not require a core level.
+With off or an unknown level, omit the core skill.
+
+The generated bundle adds ponytail source, mode, and compatibility-policy metadata.
+This metadata does not add input fields.
+The policy at ~/.codex/ponytail-policy.md applies to the bundled upstream text.
+The gain skill also receives the registered README and benchmark.
+Their navigation links do not cause additional reads.
+Instruction entry links and explicit references must remain registered.
+Every document counts toward the existing packet size limit.
+
+Run the focused fake workflows with --case ponytail.
+They cover the six selections, levels, source hashes, missing material, path escapes, conflicts, and packet limits.
+The full suite also includes those cases.
