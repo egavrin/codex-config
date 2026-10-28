@@ -1,8 +1,8 @@
 # Codex config
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
-configuration snapshot. Global instructions and shared skills were updated on
-October 26, 2026. The machine configuration retains its existing snapshot.
+configuration snapshot. Routing, memory models, RTK, and Claude instructions were updated on
+October 28, 2026. Unrelated machine settings retain their existing snapshot.
 
 ## Shared writing profile
 
@@ -47,7 +47,6 @@ Run the bridge's `sync-skills` action after the Codex user skills are installed.
 Keep existing independent Claude skills when names conflict.
 Start new Codex and Claude sessions to load persistent instructions.
 
-
 ## Ponytail plugin
 
 The pinned upstream Ponytail 5.1.0 plugin is installed for Codex and Claude.
@@ -82,19 +81,9 @@ The [source lock](docs/slopo-source-lock.json) records the pinned revision, depe
 
 - `codex/config.toml` — model, MCP, plugin, trusted-project, application, and
   multi-agent settings.
-- `codex/AGENTS.md` — the global English-language guide for cost-efficient
-  orchestration, including Direct and Delegated routes, compact task capsules,
-  batching, event-driven waits without polling, and separate implementation and
-  verification ownership.
-- `codex/agents/` — `worker` (Terra High), `explorer` (Luna Medium), `tester`
-  (Luna High), the strictly gated `senior_executor` (Sol Medium), plus
-  Standard-tier `senior_executor_standard` (Sol Medium) and
-  `astra_executor_standard` (Astra Medium for experiments),
-  `astra_executor_high` (Astra High for native delegation), and evidence-gated
-  `astra_executor_xhigh` (Astra Extra High) for the default route, and dedicated
-  `terra_context_compactor_fast` (Terra Medium Fast) for conditional context
-  compaction, plus `luna_evidence_collector_fast`, `luna_light_worker_fast`, and
-  `luna_acceptance_verifier_fast` for the Terra-Luna-Sol-Astra experiment.
+- `codex/AGENTS.md` — the global guide for normal model-aware routing, Context Packets, root acceptance, and named opt-in experiments.
+- `codex/agents/` — the normal `sol_implementer_high` role and preserved experimental roles.
+  Base configuration does not register Astra roles. Dedicated roles remain available for each named experiment.
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
 - `codex/astra-terra-standard.config.toml` — a historical comparison route with
@@ -116,21 +105,20 @@ The [source lock](docs/slopo-source-lock.json) records the pinned revision, depe
   `improve-codebase-architecture`, `writing-for-agents`, `claude-collab`, `graphify`, `slopo-review`, and `film-studio-workflow`,
   including their scripts, resources, provenance, and bundled licenses where present.
 - `agents/skills/` — eight Runpod skills from the existing `~/.agents/skills` discovery root.
-- `claude/CLAUDE.md` — personal instructions with shared profile imports.
+- `claude/` — personal instructions with shared profile imports and adapted RTK awareness.
+- `codex/RTK.md` and `integrations/rtk/` — adapted awareness, pinned configuration, hook fragments, license, and provenance.
 - `docs/controlled-english-verification.md` — migration checks, limitations, and reproduction commands.
 
-The active default is `gpt-6.1-sol` with High reasoning on the Standard service
-tier. Direct work remains in Sol. Delegated production implementation or
-substantive independent review uses one fresh `astra_executor_high` at Astra High.
-Automatic primary, fallback, and review routes exclude Claude.
+The normal default is `gpt-6.1-terra` with `high` reasoning and Standard service tier (`default`).
+Desktop and runtime model, reasoning, and tier overrides remain authoritative.
+All normal code changes go to Sol High and then the Claude completion review.
 The root integrates changes and owns acceptance.
-`claude-collab` remains available only after an explicit user request.
-The [October 21 routing audit](docs/claude-routing-audit-20261021.md) records the evidence for this change. The new named High role becomes available after restarting the
-Codex session; existing sessions may still expose only the previous role catalogue. Named opt-in experiments retain their own routes. `astra_executor_xhigh` is reserved for a narrow intrinsically hard
-remainder supported by concrete failed-attempt evidence; it is not a routine
-repair tier. The default route uses one live child at a time; the configured
-session capacity is three threads and the V1 maximum depth is one. Approval
-remains `never`, and the sandbox remains `danger-full-access`.
+The configured ceiling is 32 open child threads, excluding the root, with a depth setting of one.
+The ordinary policy permits one active child at a time. Completed owners can remain idle.
+Named experiments retain their own route and lifecycle rules.
+Approval remains `never`, and the sandbox remains `danger-full-access`.
+Memory extraction uses `gpt-6-luna`. Memory consolidation uses `gpt-6.1-terra`.
+The [October 21 routing audit](docs/claude-routing-audit-20261021.md) remains historical evidence for the previous policy.
 
 The repository intentionally excludes authentication data, tokens, task
 history, databases, memories, attachments, automations, downloaded plugins,
@@ -153,66 +141,44 @@ do not make `spawn_agent` available in a session where that mechanism is absent.
 
 ## Orchestration model
 
-Four independent choices affect a session:
+The normal profile is `PROFILE: TERRA_SOL_CLAUDE_REVIEW`.
+Terra coordinates app work, visual artifacts, bounded prose, questions, scope, and acceptance.
+All normal code changes, including tiny edits, go to one fresh `sol_implementer_high` with GPT-6.1 Sol High on Standard tier.
+A Sol root implements directly and does not create another Sol agent.
+Other effective root overrides remain authoritative and assign normal code packages to Sol.
+A `bpy` helper for an app artifact remains app work. Software and addon development count as code.
+Substantive read-only technical work can use Sol without a duplicate Claude gate.
 
-| Axis | Meaning |
-|---|---|
-| Root model | The Desktop Terra, Luna, Sol, or Astra selection determines which model is the effective root. |
-| Reasoning | Desktop labels such as Light, Medium, High, and Extra High control reasoning effort; they are not task routes. |
-| Service tier | Fast or Standard/default controls rollout service tier independently of model and reasoning. |
-| Orchestration route | Direct means the effective root owns bounded work; Delegated means a distinct implementation owner materially benefits substantive work. |
+After code and self-check, Sol prepares the existing nine-field packet and runs the bridge preflight.
+Then, Sol requests a synchronous review-only Claude Opus High result through `claude-collab` and pauses edits.
+The result must have an empty diff. Sol checks findings, fixes confirmed relevant issues, rejects unsupported findings, and reruns affected checks.
+The root owns final acceptance.
+One primary review and at most one concrete retry or delta are permitted, with two calls total per package.
+There is no automatic second review after fixes or reciprocal review loop.
+If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve the evidence.
+Continue authorized implementation and deterministic checks with explicit `review_unavailable` and `failure_stage` disclosure.
+An unavailable review does not count as a pass.
 
-The repository default is GPT-6.1 Sol High Standard. A Desktop or runtime override
-is an authoritative user choice, so routing and completion reports use the
-actual effective root. When a
-temporary override is no longer intended, select **Reset to default** before
-starting the next session, then verify the effective model, reasoning, and tier
-shown by the runtime.
+The named policy authorizes only this completion review. The skill keeps `allow_implicit_invocation: false`.
+Other companion requests remain explicit. Subscription-only authentication and existing bridge isolation remain required.
+The bridge uses no API fallback and does not read `~/.env` or change authentication, billing, or Extra Usage.
+No automatic Astra fallback, native verifier, second native opinion, or nested delegation remains in the normal route.
+All named experiments and Astra role files remain preserved. Experiments are exempt from this gate unless the user changes the experiment.
 
-Ordinary substantial independent packages use the native branches below.
-Explicit experiment profiles retain their selected native routes.
+The root returns at most one ordinary repair to the same owner.
+One native owner works at a time. The waiting Sol owner and synchronous external reviewer form the narrow concurrency exception.
+If native close or release is unavailable, report that limit and retain the completed owner idle within the 32-child cap.
+Completion, interruption, and archiving do not prove that a slot was released.
+A new session still requires the appropriate user request.
 
-| Effective root | Direct route | Native Delegated route |
-|---|---|---|
-| Terra | Terra completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_high` only after Sol. |
-| Luna | Luna completes bounded work. | One `senior_executor_standard`; optional evidence-gated `astra_executor_high` only after Sol. |
-| Sol | Sol completes bounded Direct work and never spawns Sol. | One fresh `astra_executor_high` owns planning within the package and implementation; `astra_executor_xhigh` is available only for an evidence-gated hard remainder. |
-| Astra | Astra normally owns planning, implementation, and acceptance and never spawns Astra. | Optionally one `senior_executor_standard` for a clearly bounded package that materially reduces Astra context or work. |
+Run the deterministic contract check with Python 3.11 or later:
 
-The effective root owns deterministic acceptance in every normal branch. Keep an
-implementation child open through acceptance and return at most one ordinary
-repair to that same owner. There is at most one live child, no nesting, no
-separate verifier, and no second-opinion child. High Astra closes before a
-rare Extra High escalation.
+```sh
+python3.12 tests/check_normal_policy.py
+```
 
-The current default uses Sol with one Astra High owner for Delegated work.
-Direct reports `effective_route = sol-direct`.
-Native delegation reports `effective_route = sol-astra`.
-A justified deep escalation reports `effective_route = sol-astra-xhigh`.
-Report the actual root model, reasoning, and tier separately.
-
-For Sol-root Delegated work, `[agents].enabled = true`, and exactly one
-`astra_executor_high` is required when the session exposes native collaboration and that exact role. Native collaboration means the session's
-internal subagent spawn mechanism. User-visible `create_thread`, `fork_thread`, and
-`send_message_to_thread` operations, as well as nested `codex exec`, are not
-automatic substitutes; a separate user-visible task is created only when the
-user explicitly requests one.
-
-If intended delegation fails because collaboration is absent, the effective
-root completes the work and acceptance when possible and discloses the matching
-`effective_route = <root>-single-agent-fallback` route with the reason. A missing exact role when
-collaboration exists is also reported as configuration drift. Temporary
-occupation by a route-owned child is not fallback justification. Fallback
-sessions are excluded from valid delegated-route benchmark comparisons.
-
-The `astra-terra-standard` profile remains available only as a historical
-comparison with an Astra Medium orchestrator, Terra High implementation, and an
-independently justified Luna High tester. Use `astra-sol-research` only for its
-explicitly defined research experiment.
-
-Because a task name alone does not activate a role profile in every collaboration
-runtime, `codex/AGENTS.md` also defines explicit model, reasoning, service-tier,
-context-transfer, concurrency, and escalation contracts.
+The check validates saved policy and configuration. It does not call models or establish runtime adherence.
+Use a fresh session for native role activation and the real Sol-to-Claude-to-Sol workflow.
 
 ## Routing benchmark
 
@@ -669,9 +635,10 @@ hidden/system directories and plugin caches.
 | [codebase-design](codex/skills/codebase-design/SKILL.md) | Evaluate module interfaces, architectural seams, dependencies, and alternatives. |
 | [improve-codebase-architecture](codex/skills/improve-codebase-architecture/SKILL.md) | Find evidenced architecture improvements and present a visual report. |
 | [writing-for-agents](codex/skills/writing-for-agents/SKILL.md) | Improve skills, AGENTS.md, and linked agent instructions without dropping requirements. |
-| [claude-collab](codex/skills/claude-collab/SKILL.md) | Send bounded packages to Claude Opus only after an explicit user request. Automatic invocation is disabled. Codex owns acceptance. |
+| [claude-collab](codex/skills/claude-collab/SKILL.md) | Send explicit packages or the named normal policy completion review to Claude Opus High. Codex owns acceptance. |
 
-All five allow automatic selection and explicit invocation. For example:
+The first four skills allow automatic selection and explicit invocation. Claude Collab keeps `allow_implicit_invocation: false`.
+The named policy authorizes only its completion review. Other calls require an explicit request. For example:
 
 ```text
 Use $claude-collab and $codebase-design to get Claude's alternative view of the architecture.
@@ -686,16 +653,17 @@ python3 ~/.codex/skills/claude-collab/scripts/bridge.py sync-skills
 python3 ~/.codex/skills/claude-collab/scripts/bridge.py doctor
 ```
 
-Automatic routing never calls Claude Collab because of task size, quota, or a native failure.
-The following requirements apply only to explicit Claude requests.
+The named normal policy authorizes the specific Sol completion review.
+Task size, quota, and native failure do not authorize other companion requests.
+The following requirements apply to all authorized Claude requests.
 Claude Collab requires Python 3.9+, Git, a supported installed Claude Code CLI,
 and an existing `claude.ai` subscription login. It explicitly requests Opus High,
 fresh restricted requests without tools, explicit skill/source packets, a
 15-minute inactivity watchdog, optional total budgets, and
 one initial request plus at most one focused follow-up per package. Codex checks
-returned patches before applying and testing them. The companion and a native
-child never work concurrently on the same task; opt-in experimental routes keep
-their own rules. Live sanitized progress snapshots and summaries appear every
+returned patches before applying and testing them. During the synchronous completion review, Sol pauses edits and waits.
+No other native owner works concurrently. Other companion requests cannot overlap a native child.
+Opt-in experimental routes keep their own rules. Live sanitized progress snapshots and summaries appear every
 30 seconds; heartbeats never renew model inactivity. Healthy streams have no
 default total wall-clock cap. Higher effort does not imply lower latency.
 This external route is reported as `<effective-root>-claude`.
@@ -715,6 +683,34 @@ Private companion state, results, ownership manifests, authentication data, and
 machine-specific Claude symlinks are excluded from Git. Restart the relevant agent
 if a new session does not discover the installed skills. See the skill references
 for source revisions, licenses, packet format, and acceptance rules.
+
+## RTK
+
+[`integrations/rtk/`](integrations/rtk/README.md) records the pinned RTK OSS 1.1.0 integration, license, provenance, configuration, and managed hook fragments.
+The upstream hooks support Codex and ordinary Claude sessions. Restricted companion calls retain their existing hook isolation.
+Telemetry is disabled. High awareness does not instruct agents to prefix every command.
+The local exclusion list preserves raw source evidence, diffs, structured output, Git writes, and bridge packets.
+Use raw output whenever exact machine data is required.
+Native Codex hook trust remains a separate review action. No trust database or bypass belongs in this snapshot.
+The snapshot contains no RTK binary or private database.
+`verification.json` preserves prior installation and workflow evidence. It does not record this snapshot update's checks.
+
+## Restore personal Claude instructions
+
+`claude/CLAUDE.md` contains the personal writing, Ponytail, Graphify, Slopo, and RTK instructions.
+`claude/RTK.md` contains the local selective-output adaptation for RTK OSS 1.1.0.
+These files match the live instructions and contain no credentials or runtime artifacts.
+
+Before restoration, back up existing `~/.claude/CLAUDE.md` and `~/.claude/RTK.md` files.
+Compare the saved instructions with existing files, then merge the requested sections and imports.
+Preserve unrelated personal instructions. Do not replace the complete Claude settings file.
+Merge only the RTK hook fragment into existing settings, as described in [the RTK instructions](integrations/rtk/README.md).
+Install the referenced shared skills and `~/.codex/ponytail-policy.md` before activation.
+The relative imports resolve under the live `~/.claude` directory after restoration.
+
+Upstream RTK init can replace the awareness documents.
+After init, restore `codex/RTK.md` and `claude/RTK.md` to their respective live directories, then validate the adaptation.
+Preserve the Codex ownership marker. Complete native hook trust review separately.
 
 ## Restore
 
@@ -792,12 +788,13 @@ loaded into a fresh session.
 
 ## Update the snapshot
 
-From the root of this clone, copy only the listed configuration, rules, and
-selected user skills:
+From the root of this clone, review configuration changes before synchronization.
+Merge only intended settings into `codex/config.toml`. Do not copy the complete live configuration.
+It can contain secrets, temporary project trust, and unrelated integration values.
+Then copy the listed instructions, rules, roles, and selected user skills:
 
 ```sh
 codex_source="${CODEX_HOME:-$HOME/.codex}"
-cp "$codex_source/config.toml" codex/config.toml
 cp "$codex_source/AGENTS.md" codex/AGENTS.md
 cp "$codex_source/astra-terra-standard.config.toml" codex/astra-terra-standard.config.toml
 cp "$codex_source/astra-sol-research.config.toml" codex/astra-sol-research.config.toml
@@ -817,9 +814,14 @@ mkdir -p agents/skills claude
 rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' \
   "$HOME/.agents/skills/" agents/skills/
 cp "$HOME/.claude/CLAUDE.md" claude/CLAUDE.md
+cp "$HOME/.claude/RTK.md" claude/RTK.md
+cp "$codex_source/RTK.md" codex/RTK.md
 git diff --stat
 git diff
 ```
+
+After an RTK awareness or Claude instruction update, refresh the corresponding hashes in `integrations/rtk/provenance.json`.
+Compare the recorded hashes with the snapshot files before committing.
 
 These commands do not propagate deletions from the active configuration into
 the snapshot. Apply intended deletions manually. Before committing, inspect the
@@ -828,7 +830,7 @@ rules. `.gitignore` excludes common generated files, but it cannot detect
 secrets embedded inside tracked TOML or other text files.
 
 ```sh
-git add codex agents claude docs README.md
+git add codex agents claude docs integrations tests README.md
 git commit -m "Update Codex configuration"
 git push
 ```

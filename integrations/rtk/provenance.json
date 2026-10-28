@@ -1,0 +1,23 @@
+{
+  "project": "https://github.com/rtk-ai/rtk",
+  "version": "1.1.0",
+  "variant": "OSS",
+  "revision": "753a3b0e939f2e4490fc24e3a1984010f40a103c",
+  "archive_url": "https://github.com/rtk-ai/rtk/releases/download/v1.1.0/rtk-oss-aarch64-apple-darwin.tar.gz",
+  "archive_sha256": "1623590dd8d65374f61589c599c764c08ba9ce993ebe6b601312a89a3c874558",
+  "source_archive_sha256": "4c5f529d90c5bdf420229f8c7a60a4f1fa47f58f7c9adffed45b1d383d8acaf3",
+  "binary_sha256": "f79cb2b5c49a58cb746d7478cc0e7eb5aebad593519df5d74ce7dbc1929737db",
+  "license_sha256": "33f694a31d9f9df3e292a9413a3cdb0113fa72698e2c719f657ff6b53165dcc4",
+  "automatic_updates": false,
+  "awareness_adaptation": {
+    "source_path": "hooks/rtk-awareness-high.md",
+    "source_sha256": "c749ce712ba8a1aefc08514672625842772f378110ce52b74d2c37e254637a72",
+    "purpose": "Local selective-output policy and controlled-English instructions",
+    "codex_snapshot_path": "codex/RTK.md",
+    "codex_sha256": "845d5f86f6666073e11fdb4a7c27bccfd84c14bc09e1d810175b38a268e812a7",
+    "claude_snapshot_path": "claude/RTK.md",
+    "claude_sha256": "01b0b360df9c8694240e119a5f9ac5d62e2fa9a4258c78e5762518a42e7f99f8",
+    "personal_claude_snapshot_path": "claude/CLAUDE.md",
+    "personal_claude_sha256": "ff0f4763b889d59a58faf4b60885e8d94d6fe1fa7e6b481d3e485364cc8c8c33"
+  }
+}

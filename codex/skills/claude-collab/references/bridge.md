@@ -1,7 +1,12 @@
 # Bridge interface and acceptance
 
-This helper is available only for an explicit user request for Claude.
-Ordinary task routing uses native Codex models and does not invoke this helper for checks, review, or fallback.
+This helper supports explicit Claude requests and the specific completion review authorized by `PROFILE: TERRA_SOL_CLAUDE_REVIEW`.
+For that normal gate, read the parent skill and the Claude completion review section in `~/.codex/AGENTS.md`.
+The exception authorizes synchronous review-only Opus High after Sol code and self-check. It does not authorize automatic Claude implementation.
+Sol pauses edits during the request. No other native owner works concurrently. Do not invoke the bridge recursively.
+Use one primary review plus at most one concrete retry or delta, two calls total per package.
+If the request cannot run, preserve evidence and disclose `review_unavailable` and `failure_stage` while authorized work and deterministic checks continue.
+Other automatic routing does not invoke this helper. Named experiments retain their selected procedures.
 The local `sync-skills` action remains available without a model request.
 
 To use the helper, install Python 3.9+ (including `Path.is_relative_to`), Git, and Claude CLI.

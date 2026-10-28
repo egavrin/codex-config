@@ -27,3 +27,5 @@ Before creating or amending any Git commit, follow `~/.codex/skills/slopo-review
 Complete the review and resolve blocking findings before committing.
 This requirement includes documentation-only commits.
 It does not authorize commits or change Plan Mode, Git hooks, or manual workflows.
+
+@RTK.md

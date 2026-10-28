@@ -1,0 +1,61 @@
+{
+  "status": "acceptance_passed_codex_trust_pending",
+  "rtk_version": "1.1.0",
+  "archive_checksum": "verified against published checksums.txt and requested SHA-256",
+  "project_init": "Codex sentinel hook and instructions preserved; Claude project awareness preserved",
+  "global_init": "upstream init; all unrelated JSON fields preserved; new hook executable paths made absolute",
+  "native_codex_hook": {
+    "command": "/Users/egavrin/.local/bin/rtk hook codex",
+    "currentHash": "sha256:202d429f40bfd8cd7f8772f095aa5ac4ce5a47a0a1bca02e29d469dedbb858f4",
+    "trustStatus": "untrusted"
+  },
+  "verification_commands": [
+    "python3.12 tests/check_normal_policy.py --live ~/.codex --baseline <private-baseline>",
+    "python3.12 tests/check_rtk.py",
+    "python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py ~/.codex/skills/claude-collab",
+    "git diff --check"
+  ],
+  "native_activation": "Ordinary Claude rewriting passed in a fresh session. Codex hook remains untrusted and requires native /hooks approval.",
+  "live_companion_requests": 1,
+  "bridge_helper": "unchanged",
+  "awareness_adaptation": "PASS: selective raw evidence, recovery limits, host permissions, and matching personal Claude snapshot",
+  "bridge_suite": {
+    "cases": 135,
+    "status": "PASS",
+    "helper_changed": false
+  },
+  "live_coding_workflow": {
+    "status": "PASS",
+    "root_model": "gpt-6.1-terra",
+    "root_reasoning": "high",
+    "observed_service_tier": null,
+    "native_owner": "sol_implementer_high",
+    "owner_model": "gpt-6.1-sol",
+    "owner_reasoning": "high",
+    "review_model": "claude-opus-5-5",
+    "review_effort": "high",
+    "review_authentication": "claude.ai subscription",
+    "review_result": "success; empty diff; no findings",
+    "preflight_before_request": true,
+    "review_finished_before_owner_completion": true,
+    "independent_acceptance": "PASS: empty, stable, unicode, distinct, invalid-types",
+    "elapsed_seconds": 72.316,
+    "model_effort_tier_or_developer_overrides": false
+  },
+  "ordinary_claude": {
+    "status": "PASS",
+    "fresh_session": true,
+    "requested_command": "git status",
+    "executed_command": "rtk git status",
+    "hooks_enabled": true,
+    "final_awareness_adaptation": true,
+    "authentication": "claude.ai subscription"
+  },
+  "limits": [
+    "One small coding workflow does not establish general reliability.",
+    "Live review returned no findings, so live finding repair was not exercised.",
+    "Codex service tier was not exposed in runtime evidence.",
+    "Codex automatic RTK rewriting remains inactive until native hook trust.",
+    "One ordinary Claude command was tested. RTK estimates do not measure subscription debit."
+  ]
+}

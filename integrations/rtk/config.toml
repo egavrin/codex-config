@@ -1,0 +1,20 @@
+[telemetry]
+enabled = false
+consent_given = false
+
+[awareness]
+level = "high"
+
+[hooks]
+# Keep exact source evidence and machine-readable output unfiltered.
+exclude_commands = [
+  "cat", "head", "tail", "read", "rg", "grep", "find", "sed", "awk", "diff",
+  "jq", "yq", "curl", "wget", "gh", "python", "python3", "python3.12", "docker inspect", "kubectl", "aws", "psql", "env", "printenv",
+  "npm config", "npm pkg", "npm view", "git status --short", "git status -s", "git status -sb",
+  '^.*(?:bridge\.py|packet\.json|claude-collab)(?:\s|$)',
+  '^.*(?:--json|--xml|--csv|--yaml|--porcelain|--format|--message-format|--output-format|--output|--null|--print0|(?:^|\s)-[A-Za-z]*[z0])(?:[=\s]|$)',
+  '^git\s+(?:.*\s)?(?:diff|show|log|ls-files|ls-tree|rev-parse|for-each-ref|cat-file|add|commit|push|pull|fetch|merge|rebase|reset|restore|checkout|switch|branch|tag|stash|clean|cherry-pick|revert|apply|am|bisect|worktree|submodule|update-index|update-ref|config|remote|gc|prune|reflog|init|clone|rm|mv|notes|replace|filter-branch|pack-refs|symbolic-ref|repack|maintenance)(?:\s|$)'
+]
+
+[retriever]
+mode = "sqlite"

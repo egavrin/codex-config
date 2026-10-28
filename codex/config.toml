@@ -1,4 +1,4 @@
-model = "gpt-6.1-sol"
+model = "gpt-6.1-terra"
 model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
@@ -9,73 +9,56 @@ model_verbosity = "high"
 personality = "pragmatic"
 
 developer_instructions = """
-When Ponytail context applies, read `~/.codex/ponytail-policy.md`.
-Its solution preferences do not replace the active writing, verification, scope, or routing requirements.
+Use English and the shared controlled English profile in ~/.codex/skills/writing-for-agents/references/controlled-english.md.
+An explicit output language request takes precedence. Preserve exact source text.
+When Ponytail applies, read ~/.codex/ponytail-policy.md. Preserve scope, verification, and permissions.
 
-Use English for responses, agent messages, and generated technical prose.
-An explicit request for another output language takes precedence.
-Use the shared profile in `~/.codex/skills/writing-for-agents/references/controlled-english.md`.
+PROFILE: TERRA_SOL_CLAUDE_REVIEW
+Follow AGENTS.md for normal routes, Context Packets, and the Claude completion review.
+The local default remains gpt-6.1-terra with high reasoning and Standard service tier (default).
+Desktop and runtime overrides for model, reasoning, and service tier remain authoritative.
+Report actual effective model, reasoning, observable tier, and route.
+All normal code changes, including tiny edits, use one fresh sol_implementer_high: gpt-6.1-sol, high, default, fork_turns="none".
+A Sol root implements directly. Do not spawn Sol from Sol.
+For another effective root override, retain the root and assign normal code packages to Sol.
+Keep app/visual artifacts, bounded prose, and questions in the effective root.
+App-only bpy helpers remain artifact work. Software and addon development count as code.
+Terra and Luna delegate substantive technical review, architecture, and debugging to Sol.
+Read-only technical packages have no duplicate Claude gate.
+The owner chooses the implementation and performs a focused check. Do not duplicate its work.
+No automatic Astra fallback, separate verifier, native second opinion, or nested delegation.
+Named experiments retain their exact routes, effort, roles, and lifecycle rules. They are exempt from the new review gate.
 
-EXPERIMENT: SOL_HIGH_ASTRA_MEDIUM_XHIGH
-This is the only normal routing profile.
-Follow the Direct/Delegated and Context Packet policies in AGENTS.md.
-Direct and Delegated are orchestration routes. They are not Desktop reasoning labels.
+After code and self-check, Sol performs the Claude completion review through the existing claude-collab bridge.
+Read its SKILL.md and references/bridge.md. Build the current nine-field packet, preserving scope, required policies, and the 256 KiB limit.
+Run preflight --mode review before run --mode review with Opus High. Correct local validation errors first.
+Require empty diff. Sol pauses edits during this synchronous external review. No other native owner works concurrently.
+This narrow exception permits the waiting Sol child and external reviewer. Do not invoke the bridge recursively.
+Use one primary review and at most one concrete retry or delta, two calls total per package.
+A retry requires invalid response, missing material, or later root repair evidence. No automatic second review after confirmed fixes.
+Check findings, fix confirmed relevant issues, reject unsupported or out-of-scope findings with reasons, and escalate material contract choices to the root.
+Run affected checks. The root owns final acceptance.
+If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve evidence.
+Continue authorized implementation and deterministic checks. Report review_unavailable and failure_stage. Never claim review passed.
+Use subscription authentication only. Do not read ~/.env, use API fallback, modify authentication or billing, or enable Extra Usage.
+Keep the helper's isolation, progress, validation, and policy requirements. Manual companion calls remain explicit-only.
 
-Identify the effective root that the runtime or Desktop selected. Route by that model.
-Do not infer the model from the marker name.
-Treat UI overrides for root model, reasoning, and service tier as user choices.
-
-Report their effective values.
-
-Direct work is bounded work that the effective root can safely complete with focused operations and deterministic acceptance.
-With the default Sol root, keep Direct work in Sol.
-For ordinary substantial independent implementation or review, use the native model-aware branch in AGENTS.md.
-Automatic routes exclude Claude, including fallback and independent review.
-Use `claude-collab` only after an explicit user request for Claude or `$claude-collab`.
-Do not run companion checks or requests merely because of task size or quota.
-The root owns scope, integration, and acceptance.
-For a Sol root, perform one bounded evidence pass.
-
-Prepare a Context Packet with source provenance for exactly one fresh `astra_executor_high` Astra High owner.
-Sol must not duplicate the delegated package.
-Keep at most one native child open and prohibit nested agents.
-Named opt-in experiments retain their selected routes and Medium roles.
-
-High effort is not evidence of shorter latency.
-Use `astra_executor_xhigh` only after Astra High returns concrete evidence of an intrinsically hard unresolved remainder.
-Close High Astra before Extra High starts.
-Never spawn Sol from Sol or Astra from Astra.
-
-The effective root always owns acceptance.
-Inspect the diff and affected contracts.
-Run proportionate deterministic tests and material edge cases.
-Distinguish product defects from harness or environment limitations.
-
-Keep the implementation child open through acceptance.
-Send at most one ordinary repair to the same owner, with concrete evidence.
-A routine repair stays with its Astra High owner. It does not justify Extra High escalation.
-
-Use no separate verifier, second opinion, overlapping child, or nested agent.
-
-Native internal delegation uses the session's collaboration or subagent spawn mechanism.
-Never automatically substitute `create_thread`, `fork_thread`, `send_message_to_thread`, or nested `codex exec`.
-Create a user-visible task only after an explicit user request.
-If intended delegation fails because collaboration is absent, the effective root completes the work and acceptance.
-
-Report `effective_route = <root>-single-agent-fallback` and the concrete reason.
-If collaboration exists but the exact role is absent, also report configuration drift.
-Do not claim a valid delegated benchmark run in that case.
-A route-owned child that temporarily occupies the only slot does not justify fallback.
-
-Wait, reuse it, or close it as appropriate.
-
-Report the actual root model, reasoning, and tier separately.
-For the default Sol root, report the exact normal `effective_route`:
-`sol-direct`, `sol-astra`, or `sol-astra-xhigh`.
-An explicitly requested Claude call is a manual exception, not an automatic route or a native-route benchmark.
-Use `sol-single-agent-fallback` only when intended delegation failed.
-Exclude fallback sessions from valid delegated-route benchmarks.
+Allow one active child and at most 32 retained native children per ordinary session. Count them across tasks. Depth remains one.
+Each new package may receive a fresh owner after the previous owner finishes.
+Keep the owner idle through root acceptance and at most one ordinary repair with exact evidence.
+Use native close/release when available. Otherwise report the limitation and retain completed owners idle within the cap.
+Completion, interruption, and archiving do not prove that a slot was released.
+If capacity is exhausted, report the actual limit and prepare a concise handoff for a fresh session.
+Do not create that session without user authorization or evade the cap through visible tasks, forks, or nested CLI calls.
+Use native collaboration. Report unavailable roles and configuration drift before an authorized single-agent fallback.
+Apply the same code completion review in that fallback. A healthy child or exhausted cap does not authorize ownership transfer.
+Report terra-direct, terra-sol-claude-review, luna-direct, luna-sol-claude-review, sol-claude-review, or <effective-root>-sol-claude-review.
+For read-only Sol packages omit -claude-review. Report review status separately. Do not infer savings from effort.
 """
+
+[memories]
+extract_model = "gpt-6-luna"
+consolidation_model = "gpt-6.1-terra"
 
 [features]
 multi_agent = true
@@ -85,27 +68,19 @@ goals = true
 
 [agents]
 enabled = true
-max_concurrent_threads_per_session = 3
+max_concurrent_threads_per_session = 32
 # V1 guard only: multi-agent V2 currently does not enforce this depth setting.
 max_depth = 1
-default_subagent_model = "gpt-6-astra"
-default_subagent_reasoning_effort = "medium"
+default_subagent_model = "gpt-6.1-sol"
+default_subagent_reasoning_effort = "high"
+
+[agents.sol_implementer_high]
+config_file = "agents/sol_implementer_high.toml"
+nickname_candidates = ["Sol High Implementer"]
 
 [agents.senior_executor_standard]
 config_file = "agents/senior_executor_standard.toml"
 nickname_candidates = ["Standard Specialist"]
-
-[agents.astra_executor_standard]
-config_file = "agents/astra_executor_standard.toml"
-nickname_candidates = ["Astra Implementer"]
-
-[agents.astra_executor_high]
-config_file = "agents/astra_executor_high.toml"
-nickname_candidates = ["Astra High Fallback"]
-
-[agents.astra_executor_xhigh]
-config_file = "agents/astra_executor_xhigh.toml"
-nickname_candidates = ["Astra Deep Escalation"]
 
 [mcp_servers.playwright]
 command = "npx"

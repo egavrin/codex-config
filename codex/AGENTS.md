@@ -20,10 +20,11 @@ The off mode does not disable existing instructions.
 
 ## Objective
 
-Use the root model for understanding the request, bounded evidence collection,
-architecture, decomposition, hard decisions, integration, acceptance, and
-communication. In the default route, delegate only when the effective-root branch calls for a distinct owner. Assign one bounded implementation or substantive read-only review package. Exact experimental marker sections may define other role
-sequences.
+Use the root model to understand the request, collect bounded evidence, define scope, integrate results, and perform acceptance.
+The assigned technical owner chooses the implementation approach and architecture within its package.
+Follow the effective-root branch for ordinary work.
+Assign one bounded implementation or substantive read-only review package when that branch requires delegation.
+Exact experimental marker sections may define other role sequences.
 
 Optimize for completing the user's task with fewer root-model rollouts and less
 repeated root context. Do not optimize token usage by weakening correctness,
@@ -31,9 +32,12 @@ skipping necessary verification, or producing incomplete work.
 
 ## API Keys and Local Environment
 
+`~/.env` contains the user's API keys for available services.
+You may use the required keys for authorized tasks, subject to existing authentication and approval rules.
+
 When an API key or credential is necessary for a task, preserve any non-empty value
 already set in the environment. If the required variable is absent or empty,
-load it from `~/.env` (`/Users/egavrin/.env`) before calling the service.
+load it from `~/.env` before calling the service.
 Load only the variables needed for the task into the calling process's
 environment. Treat the file as dotenv data, not executable shell code.
 
@@ -53,96 +57,117 @@ newer example.
 
 ## Routes
 
-Choose exactly one orchestration route before substantive work. Direct and
-Delegated are task-routing classes. They are not Desktop reasoning labels.
+Choose exactly one orchestration route before substantive work.
+Direct and Delegated are task-routing classes, not Desktop reasoning labels.
 
-### Direct route
+### Normal model-aware routing
 
-Use Direct when the effective root can safely finish the bounded work with a few
-focused operations and deterministic acceptance. Typical Direct work includes
-questions, bounded diagnosis, tiny local edits, and narrow reviews. Do not add
-coordination overhead when a distinct implementation owner offers no material
-benefit.
+The marker `PROFILE: TERRA_SOL_CLAUDE_REVIEW` selects the normal policy.
+The local default is `gpt-6.1-terra` with `high` reasoning and Standard service tier (`default`).
+Desktop and runtime overrides for model, reasoning, and service tier remain authoritative.
+Named opt-in experiments retain their exact routes, roles, effort, and lifecycle rules.
 
-### Delegated route
+### Direct and Delegated work
 
-Use Delegated for substantive implementation or review when a distinct owner materially improves reliability or reduces root context and work. For ordinary substantial independent work, use the native model-aware branches below.
-Signals include repository discovery plus implementation, cross-component behavior, and non-mechanical multi-file changes. Other signals include material design decisions, important security or regression risks, and substantive read-only reviews. Route by the actual effective root model, not merely the configured
-default.
+All normal code changes, including tiny edits, require Sol ownership and the Claude completion review below.
+Terra and Luna assign each code package to one fresh `sol_implementer_high` with `gpt-6.1-sol`, `high`, and `default`.
+A Sol root implements directly. Do not spawn Sol from Sol.
+For another effective root override, retain that root and assign normal code packages to Sol.
+Keep app operations, visual/Blender artifacts, bounded prose, and questions in the effective root.
+A `bpy` helper script for an app artifact remains app work. Software and addon development count as code changes.
+Terra and Luna also delegate substantive debugging, architecture, and technical review to Sol.
+An explicitly read-only Sol package has no duplicate Claude review gate.
+Prefer APIs, CLIs, and purpose-built tools. Use GUI control when necessary or explicitly requested.
 
-### Default model-aware routing
+No automatic Astra fallback, separate verifier, second native opinion, or nested delegation is permitted.
+Preserve Astra role files and named experiments. Their presence does not activate a normal route.
+Extra High requires an explicit user request or a named experiment.
 
-The marker `EXPERIMENT: SOL_HIGH_ASTRA_MEDIUM_XHIGH` selects the normal policy.
-The local default is Sol High on the Standard tier, but Desktop or runtime root
-overrides remain authoritative user choices.
+### Ownership and completion
 
-For ordinary substantial implementation or review, use the native model-aware branch directly.
-Claude is excluded from automatic primary, fallback, and review routes.
-The root retains scope, integration, and acceptance.
+Before delegation, collect one bounded evidence pass and form the Context Packet.
+Start the owner with `fork_turns="none"` and `Research Slot: withheld`.
+The owner chooses the implementation and performs one lightweight focused check.
+Do not duplicate its package or prescribe its detailed implementation.
+After code and self-check, follow the Claude completion review procedure.
+Run bridge `preflight` before `run --mode review` with the current packet.
+Use one primary review and at most one concrete retry or delta, two calls total per package.
+If review cannot run, report `review_unavailable` and `failure_stage`, preserve evidence, and continue authorized work and deterministic checks.
+The effective root owns integration and final acceptance.
+Inspect the diff and affected contracts. Run proportionate deterministic checks and material edge cases.
+Distinguish product defects from harness or environment limitations.
+Keep the implementation owner available and idle through acceptance.
+Send at most one ordinary repair to that same owner, with exact expected-versus-observed evidence.
 
-Tiny Direct work stays in the root.
-Named opt-in experiments retain their exact native routes.
-High effort is not evidence that latency will improve.
+### Native child lifecycle
 
-Native Delegated branches:
-
-| Effective root | Direct and ordinary root-owned work | Delegated behavior |
-|---|---|---|
-| Terra | Complete Direct work in Terra. | Give exactly one Context Packet to `senior_executor_standard`. Use `astra_executor_high` only for a narrow evidence-gated remainder after Sol. |
-| Luna | Complete Direct work in Luna. | Give exactly one Context Packet to `senior_executor_standard`. Use `astra_executor_high` only for a narrow evidence-gated remainder after Sol. |
-| Sol | Complete Direct work in Sol. Never spawn another Sol. | Give exactly one Context Packet to `astra_executor_high`. Use `astra_executor_xhigh` only for an evidence-gated intrinsically hard remainder after High Astra. |
-| Astra | Normally own planning, implementation, and acceptance directly. Never spawn Astra from Astra. | Optionally give one clearly bounded package to `senior_executor_standard` only when doing so materially reduces Astra context or work. |
-
-For Terra- and Luna-root Delegated work, the root performs one bounded evidence pass and forms the Context Packet. It assigns exactly one fresh `senior_executor_standard`. A substantive review package is explicitly read-only.
-Sol uses the packet as working context.
-
-It may open exact edit locations and directly connected definitions. Before broader discovery, it must identify the deficient packet field, evidence for the deficiency, and the reason for expansion. The root must not duplicate the delegated package.
-
-For default Sol-root Delegated work, Sol performs one bounded evidence pass and forms the Context Packet. It assigns exactly one fresh `astra_executor_high`. Astra High owns technical planning within the
-package, implementation or an explicitly read-only review, and one lightweight
-focused check. Sol must not prescribe a detailed implementation plan or duplicate
-the package.
-
-A routine acceptance defect returns once to that same still-open
-High Astra owner. Extra High is not a repair tier. Use `astra_executor_xhigh` only after High Astra supplies the required evidence.
-
-That evidence must identify an attempted failure, unresolved criterion, smallest remaining ownership surface, and need for deeper reasoning. Close High Astra before starting Extra High and give Extra High a delta
-packet rather than the full original packet.
-
-The effective root always owns final acceptance. Inspect the diff and affected cross-contract boundaries. Run proportionate deterministic tests and material edge cases. Distinguish product defects from harness or environment limitations.
-
-Preserve exact expected-versus-observed evidence in a repair delta. Keep the
-implementation owner open and idle through acceptance. Send at most one ordinary
-repair to that same owner.
-
-Close the current owner before a model-tier
-escalation. This keep-open behavior is an instruction validated by local rollout
-evidence, not a runtime lifecycle guarantee.
-
-Never run more than one child concurrently. Prohibit nested agents. Do not add a separate verifier or second-opinion child. Never spawn Sol from Sol or let a child spawn another agent.
-
-High Astra is the Sol-root Delegated owner. Extra
-High Astra remains rare and evidence-gated. When route choice is uncertain, examine whether the effective root can safely complete the task and deterministic acceptance alone.
-
-Use Direct only in that case. Otherwise, use the model-aware Delegated branch.
+Allow one active child and at most 32 retained native children per ordinary session.
+Count retained children across tasks. The configured depth remains one.
+Each new package may receive a fresh owner after the previous owner finishes.
+The external completion reviewer is not a native child.
+Sol pauses edits during its synchronous review. No other native owner works concurrently.
+This is the narrow exception to the companion/native-child concurrency restriction.
+Retain the completed owner for root acceptance and its one ordinary repair.
+Use native close or release after acceptance when available.
+If unavailable, report the limitation and retain the completed owner idle within the cap.
+An interrupt is not a close or release operation.
+Completion, interruption, and archiving do not prove that a slot was released.
+If the retained-thread capacity is exhausted, report the actual limit.
+If another owner is required and release is unavailable, prepare a concise handoff for a fresh session.
+Do not create a new session without the required user request.
+Do not evade the cap through visible tasks, forks, nested CLI calls, or another owner.
 
 ### Capability-aware default fallback
 
-A native internal subagent is created through the current session's
-collaboration or subagent spawn mechanism. `create_thread`, `fork_thread`,
-`send_message_to_thread`, and nested `codex exec` are not automatic substitutes.
-Use a user-visible task creation mechanism only after the user explicitly asks
-for a separate task.
+Use native collaboration for internal delegation.
+Do not substitute `create_thread`, `fork_thread`, `send_message_to_thread`, or nested `codex exec` automatically.
+If collaboration or the required role is unavailable, report the concrete limitation and configuration drift.
+The effective root may complete authorized work directly when intended delegation fails.
+Apply the same completion review to code changes in that fallback.
+Report `effective_route = <root>-single-agent-fallback` only for failed intended delegation.
+Exclude these sessions from valid delegated-route benchmarks.
+A healthy active child or the retained-child cap does not justify ownership transfer.
+Wait for the owner or use its permitted repair.
+Report the actual root model, reasoning, and observable service tier separately.
+Report normal routes as `terra-direct`, `terra-sol-claude-review`, `luna-direct`, `luna-sol-claude-review`,
+`sol-claude-review`, or `<effective-root>-sol-claude-review` for another root override.
+For read-only Sol packages, omit the `-claude-review` suffix.
+Record the review result separately. A route name does not prove review success.
+Do not infer latency, quality, or quota savings from the reasoning level.
 
-If native collaboration is entirely absent, the effective root completes the work and acceptance directly when possible. It reports `effective_route = <root>-single-agent-fallback` and the concrete reason for failed delegation.
-If collaboration exists but the exact named role is unexpectedly absent, also report configuration drift. Do not claim a valid delegated benchmark run. A route-owned child temporarily occupying the only slot does not justify fallback. Wait, reuse it for its owned repair, or close it as required.
+## Claude completion review
 
-Report the actual effective root model, reasoning, and service tier separately.
-For normal work, report the exact `effective_route`: `terra-direct`, `terra-sol`,
-`luna-direct`, `luna-sol`, `sol-direct`, `sol-astra`, `sol-astra-xhigh`,
-`astra-direct`, or `astra-sol`. Use the corresponding
-`*-single-agent-fallback` label only when intended delegation failed, and exclude
-such sessions from valid delegated-route benchmarks.
+This gate applies to all normal code changes, including tiny edits and code changes by an effective Sol root.
+It excludes bounded prose, app-only artifact scripts, and read-only technical reviews.
+Named experiments retain their exact procedures unless the user explicitly changes the experiment.
+The named normal policy is standing authorization for this specific external completion review.
+It does not authorize Claude implementation, a general automatic companion route, or broader skill selection.
+
+1. Complete the code and one focused self-check.
+2. Read `~/.codex/skills/claude-collab/SKILL.md` and its `references/bridge.md` procedure.
+3. Build the existing nine-field packet from current scope, sources, instructions, diffs, acceptance criteria, and uncertainties.
+4. Include required shared policies and selected skill references without changing the schema or the 256 KiB limit.
+5. Run `preflight --mode review --packet FILE` and correct local validation errors before any model request.
+6. Run `run --mode review --packet FILE` through the existing bridge with Opus High.
+7. Require a review-only result with an empty `diff`.
+8. Check each finding against the code and task evidence.
+9. Fix confirmed relevant findings within scope and reject unsupported or out-of-scope findings with reasons.
+10. Escalate material scope or contract decisions to the root.
+11. Run the affected deterministic checks and report findings, decisions, artifacts, and remaining criteria.
+
+Sol pauses edits while the synchronous external reviewer works.
+No other native owner works concurrently. Do not create native children or invoke the bridge recursively.
+Use one primary review plus at most one concrete retry or delta, two calls total per package.
+A retry requires an invalid response, missing material, or a later root repair with concrete evidence.
+Do not request another review merely because Sol fixed review findings.
+Do not create reciprocal review loops.
+
+If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve the evidence.
+Continue authorized implementation and deterministic checks with explicit `review_unavailable` and `failure_stage` disclosure.
+Never claim that an unavailable review passed. Correct local preflight errors before sending.
+Use only the existing subscription login. Do not read `~/.env`, use API fallback, change authentication or billing, or enable Extra Usage.
+Preserve the helper's isolation, policies, progress reporting, validation, and timeout behavior.
+The root owns final acceptance after Sol reports the completed work and review outcome.
 
 ## Jev routing-adviser shadow experiment
 
@@ -178,10 +203,12 @@ Terra-to-Sol with only evidence-gated Astra escalation. Do not spawn an Astra pl
 
 ## Root Selection, Reasoning, and Tier
 
-The local default is GPT-6.1 Sol with High reasoning on Standard service tier.
-Desktop model, reasoning, and tier overrides are user choices. Respect the effective values. Never describe an effective Terra, Luna, or Astra root as Sol.
+The local default is GPT-6.1 Terra with High reasoning on Standard service tier.
+The default configuration values are `gpt-6.1-terra`, `high`, and `default`.
+Desktop model, reasoning, and tier overrides are user choices. Respect and report the effective values.
+Never describe an effective root as a different model.
 
-Light, Medium, High, and Extra High name reasoning levels in the Desktop selector. They do not select Direct or Delegated routing.
+Light, Medium, High, Extra High, and MAX name reasoning levels where the selected model and runtime support them. They do not select Direct or Delegated routing.
 Do not request a reasoning change merely to enter an orchestration route.
 
 ## Terra-Astra plan/build experiment
@@ -217,7 +244,7 @@ quota percentages.
 
 The exact marker `EXPERIMENT: ASTRA_LUNA_NESTED_ASTRA`, supplied only by
 `astra-luna-nested-astra.config.toml`, overrides the normal model-aware route's
-one-child, no-nesting, and no-Astra-from-Astra rules for this opt-in experiment.
+one-active-child, no-nesting, and no-Astra-from-Astra rules for this opt-in experiment.
 It does not change the local or Desktop default. Use native internal subagents
 only. Never replace nesting with visible tasks, forks, or nested `codex exec`.
 
@@ -277,15 +304,13 @@ it, so these explicit capsule and slot rules are the operative nesting limit.
 
 ## Astra-Terra Standard comparison profile
 
-The marker `PROFILE: ASTRA_TERRA_STANDARD` comes from `astra-terra-standard.config.toml` and selects a historical comparison. It uses an Astra Medium root on Standard tier and Terra High for clear bounded implementation. Luna High testing is permitted only with independent justification. Selective Sol use is permitted under the Senior Executor Escalation Gate. This explicit profile overrides the default Sol High
-route while active.
+The marker `PROFILE: ASTRA_TERRA_STANDARD` comes from `astra-terra-standard.config.toml` and selects a historical comparison. It uses an Astra Medium root on Standard tier and Terra High for clear bounded implementation. Luna High testing is permitted only with independent justification. Selective Sol use is permitted under the Senior Executor Escalation Gate. This explicit profile overrides the normal routing policy while active.
 
 ## Terra-Luna-Sol-Astra experiment
 
 This policy changes only when the root developer instructions contain the exact
 marker `EXPERIMENT: TERRA_LUNA_SOL_ASTRA`, supplied by the
-`terra-luna-sol-astra.config.toml` CLI profile. The marker overrides the default
-Sol High route while selected. Terra Medium Fast coordinates work, compacts Context Packets, integrates acceptance, and communicates final results. It does not routinely investigate, plan technical work, implement, or run acceptance.
+`terra-luna-sol-astra.config.toml` CLI profile. The marker overrides the normal routing policy while selected. Terra Medium Fast coordinates work, compacts Context Packets, integrates acceptance, and communicates final results. It does not routinely investigate, plan technical work, implement, or run acceptance.
 
 Choose Direct or Delegated before spawning or editing. Questions, explanations, and
 status requests without repository mutation may remain in Terra. A tiny, obviously local, reversible implementation may go directly to one fresh `luna_light_worker_fast`. That worker owns the edit and one focused check.
@@ -333,7 +358,7 @@ Use this profile only for explicit, isolated comparisons. Before conclusions, ma
 
 This policy changes only when the root developer instructions contain the exact
 marker `EXPERIMENT: LUNA_TERRA_CONTEXT_SOL_ASTRA`, supplied by the
-`luna-terra-context-sol-astra.config.toml` CLI profile. This is an isolated comparison route. It does not change the default Sol High route or full Terra-root `TERRA_LUNA_SOL_ASTRA` experiment.
+`luna-terra-context-sol-astra.config.toml` CLI profile. This is an isolated comparison route. It does not change the normal routing policy or full Terra-root `TERRA_LUNA_SOL_ASTRA` experiment.
 
 Direct work remains in the Luna xHigh Fast root. For every Delegated implementation or review, Luna performs one bounded evidence pass. It applies the Expected-Compression Gate below. It builds or commissions a Context Packet that preserves provenance. Then, it spawns exactly one fresh `senior_executor_standard`.
 Standard Sol Medium owns technical planning and implementation, or one
@@ -444,8 +469,8 @@ marker `EXPERIMENT: LUNA_SOL_ASTRA_ESCALATION`, supplied by the
 This native Context Packet contract applies to ordinary Delegated work and the named native experiments.
 
 Before implementation, the root collects decision-relevant facts for these routes:
-- Default Sol-root Delegated work.
-- Runtime-overridden Terra- or Luna-root Delegated work.
+- Normal Terra- or Luna-root delegation to `sol_implementer_high`.
+- Normal code delegation from another effective root to `sol_implementer_high`.
 - The Luna-root experiments above. In the
 Terra-Luna-Sol-Astra experiment, the Luna collector gathers those facts in an
 Evidence Dossier and Terra performs the compaction. In every case, the packet is
@@ -475,13 +500,14 @@ default route, the effective root owns acceptance. In the
 Terra-Luna-Sol-Astra experiment, the dedicated Luna acceptance verifier owns
 that suite and reports its evidence to Terra.
 
-If Sol supplies justified Astra escalation evidence, the root sends Astra a delta packet. Include the unresolved acceptance criterion, relevant original packet facts, and Sol's concrete evidence. Include current changed paths and the smallest remaining ownership surface. Do not resend completed work or the original
+Only when a named experiment explicitly permits Astra escalation, the root sends Astra a delta packet. Include the unresolved acceptance criterion, relevant original packet facts, and Sol's concrete evidence. Include current changed paths and the smallest remaining ownership surface. Do not resend completed work or the original
 packet wholesale.
 
 ## Sol research-slot policy
 
 This policy applies whenever a selected `senior_executor` receives a Sol package,
-in either the base route or the Astra-Sol research profile. A Research Slot is
+in an explicit profile that permits this role and nested research.
+The normal `sol_implementer_high` role never receives a Research Slot. A Research Slot is
 **withheld by default**. A senior-executor capsule must explicitly say `Research
 Slot: withheld` or `Research Slot: granted`. Only the latter gives permission for one Luna
 Medium read-only investigator.
@@ -505,6 +531,7 @@ the configured values explicitly on every initial spawn:
 
 | Role | Model | Reasoning | Service tier |
 |------|-------|-----------|--------------|
+| `sol_implementer_high` | `gpt-6.1-sol` | `high` | `default` |
 | `senior_executor_standard` | `gpt-6-sol` | `medium` | `default` |
 | `astra_executor_standard` | `gpt-6-astra` | `medium` | `default` |
 | `astra_executor_high` | `gpt-6-astra` | `high` | `default` |
@@ -527,6 +554,8 @@ Do not select the default Luna model for an `explorer` or `tester` merely becaus
 or `explorer_repository` remains untyped unless the runtime applies the matching
 role profile. If typed roles are unavailable, use the table above as the effective routing contract. Include the role's behavioral constraints in the task capsule.
 
+Astra rows describe preserved experimental roles only. Base configuration does not register automatic Astra owners.
+
 The standalone agent files document intended restrictions but do not by
 themselves prove that a runtime tool or sandbox profile was applied. State a sandbox guarantee only after a check of the effective restriction. Otherwise, supply explicit model, reasoning, and behavioral constraints in the capsule.
 
@@ -535,37 +564,28 @@ profiles where those roles are permitted. Do not start a tester while the implem
 it must test is still running. Wait for the relevant worker to finish, then
 give the tester the completed state and acceptance criteria. A tester must not
 poll, wait for, coordinate, or inspect the status of sibling agents. The default
-route never creates a tester and never has more than one child open.
+route never creates a tester. It permits one active child and at most 32 retained children per ordinary session.
 
 ## Delegated Route Entry
 
-Route ordinary substantial independent work through the native model-aware branch.
-Keep the root responsible for acceptance.
-Do not call Claude before native delegation or after a native failure.
+Follow the normal effective-root branch unless an exact experimental marker selects another route.
+The root owns integration and acceptance.
 
-For a Sol-root Delegated package:
+1. State the outcome and observable acceptance criteria.
+2. Collect one bounded evidence pass and form the Context Packet.
+3. Assign normal code changes, including tiny edits, to a fresh `sol_implementer_high` with no inherited history.
+4. Require the Claude completion review after code and self-check, before the owner reports completion.
+5. Keep Sol idle and available during root acceptance.
+6. Return at most one ordinary repair with concrete evidence to that owner.
+7. Apply the native lifecycle rules before dispatch and after acceptance.
 
-1. State the intended outcome and acceptance criteria.
-2. Perform one bounded evidence pass over the smallest decision-critical
-   context and form the Context Packet.
-3. Give exactly one bounded implementation or read-only review package to a
-   fresh `astra_executor_high`.
-4. Keep High Astra open while Sol inspects the result and runs acceptance.
-5. Return one ordinary repair to that same owner, if required. Otherwise close
-   it after acceptance.
-6. Only for a concrete intrinsically hard unresolved remainder, close High
-   Astra and give one narrow delta packet to `astra_executor_xhigh`.
-
-For Terra- or Luna-root Delegated work,
-retain the existing Context Packet to `senior_executor_standard` route, with
-only evidence-gated Astra escalation.
-
-Exact experimental marker sections override this sequence only for their named
-profiles.
+A Sol root owns implementation directly and performs the same Claude completion review.
+Explicitly read-only technical packages do not require a duplicate Claude gate.
+No automatic Astra fallback is permitted. Preserve named experiments and explicit user overrides.
 
 ## Adaptive Delegation Budget
 
-This section applies only to explicit profiles with permission for multiple agents or waves. It does not override the default route's one-child model-aware lifecycle.
+This section applies only to explicit profiles with permission for multiple agents or waves. It does not override the normal route's one-active-child and 32-retained-child limits per ordinary session.
 Treat the number of subagents as an adaptive budget, not a target and not an
 absolute lifetime cap. A genuinely large task may use many agents across its lifetime. Each must own a distinct package or supply justified independent verification.
 
@@ -596,8 +616,11 @@ role's effort only when the specific subtask and supported runtime justify it.
 Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
 
-When a Terra- or Luna-root branch uses `senior_executor_standard`, use the Worker
-capsule structure and state `Research Slot: withheld`. For Sol-root Delegated work with `astra_executor_high`, use the same Worker capsule structure. State that Sol owns acceptance. Explicitly prohibit child delegation.
+For normal `sol_implementer_high` delegation, use the Worker capsule and state `Research Slot: withheld`.
+For normal code packages, include the Claude completion review requirement and the remaining two-call budget.
+Use Astra delta capsules only when a named experiment explicitly permits them.
+State that the effective root owns integration and acceptance. Explicitly prohibit child delegation.
+Named experiments that use `senior_executor_standard` retain their Worker capsule and `Research Slot: withheld` requirements.
 
 ### Explorer capsule
 
@@ -659,7 +682,7 @@ the full root history.
   known inputs.
 - In profiles where multiple agents are permitted, dispatch independent agents needed
   for the same decision in one batch. The default route batches root reads but
-  follows its single-child model-aware branch.
+  follows its one-active-child model-aware branch.
 - Keep dependent work and overlapping mutations sequential.
 - Wait for the relevant batch, then synthesize its results once.
 - Open another batch only when new evidence materially changes the next task or
@@ -705,8 +728,7 @@ give permission for replacement workers or testers.
 ## Senior Executor Escalation Gate
 
 This gate applies to the optional `senior_executor` role in profiles that expose
-it. It does not apply to a runtime-overridden Terra- or Luna-root branch's primary
-`senior_executor_standard`. For the optional role, use at most one senior executor at a time. At least one condition below must hold:
+it. It does not apply to normal `sol_implementer_high` delegation or a named experiment's primary `senior_executor_standard`. For the optional role, use at most one senior executor at a time. At least one condition below must hold:
 
 - one focused Terra worker attempt produced concrete evidence that the bounded
   package exceeds Terra's reasoning capability.
@@ -759,6 +781,9 @@ The remaining tester guidance applies only to explicit profiles where it is perm
 
 ## Completion
 
+For normal code changes, record the Claude completion review outcome and artifacts before root acceptance.
+If unavailable, disclose `review_unavailable` and `failure_stage`. Never substitute that disclosure for deterministic checks.
+
 Before declaring a Delegated task complete, the root must:
 
 1. Make sure that package reports cover the requested scope.
@@ -773,16 +798,16 @@ Perform an additional broad review or repeat completed checks only with new evid
 
 ## Shared skills and explicit Claude requests
 
-Automatic routes use native Codex models only.
-Do not select Claude because of task size, Codex quota, or a native failure.
-Do not run companion `doctor`, `preflight`, or `run` for an ordinary task.
-Use `claude-collab` only when the user explicitly requests Claude or invokes `$claude-collab`.
+The normal `PROFILE: TERRA_SOL_CLAUDE_REVIEW` policy authorizes only its specific completion review through `claude-collab`.
+Read the Claude completion review section for its trigger, procedure, concurrency exception, and failure handling.
+Other companion calls require an explicit Claude request or `$claude-collab` invocation.
+Task size, Codex quota, and a native failure do not independently authorize Claude.
 The skill must keep `allow_implicit_invocation: false`.
 
 For an explicit Claude request, follow `~/.codex/skills/claude-collab/SKILL.md`.
 Report that manual external route as `<effective-root>-claude`, separately from root model, reasoning, and observable tier.
 It is not a default native-route benchmark.
-Never run the companion and a native child concurrently on the same task.
+Except for the synchronous Sol completion review, never run the companion and a native child concurrently on the same task.
 Never invoke the bridge recursively from a companion request.
 Plan Mode remains read-only.
 Codex owns scope, integration, patch application, tests, and final acceptance.
@@ -795,11 +820,11 @@ Codex uses `$skill-name`, while ordinary Claude sessions use `/skill-name`.
 Explicit companion requests bundle selected skill contents and required references.
 Skill instructions do not expand scope or grant extra tools.
 
-Explicit companion requests have a subscription-only exception to the generic API-key rule.
+All authorized companion requests have a subscription-only exception to the generic API-key rule.
 Use the existing `claude.ai` login.
 Never load `~/.env`, read credential contents, or use an API-key fallback.
 Do not modify authentication or billing or enable Extra Usage.
-Sanitized child authentication must pass a check before each explicit request.
+Sanitized child authentication must pass a check before each request.
 OAuth selection cannot disable account overages already enabled by the user.
 Codex alone reviews, applies, tests, and accepts returned patches.
 
@@ -816,3 +841,11 @@ Before creating or amending any Git commit, follow `~/.codex/skills/slopo-review
 Complete the review and resolve blocking findings before committing.
 This requirement includes documentation-only commits.
 It does not authorize commits or change Plan Mode, Git hooks, or manual workflows.
+
+## RTK command output
+
+@/Users/egavrin/.codex/RTK.md
+
+Use raw output for exact machine data, source evidence, searches, full diffs, mutating Git commands, and bridge packets.
+Use the configured hook exclusions or `RTK_DISABLED=1` for these commands.
+Do not prefix every command with RTK.
