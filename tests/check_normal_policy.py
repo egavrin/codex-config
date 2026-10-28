@@ -21,9 +21,23 @@ def section(text, heading):
     return text.split('## ' + heading + '\n', 1)[1].split('\n## ', 1)[0]
 
 
+def check_claude_calls(text):
+    assert 'No fixed request or retry count applies.' in text
+    assert 'including review after fixes' in text
+    for cap in ('two calls total per package', 'two-call budget',
+                'one request per package', 'one initial request plus at most one',
+                'at most one concrete retry', 'one focused repair request',
+                'retry allowance above', 'same remaining allowance',
+                'Do not request another review merely because',
+                'No automatic second review after confirmed fixes',
+                'no automatic second review after fixes'):
+        assert cap not in text, cap
+
+
 def check_tree(base):
     config = read_config(base / 'config.toml')
     policy = (base / 'AGENTS.md').read_text()
+    check_claude_calls(policy)
     # Persisted UI overrides are user choices. Baseline checks preserve their exact values.
     assert all(isinstance(config.get(key), str) and config[key] for key in ('model', 'model_reasoning_effort', 'service_tier'))
     assert MARKER in policy and MARKER in config['developer_instructions']
@@ -54,15 +68,17 @@ def check_tree(base):
         assert 'failure_stage' in text
         assert 'preflight' in text and 'run --mode review' in text
         assert text.index('preflight') < text.index('run --mode review')
-        assert 'two calls total per package' in text
+        check_claude_calls(text)
         assert 'No automatic Astra' in text
     gate = section(policy, 'Claude completion review')
     for phrase in ('nine-field packet', 'Opus High', 'empty `diff`',
                    'Sol pauses edits', 'reject unsupported or out-of-scope findings',
                    'authentication, quota, CLI, or inactivity', 'root owns final acceptance',
-                   'Do not request another review merely because Sol fixed review findings.',
+                   'including review after fixes',
                    'read-only technical reviews', 'Named experiments'):
         assert phrase in gate, phrase
+    check_claude_calls((base / 'skills/claude-collab/SKILL.md').read_text())
+    check_claude_calls((base / 'skills/claude-collab/references/bridge.md').read_text())
     return config, policy
 
 
@@ -98,7 +114,7 @@ def check_preservation(baseline, live):
     skill = (new_skill / 'SKILL.md').read_text()
     assert 'PROFILE: TERRA_SOL_CLAUDE_REVIEW' in skill
     assert 'allow_implicit_invocation: false' in (new_skill / 'agents/openai.yaml').read_text()
-    assert 'two calls total per package' in skill
+    check_claude_calls(skill)
     assert section((baseline / 'README.md').read_text(), 'Restore') == section((ROOT / 'README.md').read_text(), 'Restore')
 
 
@@ -110,7 +126,8 @@ def check_awareness(live):
     assert codex.removeprefix(marker + '\n\n') == claude
     for text in (codex, claude):
         for phrase in ('Filtered summaries can omit details.', 'complete acceptance evidence',
-                       'RTK_DISABLED=1', 'material diagnostic details', 'exit codes',
+                       'Configured exclusions keep selected commands raw.',
+                       'material diagnostic details', 'exit codes',
                        '10 MiB', '200 entries', '30 days', 'subscription charges',
                        'Do not prefix every command', 'Local adaptation', 'OSS 1.1.0'):
             assert phrase in text, phrase
@@ -132,6 +149,7 @@ def main():
     parser.add_argument('--baseline', type=Path)
     args = parser.parse_args()
     check_awareness(args.live)
+    check_claude_calls((ROOT / 'README.md').read_text())
     _, snapshot_policy = check_tree(ROOT / 'codex')
     if args.live:
         _, live_policy = check_tree(args.live)

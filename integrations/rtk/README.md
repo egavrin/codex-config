@@ -10,7 +10,7 @@ The configuration is `~/Library/Application Support/rtk/config.toml` on macOS.
 It disables telemetry, selects high awareness, and uses the local exclusion list in `config.toml`.
 The awareness files use a local adaptation that distinguishes filtered summaries from complete evidence.
 Source reads, searches, full diffs, structured output, mutating Git commands, and bridge commands remain raw.
-Use `RTK_DISABLED=1` or `rtk bypass` whenever exact output is required outside the listed exclusions.
+For other commands that require exact output, follow the raw-output guidance in `codex/RTK.md`.
 Do not treat filtered output as exact machine data.
 Recovery uses the upstream SQLite recall store. Recovery availability depends on the command and output size.
 

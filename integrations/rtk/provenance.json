@@ -14,9 +14,9 @@
     "source_sha256": "c749ce712ba8a1aefc08514672625842772f378110ce52b74d2c37e254637a72",
     "purpose": "Local selective-output policy and controlled-English instructions",
     "codex_snapshot_path": "codex/RTK.md",
-    "codex_sha256": "845d5f86f6666073e11fdb4a7c27bccfd84c14bc09e1d810175b38a268e812a7",
+    "codex_sha256": "6a97eb270976b43783852a9eff74949bdcfbd66043b02e219675735ea2c493f9",
     "claude_snapshot_path": "claude/RTK.md",
-    "claude_sha256": "01b0b360df9c8694240e119a5f9ac5d62e2fa9a4258c78e5762518a42e7f99f8",
+    "claude_sha256": "bb27d3fa21201abc16c00a5d0a6ace32d71ba63b1c3ab47700398cc1b8a33349",
     "personal_claude_snapshot_path": "claude/CLAUDE.md",
     "personal_claude_sha256": "ff0f4763b889d59a58faf4b60885e8d94d6fe1fa7e6b481d3e485364cc8c8c33"
   }

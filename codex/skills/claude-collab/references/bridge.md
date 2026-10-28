@@ -4,7 +4,10 @@ This helper supports explicit Claude requests and the specific completion review
 For that normal gate, read the parent skill and the Claude completion review section in `~/.codex/AGENTS.md`.
 The exception authorizes synchronous review-only Opus High after Sol code and self-check. It does not authorize automatic Claude implementation.
 Sol pauses edits during the request. No other native owner works concurrently. Do not invoke the bridge recursively.
-Use one primary review plus at most one concrete retry or delta, two calls total per package.
+No fixed request or retry count applies.
+Use further calls for a concrete task need, including review after fixes.
+Use current source and relevant evidence for each follow-up.
+Do not repeat a request while an authentication, quota, CLI, or inactivity failure still blocks it.
 If the request cannot run, preserve evidence and disclose `review_unavailable` and `failure_stage` while authorized work and deterministic checks continue.
 Other automatic routing does not invoke this helper. Named experiments retain their selected procedures.
 The local `sync-skills` action remains available without a model request.

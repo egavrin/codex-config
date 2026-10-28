@@ -153,8 +153,9 @@ After code and self-check, Sol prepares the existing nine-field packet and runs 
 Then, Sol requests a synchronous review-only Claude Opus High result through `claude-collab` and pauses edits.
 The result must have an empty diff. Sol checks findings, fixes confirmed relevant issues, rejects unsupported findings, and reruns affected checks.
 The root owns final acceptance.
-One primary review and at most one concrete retry or delta are permitted, with two calls total per package.
-There is no automatic second review after fixes or reciprocal review loop.
+No fixed request or retry count applies.
+Use further calls for a concrete task need, including review after fixes.
+Use current source and relevant evidence for each follow-up. Avoid reciprocal review loops.
 If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve the evidence.
 Continue authorized implementation and deterministic checks with explicit `review_unavailable` and `failure_stage` disclosure.
 An unavailable review does not count as a pass.
@@ -659,9 +660,11 @@ The following requirements apply to all authorized Claude requests.
 Claude Collab requires Python 3.9+, Git, a supported installed Claude Code CLI,
 and an existing `claude.ai` subscription login. It explicitly requests Opus High,
 fresh restricted requests without tools, explicit skill/source packets, a
-15-minute inactivity watchdog, optional total budgets, and
-one initial request plus at most one focused follow-up per package. Codex checks
-returned patches before applying and testing them. During the synchronous completion review, Sol pauses edits and waits.
+15-minute inactivity watchdog, and optional total budgets.
+No fixed request or retry count applies.
+Use further calls for a concrete task need, including review after fixes.
+Do not repeat a request while an authentication, quota, CLI, or inactivity failure still blocks it.
+Codex checks returned patches before applying and testing them. During the synchronous completion review, Sol pauses edits and waits.
 No other native owner works concurrently. Other companion requests cannot overlap a native child.
 Opt-in experimental routes keep their own rules. Live sanitized progress snapshots and summaries appear every
 30 seconds; heartbeats never renew model inactivity. Healthy streams have no

@@ -7,7 +7,7 @@ Configured exclusions keep selected commands raw.
 Host approval, sandbox, and native hook trust requirements remain unchanged.
 
 Use raw output for exact source text, searches, full diffs, machine data, bridge inputs, and complete acceptance evidence.
-Use the configured exclusions or `RTK_DISABLED=1 <cmd>` for these commands.
+When a configured exclusion covers the command, run it without an RTK prefix.
 Check exit codes and material diagnostics, including Git command results.
 Do not infer success from a short summary.
 

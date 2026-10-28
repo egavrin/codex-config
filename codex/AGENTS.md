@@ -91,7 +91,8 @@ The owner chooses the implementation and performs one lightweight focused check.
 Do not duplicate its package or prescribe its detailed implementation.
 After code and self-check, follow the Claude completion review procedure.
 Run bridge `preflight` before `run --mode review` with the current packet.
-Use one primary review and at most one concrete retry or delta, two calls total per package.
+No fixed request or retry count applies.
+Use further calls for a concrete task need, including review after fixes.
 If review cannot run, report `review_unavailable` and `failure_stage`, preserve evidence, and continue authorized work and deterministic checks.
 The effective root owns integration and final acceptance.
 Inspect the diff and affected contracts. Run proportionate deterministic checks and material edge cases.
@@ -157,9 +158,9 @@ It does not authorize Claude implementation, a general automatic companion route
 
 Sol pauses edits while the synchronous external reviewer works.
 No other native owner works concurrently. Do not create native children or invoke the bridge recursively.
-Use one primary review plus at most one concrete retry or delta, two calls total per package.
-A retry requires an invalid response, missing material, or a later root repair with concrete evidence.
-Do not request another review merely because Sol fixed review findings.
+No fixed request or retry count applies.
+Use further calls for a concrete task need, including review after fixes.
+Use current source and relevant evidence for each follow-up.
 Do not create reciprocal review loops.
 
 If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve the evidence.
@@ -617,7 +618,7 @@ Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
 
 For normal `sol_implementer_high` delegation, use the Worker capsule and state `Research Slot: withheld`.
-For normal code packages, include the Claude completion review requirement and the remaining two-call budget.
+For normal code packages, include the Claude completion review requirement and permission for relevant follow-up calls.
 Use Astra delta capsules only when a named experiment explicitly permits them.
 State that the effective root owns integration and acceptance. Explicitly prohibit child delegation.
 Named experiments that use `senior_executor_standard` retain their Worker capsule and `Research Slot: withheld` requirements.
@@ -847,5 +848,5 @@ It does not authorize commits or change Plan Mode, Git hooks, or manual workflow
 @/Users/egavrin/.codex/RTK.md
 
 Use raw output for exact machine data, source evidence, searches, full diffs, mutating Git commands, and bridge packets.
-Use the configured hook exclusions or `RTK_DISABLED=1` for these commands.
+When a configured exclusion covers the command, run it without an RTK prefix.
 Do not prefix every command with RTK.

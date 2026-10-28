@@ -27,19 +27,16 @@ The completion reviewer may run synchronously while Sol pauses edits. No other n
 High effort is a quality choice, not a claim of lower latency.
 Do not poll quota or invent subscription usage figures.
 
-Use one request per package. After an invalid response, an invalid patch, or a
-report of missing context, you may send one focused repair request. A later root repair can use that same remaining allowance.
-Use two calls total per package, including its repair. Include the
-concrete evidence, such as `failure_stage`, `failure_reason`, and the unmet
-criterion. Also include the current source. If the failure is a stale baseline,
+No fixed request or retry count applies.
+Use further calls for a concrete task need, including review after fixes.
+For each follow-up, include current source and relevant evidence, such as `failure_stage`, `failure_reason`, or an unmet criterion. If the failure is a stale baseline,
 examine the intervening edits before you prepare that repair. Do not force a patch
 or a rebase. Preserve completed work and send only the changed facts that the
 repair needs.
 
-If authentication, quota, or inactivity stops the request, stop. If the repair is
-not successful, also stop. Then, follow the failure policy above. The helper never
-retries automatically. Avoid reciprocal review loops and repeated calls without a
-concrete unmet criterion.
+If authentication, quota, CLI, or inactivity stops the request, stop it and report the actual failure.
+Do not repeat a request while its blocking condition remains. The helper never retries automatically.
+Avoid reciprocal review loops and calls without a concrete task need.
 
 Except for the named completion review, never run a Claude companion and a native child concurrently on the same task.
 For that exception, Sol pauses edits and waits synchronously. No native nesting or recursive bridge call is permitted.
@@ -53,12 +50,10 @@ Use review mode with Opus High and require an empty `diff`.
 Check findings against the code and task evidence.
 Fix confirmed relevant findings within scope. Reject unsupported or out-of-scope findings with reasons.
 Escalate material scope or contract decisions to the root. Rerun affected deterministic checks.
-Do not request another review merely because Sol fixed review findings.
 The root owns final acceptance.
 If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve evidence.
 Continue authorized implementation and checks with explicit `review_unavailable` and `failure_stage` disclosure.
 Never claim that an unavailable review passed. Correct local preflight errors before a model request.
-The retry allowance above applies across the whole package. It does not reset after root repair.
 
 ## Prepare and invoke
 

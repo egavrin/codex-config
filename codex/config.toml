@@ -34,8 +34,9 @@ Read its SKILL.md and references/bridge.md. Build the current nine-field packet,
 Run preflight --mode review before run --mode review with Opus High. Correct local validation errors first.
 Require empty diff. Sol pauses edits during this synchronous external review. No other native owner works concurrently.
 This narrow exception permits the waiting Sol child and external reviewer. Do not invoke the bridge recursively.
-Use one primary review and at most one concrete retry or delta, two calls total per package.
-A retry requires invalid response, missing material, or later root repair evidence. No automatic second review after confirmed fixes.
+No fixed request or retry count applies.
+Use further calls for a concrete task need, including review after fixes.
+Use current source and relevant evidence for each follow-up. Avoid reciprocal review loops.
 Check findings, fix confirmed relevant issues, reject unsupported or out-of-scope findings with reasons, and escalate material contract choices to the root.
 Run affected checks. The root owns final acceptance.
 If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve evidence.
