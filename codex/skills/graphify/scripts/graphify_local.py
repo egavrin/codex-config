@@ -68,10 +68,13 @@ def fingerprint(root):
     for directory, names, files in os.walk(root, followlinks=False):
         current = Path(directory)
         if current != root and '.git' in names + files:
-            raise Fallback('Nested Git projects found. Select one project root.')
+            raise Fallback(f'Nested Git project found at {str(current.relative_to(root))!r}. Select that project root.')
         names[:] = sorted(n for n in names if n not in SKIP and n.lower() not in PRIVATE_DIRS
                           and not (n == 'worktrees' and current.name == '.claude')
                           and not n.startswith('.graphify-local-') and not (current / n).is_symlink())
+        # The pinned scanner omits dist content, but nested project boundaries still need detection.
+        if 'dist' in current.relative_to(root).parts:
+            continue
         for name in sorted(files):
             path = current / name
             if SENSITIVE.search(name) or path.is_symlink():
@@ -241,7 +244,7 @@ def fresh(root, digest):
         saved = read_json(root / OUT / STATE, 64 * 1024)
     except (OSError, ValueError) as exc:
         raise Fallback('Graph freshness is unknown. Run ensure when writes are permitted.') from exc
-    if saved != {'root': str(root), 'fingerprint': digest, 'format': 2}:
+    if saved != {'root': str(root), 'fingerprint': digest, 'format': 3}:
         raise Fallback('Graph is stale. Run ensure when writes are permitted.')
 
 
@@ -279,7 +282,7 @@ def ensure(root, is_git, digest):
         after = fingerprint(root)
         if before != after:
             raise Fallback('Sources changed during extraction. Previous graph is preserved.')
-        (staged / STATE).write_text(json.dumps({'root': str(root), 'fingerprint': after, 'format': 2}) + '\n')
+        (staged / STATE).write_text(json.dumps({'root': str(root), 'fingerprint': after, 'format': 3}) + '\n')
         if output.exists():
             output.rename(backup)
         try:

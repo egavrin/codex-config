@@ -81,15 +81,66 @@ def main():
             if readonly:
                 command.append('--read-only')
             command += list(operands)
+            before = snapshot(base) if readonly else None
             result = subprocess.run(command, env=environ or env, text=True, capture_output=True)
             records.append({'command': command, 'expected_exit': code, 'observed_exit': result.returncode,
                             'stdout': result.stdout, 'stderr': result.stderr})
+            if readonly:
+                records[-1]['read_only_unchanged'] = snapshot(base) == before
+                assert records[-1]['read_only_unchanged'], records[-1]
+            (evidence / 'runs.json').write_text(json.dumps(records, indent=2) + '\n')
             assert result.returncode == code, records[-1]
             return result
 
         def snapshot(path):
-            return {str(p.relative_to(path)): (p.stat().st_mtime_ns, p.stat().st_size)
-                    for p in path.rglob('*') if p.is_file()}
+            return {str(p.relative_to(path)): (p.is_dir(), p.stat().st_mtime_ns, p.stat().st_size)
+                    for p in path.rglob('*')}
+
+        def freshness_policy(root, environ=None):
+            graph = root / 'graphify-out/graph.json'
+            state = root / 'graphify-out/.local-state.json'
+            initial = snapshot(root / 'graphify-out')
+            for relative in ('dist/bundle.py', 'web/dist/assets/bundle.js'):
+                artifact = root / relative
+                artifact.parent.mkdir(parents=True)
+                for content in ('def excluded_dist(): pass\n', 'changed build output\n', None):
+                    if content is None:
+                        artifact.unlink()
+                    else:
+                        artifact.write_text(content)
+                    run(root, readonly=True, environ=environ)
+                    run(root, environ=environ)
+                    assert snapshot(root / 'graphify-out') == initial
+            # Keep existing skip rules inside dist, but inspect other project boundaries.
+            ignored = root / 'dist/node_modules/dependency'
+            subprocess.run(['git', 'init', '-q', str(ignored)], check=True)
+            run(root, readonly=True, environ=environ)
+            for marker in ('directory', 'file'):
+                nested = root / 'dist/packages/other'
+                nested.mkdir(parents=True, exist_ok=True)
+                if marker == 'directory':
+                    subprocess.run(['git', 'init', '-q', str(nested)], check=True)
+                else:
+                    (nested / '.git').write_text('gitdir: /synthetic/private-marker-target\n')
+                for readonly in (True, False):
+                    result = run(root, readonly=readonly, code=2, environ=environ)
+                    assert 'dist/packages/other' in result.stderr
+                    assert 'private-marker-target' not in result.stderr
+                    assert snapshot(root / 'graphify-out') == initial
+                shutil.rmtree(nested)
+            # Each earlier policy must be rejected without writes and rebuilt once.
+            for version in (1, 2):
+                previous = json.loads(state.read_text())
+                previous['format'] = version
+                state.write_text(json.dumps(previous))
+                run(root, readonly=True, code=2, environ=environ)
+                assert json.loads(state.read_text())['format'] == version
+                run(root, environ=environ)
+                assert json.loads(state.read_text())['format'] == 3
+                current = snapshot(root / 'graphify-out')
+                run(root, environ=environ)
+                assert snapshot(root / 'graphify-out') == current
+            assert graph.is_file()
 
         a, b = project('a'), project('b')
         run(a, readonly=True, code=2)
@@ -110,18 +161,12 @@ def main():
         run(a, readonly=True)
         run(a)
         assert graph.stat().st_mtime_ns == first
+        freshness_policy(a)
         # Other nested projects still require a separate scope.
         other = a / 'vendor/other'
         subprocess.run(['git', 'init', '-q', str(other)], check=True)
-        run(a, code=2)
+        assert 'vendor/other' in run(a, code=2).stderr
         shutil.rmtree(other.parent)
-        state = a / 'graphify-out/.local-state.json'
-        previous = json.loads(state.read_text())
-        previous['format'] = 1
-        state.write_text(json.dumps(previous))
-        run(a, readonly=True, code=2)
-        run(a)
-        assert json.loads(state.read_text())['format'] == 2
         before = snapshot(base)
         run(a, 'query', ['alpha'], readonly=True)
         run(a, 'path', ['alpha', 'beta'], readonly=True)
@@ -168,6 +213,7 @@ runpy.run_path(launcher, run_name='__main__')
         run(a, readonly=True, code=2)
         run(a)
         (a / 'new.py').unlink()
+        run(a, readonly=True, code=2)
         run(a)
         assert 'new.py' not in graph.read_text()
         run(b)
@@ -211,6 +257,7 @@ runpy.run_path(launcher, run_name='__main__')
             real_graph = (real / 'graphify-out/graph.json').read_text()
             assert 'forbidden_ignored' not in real_graph and 'synthetic' not in real_graph
             assert 'excluded_worktree_function' not in real_graph
+            freshness_policy(real, real_env)
             graph_time = (real / 'graphify-out/graph.json').stat().st_mtime_ns
             (child / 'nested.py').write_text('def changed_worktree_function(): return 10\n')
             run(real, readonly=True, environ=real_env)
@@ -224,12 +271,15 @@ runpy.run_path(launcher, run_name='__main__')
             assert 'alpha.py' in run(real, 'explain', ['alpha_alpha'], readonly=True, environ=real_env).stdout
             run(real, environ=real_env)
             (real / 'added.py').write_text('def added_function():\n    return 3\n')
+            run(real, readonly=True, code=2, environ=real_env)
             run(real, environ=real_env)
             assert 'added_function' in (real / 'graphify-out/graph.json').read_text()
             (real / 'added.py').write_text('def renamed_function():\n    return 4\n')
+            run(real, readonly=True, code=2, environ=real_env)
             run(real, environ=real_env)
             assert 'renamed_function' in (real / 'graphify-out/graph.json').read_text()
             (real / 'added.py').unlink()
+            run(real, readonly=True, code=2, environ=real_env)
             run(real, environ=real_env)
             assert 'renamed_function' not in (real / 'graphify-out/graph.json').read_text()
         assert (SKILL / 'SKILL.md').read_bytes() == before_skill

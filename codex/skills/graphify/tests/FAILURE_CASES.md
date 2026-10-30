@@ -17,6 +17,10 @@ The public launcher needs these workflow checks before acceptance:
 - Claude worktrees block the parent graph or enter its extraction and freshness checks.
 - A worktree exclusion hides an unrelated nested repository outside `.claude/worktrees/`.
 - A graph from an earlier exclusion policy is reused without a rebuild.
+- Added, changed, or deleted files below a `dist` directory trigger unnecessary extraction.
+- A `dist` exclusion hides a nested Git directory or linked-worktree file.
+- A nested-project fallback omits the project boundary or exposes Git marker contents.
+- State format 2 remains fresh after the fingerprint policy changes.
 - Local Git excludes replace user entries or change tracked ignore files.
 - An interrupted publication leaves a recoverable previous graph.
 

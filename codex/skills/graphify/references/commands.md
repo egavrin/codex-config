@@ -35,7 +35,7 @@ A non-Git target also requires `--scoped`.
 The caller must identify a single project from the task before using that flag.
 The launcher excludes `.claude/worktrees/` directories from extraction and freshness checks.
 Those directories contain separate working copies. Index a required worktree as its own project root.
-Other nested Git projects still cause a fallback.
+Other nested Git projects still cause a fallback that identifies their path relative to the selected root.
 The launcher rejects unsafe roots, output symbolic links, and tracked graph output.
 Graph and state reads reject symbolic links before opening them and enforce regular-file size limits.
 A non-Git parent without repository markers cannot be distinguished reliably from one large project.
@@ -49,10 +49,12 @@ A fallback requires ordinary source search, with the reported graph limitation p
 The graph stays in `<project>/graphify-out/`.
 The launcher records the exact root and a source-metadata fingerprint in `graphify-out/.local-state.json`.
 Metadata checks include file names, sizes, modification times, change times, and relevant external Git ignore files.
-State format 2 requires a rebuild of graphs from the earlier exclusion policy.
+State format 3 requires one rebuild of graphs from earlier fingerprint policies, including format 2.
 They do not read source content or credential files.
 Changes to ignored files can cause conservative refreshes.
 Symlink targets and common dependency directories do not enter the fingerprint.
+Files below any directory named `dist` within the project do not enter the fingerprint, consistent with the pinned scanner.
+The launcher still traverses those directories to detect nested Git projects, with the other skip rules unchanged.
 
 Builds copy the previous output to a temporary directory beside the project graph.
 The CLI updates that copy, using its automatic incremental behavior.
