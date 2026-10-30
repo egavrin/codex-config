@@ -2,7 +2,7 @@
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
 configuration snapshot. Routing, memory models, RTK, and Claude instructions were updated on
-October 28, 2026. Unrelated machine settings retain their existing snapshot.
+October 30, 2026. Unrelated machine settings retain their existing snapshot.
 
 ## Shared writing profile
 
@@ -83,7 +83,8 @@ The [source lock](docs/slopo-source-lock.json) records the pinned revision, depe
   multi-agent settings.
 - `codex/AGENTS.md` — the global guide for normal model-aware routing, Context Packets, root acceptance, and named opt-in experiments.
 - `codex/agents/` — the normal `sol_implementer_high` role and preserved experimental roles.
-  Base configuration does not register Astra roles. Dedicated roles remain available for each named experiment.
+  Base configuration registers the read-only `astra_planner_high` and `astra_reviewer_high` roles for planned code.
+  Dedicated experimental roles remain available for each named experiment.
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
 - `codex/astra-terra-standard.config.toml` — a historical comparison route with
@@ -112,6 +113,7 @@ The [source lock](docs/slopo-source-lock.json) records the pinned revision, depe
 The normal default is `gpt-6.1-terra` with `high` reasoning and Standard service tier (`default`).
 Desktop and runtime model, reasoning, and tier overrides remain authoritative.
 All normal code changes go to Sol High with a focused self-check.
+Planned code also uses Astra High planning and read-only review.
 The root integrates changes and owns acceptance.
 The configured ceiling is 32 open child threads, excluding the root, with a depth setting of one.
 The ordinary policy permits one active child at a time. Completed owners can remain idle.
@@ -141,38 +143,54 @@ do not make `spawn_agent` available in a session where that mechanism is absent.
 
 ## Orchestration model
 
-The normal profile is `PROFILE: TERRA_SOL`.
+The normal profile is `PROFILE: TERRA_ASTRA_SOL_REVIEW`.
 Terra coordinates app work, visual artifacts, bounded prose, questions, scope, and acceptance.
-All normal code changes, including tiny edits, go to one fresh `sol_implementer_high` with GPT-6.1 Sol High on Standard tier.
+All normal code changes, including tiny edits, use `sol_implementer_high` with GPT-6.1 Sol High on Standard tier.
 A Sol root implements directly and does not create another Sol agent.
-Other effective root overrides remain authoritative and assign normal code packages to Sol.
-A `bpy` helper for an app artifact remains app work. Software and addon development count as code.
+Other effective root overrides remain authoritative.
+A `bpy` helper for an app artifact remains app work. Software and add-on development count as code.
 Substantive read-only technical work goes to Sol.
+Small obvious edits use Sol without the planner or reviewer.
 
-After code and a focused self-check, Sol reports the completed package.
-The root inspects the diff and affected contracts, then runs proportionate deterministic acceptance checks.
+Planned code uses this sequence:
+
+1. The root collects bounded evidence and forms the Context Packet.
+2. `astra_planner_high` returns a read-only plan with bounded packages and verification criteria.
+3. Sol High implements the relevant plan slice and runs a focused self-check.
+4. `astra_reviewer_high` reviews the plan, completed diff, affected contracts, and check evidence without edits.
+5. The root checks the findings and runs proportionate deterministic acceptance checks.
+
+Both Astra roles use `gpt-6-astra`, `high`, and `default` with fresh contexts.
+Use this route for a user-requested code plan, a material design decision, a cross-component change, or ordered implementation packages.
+The planned-route triggers take precedence over the small-edit shortcut.
+In Plan Mode, stop after the plan without edits or implicit implementation.
+Outside Plan Mode, continue authorized implementation without an extra approval step.
+Only the root dispatches agents. Sol sends planning or review requests to the root.
+The root returns at most one ordinary repair to the same Sol owner, then requests a focused recheck from the same reviewer.
+Astra planning and review do not authorize Astra implementation.
+Report a complete planned route as `<effective-root>-astra-sol-review`.
+
+One child works at a time. Completed owners remain idle through review and acceptance.
+Preflight capacity for the planner, each required Sol owner, and the reviewer within the same 32-child cap.
+In Plan Mode, reserve only the planner slot.
+If the plan requires more slots than available, stop before implementation and report the missing capacity.
+If native close or release is unavailable, report that limit and retain completed owners idle within the cap.
+Completion, interruption, and archiving do not prove that a slot was released.
+Do not evade capacity through another session, visible task, fork, or nested CLI.
+Report each unavailable stage and the actual completed route.
+For planned work, continue only with a user-authorized fallback and disclose every omitted stage.
+Do not claim the full planned route completed when a required stage was unavailable.
+Fresh sessions must load the new roles before the root can dispatch them.
+Saved configuration and static checks alone do not prove runtime dispatch or sandbox enforcement.
+
 Do not request Claude automatically.
 Companion calls require an explicit Claude request or `$claude-collab` invocation.
 The skill keeps `allow_implicit_invocation: false`.
 Subscription-only authentication and existing bridge isolation remain required for manual requests.
 The bridge uses no API fallback and does not read `~/.env` or change authentication, billing, or Extra Usage.
-No automatic Astra fallback, native verifier, second native opinion, or nested delegation remains in the normal route.
-All named experiments and Astra role files remain preserved.
-
-The root returns at most one ordinary repair to the same owner.
-One native owner works at a time. Companion requests cannot overlap a native child.
-If native close or release is unavailable, report that limit and retain the completed owner idle within the 32-child cap.
-Completion, interruption, and archiving do not prove that a slot was released.
-A new session still requires the appropriate user request.
-
-Run the deterministic contract check with Python 3.11 or later:
-
-```sh
-python3.12 tests/check_normal_policy.py
-```
-
-The check validates saved policy and configuration. It does not call models or establish runtime adherence.
-Use a fresh session to load the revised native roles and routing instructions.
+Companion requests cannot overlap a native child.
+No automatic Astra implementation fallback, separate tester, additional reviewer, or nested delegation is permitted.
+All named experiments and experimental Astra role files remain preserved.
 
 ## Routing benchmark
 

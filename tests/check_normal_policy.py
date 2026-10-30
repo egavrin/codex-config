@@ -10,7 +10,29 @@ import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MARKER = 'PROFILE: TERRA_SOL'
+MARKER = 'PROFILE: TERRA_ASTRA_SOL_REVIEW'
+ASTRA_ROLES = ('astra_planner_high', 'astra_reviewer_high')
+
+# Failure cases: missing stages, planning edits, implicit execution/approval,
+# nested dispatch, wrong roles, lost settings, capacity evasion, and false completion.
+SCENARIOS = {
+    'planned coding': ('root evidence -> Astra High plan -> Sol High implementation -> Astra High read-only review -> root acceptance',),
+    'planning trigger': ('user requests a plan for code', 'material design decision', 'cross-component change', 'ordered implementation packages'),
+    'small edit': ('Small obvious code edits use Sol without the planner or reviewer.', 'The planned-route triggers take precedence over the small-edit shortcut.'),
+    'artifact': ('One-off scripts and commands for a specific artifact', 'For mixed tasks, assign only the software package to Sol.'),
+    'plan mode': ('In Plan Mode, stop after the plan.', 'Do not edit files or start implementation implicitly.', 'In Plan Mode, reserve only the planner slot.'),
+    'normal execution': ('Outside Plan Mode, continue authorized implementation without an extra approval step.',),
+    'root dispatch': ('Sol sends planning or review requests to the root.', 'Only the root dispatches the planner and reviewer.'),
+    'repair': ('same Sol owner', 'same reviewer', 'at most one ordinary repair'),
+    'capacity': ('Preflight retained capacity before the planned route.', 'Reserve slots for the planner, each required Sol owner, and the reviewer.', 'Do not evade the cap'),
+    'unavailable stage': ('Report each unavailable stage', 'user-authorized fallback', 'Do not claim the full planned route completed'),
+}
+
+
+def check_scenarios(routes):
+    for scenario, phrases in SCENARIOS.items():
+        for phrase in phrases:
+            assert phrase in routes, (scenario, phrase)
 
 
 def check_no_automatic_claude(text):
@@ -62,7 +84,15 @@ def check_tree(base):
             assert name == role_path.stem == role.get('name', role_path.stem), name
     role = read_config(base / agents['sol_implementer_high']['config_file'])
     assert (role['model'], role['model_reasoning_effort'], role['service_tier']) == ('gpt-6.1-sol', 'high', 'default')
-    assert not any(name.startswith('astra') for name in agents), 'automatic Astra registration'
+    assert {name for name in agents if name.startswith('astra')} == set(ASTRA_ROLES)
+    for name in ASTRA_ROLES:
+        astra = read_config(base / agents[name]['config_file'])
+        assert (astra['model'], astra['model_reasoning_effort'], astra['service_tier']) == ('gpt-6-astra', 'high', 'default')
+        assert astra['sandbox_mode'] == 'read-only'
+        instructions = astra['developer_instructions']
+        for phrase in ('Do not edit files.', 'Do not spawn agents or use nested Codex.',
+                       'The root owns final acceptance.', 'Do not request Claude automatically.'):
+            assert phrase in instructions, (name, phrase)
     routes = section(policy, 'Routes')
     for phrase in ('All normal code changes, including tiny edits',
                    'Desktop and runtime overrides for model, reasoning, and service tier remain authoritative.',
@@ -75,8 +105,18 @@ def check_tree(base):
         assert 'Do not request Claude automatically.' in text
         assert 'No automatic Astra' in text
     assert 'root owns integration and final acceptance' in routes
-    for route in ('terra-direct', 'terra-sol', 'luna-direct', 'luna-sol', 'sol-direct', '<effective-root>-sol'):
+    check_scenarios(routes)
+    for phrase in ('PROFILE: TERRA_SOL` selects the normal policy', 'No automatic Astra fallback, separate verifier, second native opinion'):
+        assert phrase not in routes
+    assert 'Sol sends planning or review requests to the root.' in role['developer_instructions']
+    assert 'After planned implementation, request root-dispatched Astra High read-only review.' in role['developer_instructions']
+    for route in ('terra-direct', 'terra-sol', 'luna-direct', 'luna-sol', 'sol-direct', '<effective-root>-sol', '<effective-root>-astra-sol-review'):
         assert route in routes and route in config['developer_instructions'], route
+    for phrase in ('astra_planner_high', 'astra_reviewer_high', 'Plan Mode', 'user-authorized fallback', '32 retained'):
+        assert phrase in config['developer_instructions'], phrase
+    assert '| `astra_planner_high` | `gpt-6-astra` | `high` | `default` |' in policy
+    assert '| `astra_reviewer_high` | `gpt-6-astra` | `high` | `default` |' in policy
+    assert 'Do not create a tester or an additional model-review child.' in policy
     manual = section(policy, 'Shared skills and explicit Claude requests')
     assert 'require an explicit Claude request or `$claude-collab` invocation' in manual
     assert 'Never run the companion and a native child concurrently' in manual
@@ -95,6 +135,7 @@ def check_preservation(baseline, live):
         new = read_config(current / 'config.toml')
         def preserved(config):
             result = {k: v for k, v in config.items() if k != 'developer_instructions'}
+            result['agents'] = {k: v for k, v in result['agents'].items() if k not in ASTRA_ROLES}
             return result
         assert preserved(old) == preserved(new), name
         for role_path in (baseline / name / 'agents').glob('*.toml'):
@@ -103,9 +144,16 @@ def check_preservation(baseline, live):
             assert role_path.read_bytes() == (current / 'agents' / role_path.name).read_bytes(), role_path.name
     before = (baseline / 'live/AGENTS.md').read_text()
     after = (live / 'AGENTS.md').read_text()
-    protected = ['Controlled English', 'Ponytail compatibility', 'API Keys and Local Environment', 'Engineering Choices', 'Verification', 'Graphify code discovery', 'Mandatory Slopo commit review']
+    protected = ['Controlled English', 'Ponytail compatibility', 'API Keys and Local Environment', 'Engineering Choices', 'Graphify code discovery', 'Mandatory Slopo commit review', 'Shared skills and explicit Claude requests']
     for heading in protected:
         assert section(before, heading) == section(after, heading), heading
+    assert section(before, 'Verification').replace(
+        'Do not create a tester or another model-review child.',
+        'Use the required Astra High review for planned code. Do not create a tester or an additional model-review child.'
+    ).replace(
+        '- Do not add a separate model-review cycle when existing automated evidence is\n  sufficient.',
+        '- Complete the required Astra High review for planned code.\n- Do not add an additional model-review cycle when existing automated evidence is sufficient.'
+    ) == section(after, 'Verification')
     experiments = ['Jev routing-adviser shadow experiment', 'Terra-Astra plan/build experiment', 'Astra-Luna nested Astra experiment', 'Astra-Sol research profile', 'Astra-Terra Standard comparison profile', 'Terra-Luna-Sol-Astra experiment', 'Luna-Terra-context-Sol-Astra experiment', 'Luna-Astra implementer experiment', 'Luna-Sol-Astra escalation experiment']
     for heading in experiments:
         assert section(before, heading).split('### Context Packet contract')[0] == section(after, heading).split('### Context Packet contract')[0], heading
@@ -161,6 +209,9 @@ def main():
     if args.live:
         _, live_policy = check_tree(args.live)
         assert live_policy == snapshot_policy
+    readme = (ROOT / 'README.md').read_text()
+    for phrase in (MARKER, 'astra_planner_high', 'astra_reviewer_high', 'Plan Mode', 'user-authorized fallback'):
+        assert phrase in readme, phrase
     if args.baseline:
         assert args.live, '--baseline requires --live'
         check_preservation(args.baseline, args.live)

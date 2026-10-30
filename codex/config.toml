@@ -13,7 +13,7 @@ Use English and the shared controlled English profile in ~/.codex/skills/writing
 An explicit output language request takes precedence. Preserve exact source text.
 When Ponytail applies, read ~/.codex/ponytail-policy.md. Preserve scope, verification, and permissions.
 
-PROFILE: TERRA_SOL
+PROFILE: TERRA_ASTRA_SOL_REVIEW
 Follow AGENTS.md for normal routes, Context Packets, and deterministic acceptance.
 Do not request Claude automatically. Companion calls require an explicit Claude request or $claude-collab invocation.
 The local default remains gpt-6.1-terra with high reasoning and Standard service tier (default).
@@ -31,21 +31,41 @@ These scripts and commands alone do not trigger Sol ownership.
 Application code, reusable automation, plugins, add-ons, and software contract changes remain code changes.
 For mixed tasks, assign only the software package to Sol.
 After Sol finishes, the effective root handles the artifact work and final acceptance.
-Terra and Luna delegate substantive technical review, architecture, and debugging to Sol.
-The owner chooses the implementation and performs a focused check. Do not duplicate its work.
-No automatic Astra fallback, separate verifier, native second opinion, or nested delegation.
+Terra and Luna delegate substantive read-only technical review and debugging to Sol.
+Small obvious code edits use Sol without the planner or reviewer.
+
+Use the planned route for a user-requested code plan, a material design decision, a cross-component change, or ordered implementation packages.
+The planned-route triggers take precedence over the small-edit shortcut.
+The sequence is root evidence -> Astra High plan -> Sol High implementation -> Astra High read-only review -> root acceptance.
+Only the root dispatches astra_planner_high and astra_reviewer_high with gpt-6-astra, high, default, fork_turns="none".
+Both Astra roles are read-only. They must not edit files or implement repairs.
+Sol sends planning or review requests to the root and must not spawn agents.
+Give the planner the Context Packet. Give Sol only the relevant plan slice and package evidence.
+Give the reviewer the plan, completed diff, affected contracts, check evidence, and acceptance criteria.
+The root checks actionable findings against source and owns final acceptance.
+In Plan Mode, stop after the plan. Do not edit files or start implementation implicitly.
+Outside Plan Mode, continue authorized implementation without an extra approval step.
+No automatic Astra implementation fallback, separate tester, additional review agent, or nested delegation.
 Named experiments retain their exact routes, effort, roles, and lifecycle rules.
 
 Allow one active child and at most 32 retained native children per ordinary session. Count them across tasks. Depth remains one.
-Each new package may receive a fresh owner after the previous owner finishes.
-Keep the owner idle through root acceptance and at most one ordinary repair with exact evidence.
+Preflight retained capacity before the planned route. Reserve the planner, each required Sol owner, and reviewer slots.
+In Plan Mode, reserve only the planner slot.
+Recheck capacity after the plan. If required slots are unavailable, stop before implementation and report the limit.
+Each stage starts only after the previous active child finishes. Completed owners remain idle.
+Keep the same Sol owner idle through review, acceptance, and at most one ordinary repair with exact evidence.
+After repair, request a focused recheck from the same reviewer. The root runs affected acceptance checks again.
 Use native close/release when available. Otherwise report the limitation and retain completed owners idle within the cap.
 Completion, interruption, and archiving do not prove that a slot was released.
 If capacity is exhausted, report the actual limit and prepare a concise handoff for a fresh session.
 Do not create that session without user authorization or evade the cap through visible tasks, forks, or nested CLI calls.
-Use native collaboration. Report unavailable roles and configuration drift before an authorized single-agent fallback.
+Use native collaboration. Report unavailable roles, stages, and configuration drift honestly.
+For planned work, continue only with a user-authorized fallback. Do not claim the full route completed after an omitted stage.
+For unplanned work, report failed intended delegation before an authorized single-agent fallback.
 A healthy child or exhausted cap does not authorize ownership transfer.
-Report terra-direct, terra-sol, luna-direct, luna-sol, sol-direct, or <effective-root>-sol.
+Report terra-direct, terra-sol, luna-direct, luna-sol, sol-direct, or <effective-root>-sol for unplanned work.
+Report <effective-root>-astra-sol-review only after the complete planned route.
+Report <root>-single-agent-fallback only for failed intended delegation, with omitted stages and the actual replacement route.
 Do not infer savings from effort.
 """
 
@@ -66,6 +86,14 @@ max_concurrent_threads_per_session = 32
 max_depth = 1
 default_subagent_model = "gpt-6.1-sol"
 default_subagent_reasoning_effort = "high"
+
+[agents.astra_planner_high]
+config_file = "agents/astra_planner_high.toml"
+nickname_candidates = ["Astra High Planner"]
+
+[agents.astra_reviewer_high]
+config_file = "agents/astra_reviewer_high.toml"
+nickname_candidates = ["Astra High Reviewer"]
 
 [agents.sol_implementer_high]
 config_file = "agents/sol_implementer_high.toml"

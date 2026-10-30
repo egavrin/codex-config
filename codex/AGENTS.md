@@ -21,7 +21,7 @@ The off mode does not disable existing instructions.
 ## Objective
 
 Use the root model to understand the request, collect bounded evidence, define scope, integrate results, and perform acceptance.
-The assigned technical owner chooses the implementation approach and architecture within its package.
+The assigned technical owner chooses the approach within its package and the applicable planned route.
 Follow the effective-root branch for ordinary work.
 Assign one bounded implementation or substantive read-only review package when that branch requires delegation.
 Exact experimental marker sections may define other role sequences.
@@ -68,7 +68,7 @@ Direct and Delegated are task-routing classes, not Desktop reasoning labels.
 
 ### Normal model-aware routing
 
-The marker `PROFILE: TERRA_SOL` selects the normal policy.
+The marker `PROFILE: TERRA_ASTRA_SOL_REVIEW` selects the normal policy.
 The local default is `gpt-6.1-terra` with `high` reasoning and Standard service tier (`default`).
 Desktop and runtime overrides for model, reasoning, and service tier remain authoritative.
 Named opt-in experiments retain their exact routes, roles, effort, and lifecycle rules.
@@ -82,6 +82,7 @@ A Sol root implements directly. Do not spawn Sol from Sol.
 For GPT-6.1 Sol, avoid speculative defenses and redundant comparisons or validations.
 Preserve required boundary validation, error handling, contracts, and task verification.
 For another effective root override, retain that root and assign normal code packages to Sol.
+Small obvious code edits use Sol without the planner or reviewer.
 Keep app operations, visual artifacts, bounded prose, and questions in the effective root.
 Terra directly handles Blender scenes, models, animation, CAD artifacts, and computer-use tasks.
 One-off scripts and commands for a specific artifact, including `bpy` scripts, remain artifact work.
@@ -89,29 +90,72 @@ These scripts and commands alone do not trigger Sol ownership.
 Application code, reusable automation, plugins, add-ons, and software contract changes remain code changes.
 For mixed tasks, assign only the software package to Sol.
 After Sol finishes, the effective root handles the artifact work and final acceptance.
-Terra and Luna also delegate substantive debugging, architecture, and technical review to Sol.
+Terra and Luna also delegate substantive debugging and read-only technical review to Sol.
 Prefer APIs, CLIs, and purpose-built tools. Use GUI control when necessary or explicitly requested.
 
-No automatic Astra fallback, separate verifier, second native opinion, or nested delegation is permitted.
-Preserve Astra role files and named experiments. Their presence does not activate a normal route.
+### Planned coding route
+
+Use this route when the user requests a plan for code or the task requires a material design decision.
+Also use it for a cross-component change or ordered implementation packages.
+The planned-route triggers take precedence over the small-edit shortcut.
+Architecture questions without planned code remain substantive read-only Sol work.
+The sequence is root evidence -> Astra High plan -> Sol High implementation -> Astra High read-only review -> root acceptance.
+Only the root dispatches the planner and reviewer.
+Sol sends planning or review requests to the root.
+Do not spawn agents from a child or use nested Codex.
+
+1. State the objective and observable acceptance criteria.
+2. Collect one bounded evidence pass and form the Context Packet.
+3. Preflight retained capacity before the planned route.
+4. Reserve slots for the planner, each required Sol owner, and the reviewer.
+5. Start one fresh `astra_planner_high` with `gpt-6-astra`, `high`, `default`, and `fork_turns="none"`.
+6. Give the planner the Context Packet, applicable instructions, and material uncertainties.
+7. Require a read-only plan with bounded packages, affected interfaces, verification criteria, and unresolved decisions.
+8. In Plan Mode, stop after the plan. Do not edit files or start implementation implicitly.
+9. Outside Plan Mode, continue authorized implementation without an extra approval step.
+10. Give each fresh `sol_implementer_high` only its relevant plan slice, evidence, constraints, and acceptance criteria.
+11. Require complete code and one lightweight focused check before Sol reports completion.
+12. Keep Sol idle while one fresh `astra_reviewer_high` reviews the completed changes.
+13. Use `gpt-6-astra`, `high`, `default`, and `fork_turns="none"` for the read-only reviewer.
+14. Give the reviewer the plan, completed diff, affected contracts, check evidence, and uncertainties.
+15. Require actionable findings with exact evidence, severity, unmet criteria, and residual risk.
+16. Check the findings against source and acceptance criteria before a repair or acceptance decision.
+17. Return at most one ordinary repair to the same Sol owner with exact expected-versus-observed evidence.
+18. Request a focused recheck from the same reviewer after that repair.
+19. Inspect the final diff and run proportionate deterministic acceptance checks in the root.
+
+For a Sol root, the root performs the Sol implementation stage directly.
+The root still dispatches the planner and reviewer for planned code.
+A planner or reviewer must not edit production files or implement a repair.
+Return material scope, architecture, contract, security, migration, or ambiguous findings to the root for a decision.
+If a repair remains unresolved, report the unmet criterion without another automatic repair loop.
+No automatic Astra implementation fallback is permitted.
+Do not create a separate tester or another review agent.
+Preserve all experimental role files and named experiments.
 Extra High requires an explicit user request or a named experiment.
 
 ### Ownership and completion
 
 Before delegation, collect one bounded evidence pass and form the Context Packet.
-Start the owner with `fork_turns="none"` and `Research Slot: withheld`.
-The owner chooses the implementation and performs one lightweight focused check.
+Start each owner with `fork_turns="none"` and `Research Slot: withheld`.
+The planner defines the planned approach. Sol chooses implementation details within its approved package.
+For unplanned work, the Sol owner chooses the implementation and performs one lightweight focused check.
 Do not duplicate its package or prescribe its detailed implementation.
 The effective root owns integration and final acceptance.
 Inspect the diff and affected contracts. Run proportionate deterministic checks and material edge cases.
 Distinguish product defects from harness or environment limitations.
 Keep the implementation owner available and idle through acceptance.
 Send at most one ordinary repair to that same owner, with exact expected-versus-observed evidence.
+Keep the reviewer idle and available for the focused recheck through acceptance.
 
 ### Native child lifecycle
 
 Allow one active child and at most 32 retained native children per ordinary session.
 Count retained children across tasks. The configured depth remains one.
+In Plan Mode, reserve only the planner slot.
+Each planned stage starts only after the previous active child finishes.
+Completed owners remain idle while another stage works.
+Count a retained planner, each Sol owner, and the reviewer against the same 32-child cap.
 Each new package may receive a fresh owner after the previous owner finishes.
 Retain the completed owner for root acceptance and its one ordinary repair.
 Use native close or release after acceptance when available.
@@ -119,6 +163,7 @@ If unavailable, report the limitation and retain the completed owner idle within
 An interrupt is not a close or release operation.
 Completion, interruption, and archiving do not prove that a slot was released.
 If the retained-thread capacity is exhausted, report the actual limit.
+If the plan requires more slots than available, stop before implementation and report the missing capacity.
 If another owner is required and release is unavailable, prepare a concise handoff for a fresh session.
 Do not create a new session without the required user request.
 Do not evade the cap through visible tasks, forks, nested CLI calls, or another owner.
@@ -127,15 +172,20 @@ Do not evade the cap through visible tasks, forks, nested CLI calls, or another 
 
 Use native collaboration for internal delegation.
 Do not substitute `create_thread`, `fork_thread`, `send_message_to_thread`, or nested `codex exec` automatically.
-If collaboration or the required role is unavailable, report the concrete limitation and configuration drift.
-The effective root may complete authorized work directly when intended delegation fails.
+If collaboration or a required role is unavailable, report the concrete limitation and configuration drift.
+Report each unavailable stage and the actual completed stages before a fallback decision.
+For planned work, continue only with a user-authorized fallback that preserves scope, permissions, and mode.
+Do not claim the full planned route completed when a required stage was unavailable.
+For unplanned work, the effective root may complete authorized work directly when intended delegation fails.
 Report `effective_route = <root>-single-agent-fallback` only for failed intended delegation.
-Exclude these sessions from valid delegated-route benchmarks.
+For a planned fallback, also report the omitted stages and the actual replacement route.
+Exclude fallback sessions from valid full-route benchmarks.
 A healthy active child or the retained-child cap does not justify ownership transfer.
 Wait for the owner or use its permitted repair.
 Report the actual root model, reasoning, and observable service tier separately.
-Report normal routes as `terra-direct`, `terra-sol`, `luna-direct`, `luna-sol`,
+Report unplanned routes as `terra-direct`, `terra-sol`, `luna-direct`, `luna-sol`,
 `sol-direct`, or `<effective-root>-sol` for another root override.
+Report the completed planned route as `<effective-root>-astra-sol-review`.
 Do not infer latency, quality, or quota savings from the reasoning level.
 
 ## Jev routing-adviser shadow experiment
@@ -501,6 +551,8 @@ the configured values explicitly on every initial spawn:
 | Role | Model | Reasoning | Service tier |
 |------|-------|-----------|--------------|
 | `sol_implementer_high` | `gpt-6.1-sol` | `high` | `default` |
+| `astra_planner_high` | `gpt-6-astra` | `high` | `default` |
+| `astra_reviewer_high` | `gpt-6-astra` | `high` | `default` |
 | `senior_executor_standard` | `gpt-6-sol` | `medium` | `default` |
 | `astra_executor_standard` | `gpt-6-astra` | `medium` | `default` |
 | `astra_executor_high` | `gpt-6-astra` | `high` | `default` |
@@ -523,7 +575,8 @@ Do not select the default Luna model for an `explorer` or `tester` merely becaus
 or `explorer_repository` remains untyped unless the runtime applies the matching
 role profile. If typed roles are unavailable, use the table above as the effective routing contract. Include the role's behavioral constraints in the task capsule.
 
-Astra rows describe preserved experimental roles only. Base configuration does not register automatic Astra owners.
+The normal route registers `astra_planner_high` and `astra_reviewer_high` for read-only planned-code stages.
+All other Astra rows describe preserved experimental roles.
 
 The standalone agent files document intended restrictions but do not by
 themselves prove that a runtime tool or sandbox profile was applied. State a sandbox guarantee only after a check of the effective restriction. Otherwise, supply explicit model, reasoning, and behavioral constraints in the capsule.
@@ -539,17 +592,23 @@ route never creates a tester. It permits one active child and at most 32 retaine
 
 Follow the normal effective-root branch unless an exact experimental marker selects another route.
 The root owns integration and acceptance.
+For planned code, use the complete sequence in **Planned coding route** under **Routes**.
+In Plan Mode, stop after the read-only plan without implementation.
+Outside Plan Mode, continue authorized work without an extra approval step.
 
 1. State the outcome and observable acceptance criteria.
 2. Collect one bounded evidence pass and form the Context Packet.
 3. Assign normal code changes, including tiny edits, to a fresh `sol_implementer_high` with no inherited history.
-4. Require code and a focused self-check before the owner reports completion.
-5. Keep Sol idle and available during root acceptance.
-6. Return at most one ordinary repair with concrete evidence to that owner.
-7. Apply the native lifecycle rules before dispatch and after acceptance.
+4. For planned code, supply the relevant Astra plan slice before Sol implementation.
+5. Require code and a focused self-check before the owner reports completion.
+6. For planned code, dispatch the Astra High read-only review before root acceptance.
+7. Keep Sol idle and available during review and root acceptance.
+8. Return at most one ordinary repair with concrete evidence to that owner.
+9. After repair, request the focused recheck from the same reviewer for planned code.
+10. Apply the native lifecycle rules before dispatch and after acceptance.
 
 A Sol root owns implementation directly and performs a focused self-check.
-No automatic Astra fallback is permitted. Preserve named experiments and explicit user overrides.
+No automatic Astra implementation fallback is permitted. Preserve named experiments and explicit user overrides.
 
 ## Adaptive Delegation Budget
 
@@ -585,7 +644,8 @@ Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
 
 For normal `sol_implementer_high` delegation, use the Worker capsule and state `Research Slot: withheld`.
-Use Astra delta capsules only when a named experiment explicitly permits them.
+For normal planned code, use read-only planner and reviewer capsules with the Context Packet and relevant stage evidence.
+Use Astra implementation delta capsules only when a named experiment explicitly permits them.
 State that the effective root owns integration and acceptance. Explicitly prohibit child delegation.
 Named experiments that use `senior_executor_standard` retain their Worker capsule and `Research Slot: withheld` requirements.
 
@@ -613,6 +673,31 @@ Include only material interfaces, constraints, decisions, likely files, risks,
 and required outcomes. Leave bounded discovery, implementation details, ordinary
 repair, and appropriate validation to the worker. Supply a concise report of
 changes, checks, failures, residual risk, and decisions needed from the root.
+
+### Normal Astra planner capsule
+
+- `Task ID`
+- `Planning Context + Read-only Scope`
+- `Objective + Acceptance Criteria`
+- `Context Packet + Material Uncertainties`
+- `Main-Agent Guidance`
+
+Require a bounded plan, affected interfaces, package order, verification criteria, and unresolved decisions.
+Prohibit file edits, implementation, child delegation, and automatic Claude requests.
+State that the root owns dispatch, mode decisions, integration, and final acceptance.
+
+### Normal Astra reviewer capsule
+
+- `Task ID`
+- `Review Context + Read-only Scope`
+- `Plan + Completed Diff + Affected Contracts`
+- `Focused Check Evidence + Acceptance Criteria`
+- `Main-Agent Guidance`
+
+Require actionable findings with exact evidence, severity, unmet criteria, and residual risk.
+Prohibit file edits, repairs, child delegation, and automatic Claude requests.
+State that the root checks findings, dispatches repairs, and owns final acceptance.
+For a focused recheck, provide only the repair diff, prior findings, and changed evidence.
 
 ### Tester capsule
 
@@ -676,7 +761,8 @@ is available.
 ## Implementation and Repair Ownership
 
 In Delegated work, do not let the root silently duplicate a distinct owner's
-package. In the default route, the child owner receives at most one ordinary repair. The effective root supplies the failed criterion and exact expected-versus-observed evidence. Then, the root runs the affected acceptance checks again.
+package. In the default route, the child owner receives at most one ordinary repair. The effective root supplies the failed criterion and exact expected-versus-observed evidence. For planned code, the root requests a focused recheck from the same Astra reviewer after repair.
+Then, the root runs the affected acceptance checks again.
 Do not add a tester.
 
 The remaining ownership guidance applies only to experimental profiles that
@@ -730,7 +816,7 @@ Include saved evidence, such as logs, traces, or screenshots, when applicable. R
 
 If isolated testing is necessary, first record all identifiable ways that the scoped system could fail. Encode those cases in isolated tests before production code. Then implement against those tests.
 
-In the default route, the effective root owns verification and acceptance. Inspect the diff and affected contracts. Run proportionate deterministic checks and material edge cases. Distinguish product defects from harness or environment limitations. Do not create a tester or another model-review child.
+In the default route, the effective root owns verification and acceptance. Inspect the diff and affected contracts. Run proportionate deterministic checks and material edge cases. Distinguish product defects from harness or environment limitations. Use the required Astra High review for planned code. Do not create a tester or an additional model-review child.
 The remaining tester guidance applies only to explicit profiles where it is permitted.
 
 - Small reversible changes may rely on focused worker validation.
@@ -741,8 +827,8 @@ The remaining tester guidance applies only to explicit profiles where it is perm
   when the risk warrants it. Remove only duplicate or evidence-free passes.
 - Prefer deterministic E2E tests, compilers, linters, schemas, and other
   executable gates over repeated model review.
-- Do not add a separate model-review cycle when existing automated evidence is
-  sufficient.
+- Complete the required Astra High review for planned code.
+- Do not add an additional model-review cycle when existing automated evidence is sufficient.
 - Never weaken assertions, coverage, or failure visibility to save tokens.
 - Never claim an unrun check passed.
 
