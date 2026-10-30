@@ -45,6 +45,12 @@ Never expose secret values or the contents of `~/.env` in chat, logs, reports,
 or commands containing literal credentials. Do not copy secrets into task
 packets or generated files. If the key is absent from both the process environment and `~/.env`, report only its name and the sources examined.
 
+## Telegram text delivery
+
+When the user explicitly asks you to send text through Telegram, read `~/.codex/telegram-guide.md` before delivery.
+The guide covers credentials, destinations, safe requests, and delivery results.
+This reference does not authorize a message by itself.
+
 ## Engineering Choices
 
 Choose the simplest maintainable solution that meets the requirements. Reuse
@@ -62,21 +68,28 @@ Direct and Delegated are task-routing classes, not Desktop reasoning labels.
 
 ### Normal model-aware routing
 
-The marker `PROFILE: TERRA_SOL_CLAUDE_REVIEW` selects the normal policy.
+The marker `PROFILE: TERRA_SOL` selects the normal policy.
 The local default is `gpt-6.1-terra` with `high` reasoning and Standard service tier (`default`).
 Desktop and runtime overrides for model, reasoning, and service tier remain authoritative.
 Named opt-in experiments retain their exact routes, roles, effort, and lifecycle rules.
 
 ### Direct and Delegated work
 
-All normal code changes, including tiny edits, require Sol ownership and the Claude completion review below.
+All normal code changes, including tiny edits, require Sol ownership.
+Do not request Claude automatically.
 Terra and Luna assign each code package to one fresh `sol_implementer_high` with `gpt-6.1-sol`, `high`, and `default`.
 A Sol root implements directly. Do not spawn Sol from Sol.
+For GPT-6.1 Sol, avoid speculative defenses and redundant comparisons or validations.
+Preserve required boundary validation, error handling, contracts, and task verification.
 For another effective root override, retain that root and assign normal code packages to Sol.
-Keep app operations, visual/Blender artifacts, bounded prose, and questions in the effective root.
-A `bpy` helper script for an app artifact remains app work. Software and addon development count as code changes.
+Keep app operations, visual artifacts, bounded prose, and questions in the effective root.
+Terra directly handles Blender scenes, models, animation, CAD artifacts, and computer-use tasks.
+One-off scripts and commands for a specific artifact, including `bpy` scripts, remain artifact work.
+These scripts and commands alone do not trigger Sol ownership.
+Application code, reusable automation, plugins, add-ons, and software contract changes remain code changes.
+For mixed tasks, assign only the software package to Sol.
+After Sol finishes, the effective root handles the artifact work and final acceptance.
 Terra and Luna also delegate substantive debugging, architecture, and technical review to Sol.
-An explicitly read-only Sol package has no duplicate Claude review gate.
 Prefer APIs, CLIs, and purpose-built tools. Use GUI control when necessary or explicitly requested.
 
 No automatic Astra fallback, separate verifier, second native opinion, or nested delegation is permitted.
@@ -89,11 +102,6 @@ Before delegation, collect one bounded evidence pass and form the Context Packet
 Start the owner with `fork_turns="none"` and `Research Slot: withheld`.
 The owner chooses the implementation and performs one lightweight focused check.
 Do not duplicate its package or prescribe its detailed implementation.
-After code and self-check, follow the Claude completion review procedure.
-Run bridge `preflight` before `run --mode review` with the current packet.
-No fixed request or retry count applies.
-Use further calls for a concrete task need, including review after fixes.
-If review cannot run, report `review_unavailable` and `failure_stage`, preserve evidence, and continue authorized work and deterministic checks.
 The effective root owns integration and final acceptance.
 Inspect the diff and affected contracts. Run proportionate deterministic checks and material edge cases.
 Distinguish product defects from harness or environment limitations.
@@ -105,9 +113,6 @@ Send at most one ordinary repair to that same owner, with exact expected-versus-
 Allow one active child and at most 32 retained native children per ordinary session.
 Count retained children across tasks. The configured depth remains one.
 Each new package may receive a fresh owner after the previous owner finishes.
-The external completion reviewer is not a native child.
-Sol pauses edits during its synchronous review. No other native owner works concurrently.
-This is the narrow exception to the companion/native-child concurrency restriction.
 Retain the completed owner for root acceptance and its one ordinary repair.
 Use native close or release after acceptance when available.
 If unavailable, report the limitation and retain the completed owner idle within the cap.
@@ -124,51 +129,14 @@ Use native collaboration for internal delegation.
 Do not substitute `create_thread`, `fork_thread`, `send_message_to_thread`, or nested `codex exec` automatically.
 If collaboration or the required role is unavailable, report the concrete limitation and configuration drift.
 The effective root may complete authorized work directly when intended delegation fails.
-Apply the same completion review to code changes in that fallback.
 Report `effective_route = <root>-single-agent-fallback` only for failed intended delegation.
 Exclude these sessions from valid delegated-route benchmarks.
 A healthy active child or the retained-child cap does not justify ownership transfer.
 Wait for the owner or use its permitted repair.
 Report the actual root model, reasoning, and observable service tier separately.
-Report normal routes as `terra-direct`, `terra-sol-claude-review`, `luna-direct`, `luna-sol-claude-review`,
-`sol-claude-review`, or `<effective-root>-sol-claude-review` for another root override.
-For read-only Sol packages, omit the `-claude-review` suffix.
-Record the review result separately. A route name does not prove review success.
+Report normal routes as `terra-direct`, `terra-sol`, `luna-direct`, `luna-sol`,
+`sol-direct`, or `<effective-root>-sol` for another root override.
 Do not infer latency, quality, or quota savings from the reasoning level.
-
-## Claude completion review
-
-This gate applies to all normal code changes, including tiny edits and code changes by an effective Sol root.
-It excludes bounded prose, app-only artifact scripts, and read-only technical reviews.
-Named experiments retain their exact procedures unless the user explicitly changes the experiment.
-The named normal policy is standing authorization for this specific external completion review.
-It does not authorize Claude implementation, a general automatic companion route, or broader skill selection.
-
-1. Complete the code and one focused self-check.
-2. Read `~/.codex/skills/claude-collab/SKILL.md` and its `references/bridge.md` procedure.
-3. Build the existing nine-field packet from current scope, sources, instructions, diffs, acceptance criteria, and uncertainties.
-4. Include required shared policies and selected skill references without changing the schema or the 256 KiB limit.
-5. Run `preflight --mode review --packet FILE` and correct local validation errors before any model request.
-6. Run `run --mode review --packet FILE` through the existing bridge with Opus High.
-7. Require a review-only result with an empty `diff`.
-8. Check each finding against the code and task evidence.
-9. Fix confirmed relevant findings within scope and reject unsupported or out-of-scope findings with reasons.
-10. Escalate material scope or contract decisions to the root.
-11. Run the affected deterministic checks and report findings, decisions, artifacts, and remaining criteria.
-
-Sol pauses edits while the synchronous external reviewer works.
-No other native owner works concurrently. Do not create native children or invoke the bridge recursively.
-No fixed request or retry count applies.
-Use further calls for a concrete task need, including review after fixes.
-Use current source and relevant evidence for each follow-up.
-Do not create reciprocal review loops.
-
-If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve the evidence.
-Continue authorized implementation and deterministic checks with explicit `review_unavailable` and `failure_stage` disclosure.
-Never claim that an unavailable review passed. Correct local preflight errors before sending.
-Use only the existing subscription login. Do not read `~/.env`, use API fallback, change authentication or billing, or enable Extra Usage.
-Preserve the helper's isolation, policies, progress reporting, validation, and timeout behavior.
-The root owns final acceptance after Sol reports the completed work and review outcome.
 
 ## Jev routing-adviser shadow experiment
 
@@ -575,13 +543,12 @@ The root owns integration and acceptance.
 1. State the outcome and observable acceptance criteria.
 2. Collect one bounded evidence pass and form the Context Packet.
 3. Assign normal code changes, including tiny edits, to a fresh `sol_implementer_high` with no inherited history.
-4. Require the Claude completion review after code and self-check, before the owner reports completion.
+4. Require code and a focused self-check before the owner reports completion.
 5. Keep Sol idle and available during root acceptance.
 6. Return at most one ordinary repair with concrete evidence to that owner.
 7. Apply the native lifecycle rules before dispatch and after acceptance.
 
-A Sol root owns implementation directly and performs the same Claude completion review.
-Explicitly read-only technical packages do not require a duplicate Claude gate.
+A Sol root owns implementation directly and performs a focused self-check.
 No automatic Astra fallback is permitted. Preserve named experiments and explicit user overrides.
 
 ## Adaptive Delegation Budget
@@ -618,7 +585,6 @@ Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
 
 For normal `sol_implementer_high` delegation, use the Worker capsule and state `Research Slot: withheld`.
-For normal code packages, include the Claude completion review requirement and permission for relevant follow-up calls.
 Use Astra delta capsules only when a named experiment explicitly permits them.
 State that the effective root owns integration and acceptance. Explicitly prohibit child delegation.
 Named experiments that use `senior_executor_standard` retain their Worker capsule and `Research Slot: withheld` requirements.
@@ -782,9 +748,6 @@ The remaining tester guidance applies only to explicit profiles where it is perm
 
 ## Completion
 
-For normal code changes, record the Claude completion review outcome and artifacts before root acceptance.
-If unavailable, disclose `review_unavailable` and `failure_stage`. Never substitute that disclosure for deterministic checks.
-
 Before declaring a Delegated task complete, the root must:
 
 1. Make sure that package reports cover the requested scope.
@@ -799,16 +762,14 @@ Perform an additional broad review or repeat completed checks only with new evid
 
 ## Shared skills and explicit Claude requests
 
-The normal `PROFILE: TERRA_SOL_CLAUDE_REVIEW` policy authorizes only its specific completion review through `claude-collab`.
-Read the Claude completion review section for its trigger, procedure, concurrency exception, and failure handling.
-Other companion calls require an explicit Claude request or `$claude-collab` invocation.
+Companion calls require an explicit Claude request or `$claude-collab` invocation.
 Task size, Codex quota, and a native failure do not independently authorize Claude.
 The skill must keep `allow_implicit_invocation: false`.
 
 For an explicit Claude request, follow `~/.codex/skills/claude-collab/SKILL.md`.
 Report that manual external route as `<effective-root>-claude`, separately from root model, reasoning, and observable tier.
 It is not a default native-route benchmark.
-Except for the synchronous Sol completion review, never run the companion and a native child concurrently on the same task.
+Never run the companion and a native child concurrently on the same task.
 Never invoke the bridge recursively from a companion request.
 Plan Mode remains read-only.
 Codex owns scope, integration, patch application, tests, and final acceptance.

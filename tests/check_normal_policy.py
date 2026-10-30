@@ -10,7 +10,14 @@ import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MARKER = 'PROFILE: TERRA_SOL_CLAUDE_REVIEW'
+MARKER = 'PROFILE: TERRA_SOL'
+
+
+def check_no_automatic_claude(text):
+    for stale in ('TERRA_SOL_CLAUDE_REVIEW', 'Claude completion review',
+                  '-claude-review', 'Normal completion review',
+                  'named normal policy completion review', 'synchronous completion review'):
+        assert stale not in text, stale
 
 
 def read_config(path):
@@ -37,9 +44,10 @@ def check_claude_calls(text):
 def check_tree(base):
     config = read_config(base / 'config.toml')
     policy = (base / 'AGENTS.md').read_text()
-    check_claude_calls(policy)
+    check_no_automatic_claude(policy)
     # Persisted UI overrides are user choices. Baseline checks preserve their exact values.
-    assert all(isinstance(config.get(key), str) and config[key] for key in ('model', 'model_reasoning_effort', 'service_tier'))
+    assert all(isinstance(config.get(key), str) and config[key] for key in ('model', 'model_reasoning_effort'))
+    assert isinstance(config.get('service_tier', 'default'), str) and config.get('service_tier', 'default')
     assert MARKER in policy and MARKER in config['developer_instructions']
     assert 'EXPERIMENT: SOL_HIGH_ASTRA_MEDIUM_XHIGH' not in policy + config['developer_instructions']
     assert not re.search(r'default\s+Sol\s+High\s+route', policy), 'stale normal default reference'
@@ -63,22 +71,21 @@ def check_tree(base):
                    'Keep the implementation owner available and idle through acceptance.'):
         assert phrase in routes, phrase
     for text in (routes, config['developer_instructions'], role['developer_instructions']):
-        assert 'Claude completion review' in text
-        assert 'review_unavailable' in text
-        assert 'failure_stage' in text
-        assert 'preflight' in text and 'run --mode review' in text
-        assert text.index('preflight') < text.index('run --mode review')
-        check_claude_calls(text)
+        check_no_automatic_claude(text)
+        assert 'Do not request Claude automatically.' in text
         assert 'No automatic Astra' in text
-    gate = section(policy, 'Claude completion review')
-    for phrase in ('nine-field packet', 'Opus High', 'empty `diff`',
-                   'Sol pauses edits', 'reject unsupported or out-of-scope findings',
-                   'authentication, quota, CLI, or inactivity', 'root owns final acceptance',
-                   'including review after fixes',
-                   'read-only technical reviews', 'Named experiments'):
-        assert phrase in gate, phrase
-    check_claude_calls((base / 'skills/claude-collab/SKILL.md').read_text())
-    check_claude_calls((base / 'skills/claude-collab/references/bridge.md').read_text())
+    assert 'root owns integration and final acceptance' in routes
+    for route in ('terra-direct', 'terra-sol', 'luna-direct', 'luna-sol', 'sol-direct', '<effective-root>-sol'):
+        assert route in routes and route in config['developer_instructions'], route
+    manual = section(policy, 'Shared skills and explicit Claude requests')
+    assert 'require an explicit Claude request or `$claude-collab` invocation' in manual
+    assert 'Never run the companion and a native child concurrently' in manual
+    for path in ('skills/claude-collab/SKILL.md', 'skills/claude-collab/references/bridge.md'):
+        text = (base / path).read_text()
+        check_no_automatic_claude(text)
+        check_claude_calls(text)
+        assert 'explicit Claude requests' in text
+    assert 'allow_implicit_invocation: false' in (base / 'skills/claude-collab/agents/openai.yaml').read_text()
     return config, policy
 
 
@@ -88,7 +95,6 @@ def check_preservation(baseline, live):
         new = read_config(current / 'config.toml')
         def preserved(config):
             result = {k: v for k, v in config.items() if k != 'developer_instructions'}
-            result['agents'] = {k: v for k, v in config['agents'].items() if not k.startswith('astra')}
             return result
         assert preserved(old) == preserved(new), name
         for role_path in (baseline / name / 'agents').glob('*.toml'):
@@ -112,7 +118,7 @@ def check_preservation(baseline, live):
     for old in (old_skill / 'scripts').rglob('*.py'):
         assert old.read_bytes() == (new_skill / old.relative_to(old_skill)).read_bytes(), old.name
     skill = (new_skill / 'SKILL.md').read_text()
-    assert 'PROFILE: TERRA_SOL_CLAUDE_REVIEW' in skill
+    check_no_automatic_claude(skill)
     assert 'allow_implicit_invocation: false' in (new_skill / 'agents/openai.yaml').read_text()
     check_claude_calls(skill)
     assert section((baseline / 'README.md').read_text(), 'Restore') == section((ROOT / 'README.md').read_text(), 'Restore')
@@ -149,6 +155,7 @@ def main():
     parser.add_argument('--baseline', type=Path)
     args = parser.parse_args()
     check_awareness(args.live)
+    check_no_automatic_claude((ROOT / 'README.md').read_text())
     check_claude_calls((ROOT / 'README.md').read_text())
     _, snapshot_policy = check_tree(ROOT / 'codex')
     if args.live:

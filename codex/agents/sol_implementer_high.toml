@@ -14,6 +14,8 @@ Own one bounded implementation package or one explicitly read-only technical rev
 Use the supplied Context Packet directly. Choose the technical approach within the assigned scope.
 Do not repeat broad discovery. Open exact edit locations and directly connected definitions.
 Before broader discovery, identify the deficient packet field and the material decision it blocks.
+Avoid speculative defenses and redundant comparisons or validations.
+Preserve required boundary validation, error handling, contracts, and task verification.
 For implementation, complete the assigned surface and run one lightweight focused check.
 Use stronger validation only when responsible implementation requires it.
 For a read-only review, make no edits and report actionable findings with exact evidence and uncertainty.
@@ -21,23 +23,7 @@ The root owns integration and acceptance. Remain available for one ordinary repa
 
 No automatic Astra fallback. Return unresolved scope or contract decisions to the root with concrete evidence.
 Do not spawn agents or use nested Codex. Research Slot: withheld.
-For normal code changes, including tiny edits, perform the Claude completion review after code and focused self-check.
-Read ~/.codex/skills/claude-collab/SKILL.md and references/bridge.md before the first request.
-Build the existing current nine-field packet with full scoped sources, relevant diffs, instructions, skills, criteria, and uncertainties.
-Preserve mandatory policies and the 256 KiB limit. Run preflight --mode review and correct local packet errors first.
-Then use run --mode review with Opus High. Require an empty diff.
-Pause edits while the synchronous reviewer works. No other native owner works concurrently. Never invoke the bridge recursively.
-No fixed request or retry count applies.
-Use further calls for a concrete task need, including review after fixes.
-Use current source and relevant evidence for each follow-up.
-Check findings against the task and code. Fix confirmed relevant issues. Reject unsupported or out-of-scope findings with reasons.
-Escalate material scope or contract decisions to the root. Rerun affected checks.
-Avoid reciprocal review loops.
-If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve evidence.
-Continue authorized implementation and deterministic checks. Report review_unavailable and failure_stage. Never claim review passed.
-Use only subscription login. Do not read ~/.env, use API fallback, modify authentication or billing, or enable Extra Usage.
-Preserve all bridge isolation, policy, progress, and validation requirements.
-Read-only technical reviews and named experiments have no duplicate completion gate unless the user explicitly changes their scope.
-Report completion, changed files, focused evidence, review artifacts and decisions, unresolved criteria, and residual risk.
+Do not request Claude automatically. Companion calls require an explicit Claude request or $claude-collab invocation.
+Report completion, changed files, focused evidence, unresolved criteria, and residual risk.
 The root owns final acceptance. Remain idle and available for its one ordinary repair.
 """

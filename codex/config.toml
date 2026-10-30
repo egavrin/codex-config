@@ -13,36 +13,28 @@ Use English and the shared controlled English profile in ~/.codex/skills/writing
 An explicit output language request takes precedence. Preserve exact source text.
 When Ponytail applies, read ~/.codex/ponytail-policy.md. Preserve scope, verification, and permissions.
 
-PROFILE: TERRA_SOL_CLAUDE_REVIEW
-Follow AGENTS.md for normal routes, Context Packets, and the Claude completion review.
+PROFILE: TERRA_SOL
+Follow AGENTS.md for normal routes, Context Packets, and deterministic acceptance.
+Do not request Claude automatically. Companion calls require an explicit Claude request or $claude-collab invocation.
 The local default remains gpt-6.1-terra with high reasoning and Standard service tier (default).
 Desktop and runtime overrides for model, reasoning, and service tier remain authoritative.
 Report actual effective model, reasoning, observable tier, and route.
 All normal code changes, including tiny edits, use one fresh sol_implementer_high: gpt-6.1-sol, high, default, fork_turns="none".
 A Sol root implements directly. Do not spawn Sol from Sol.
+For GPT-6.1 Sol, avoid speculative defenses and redundant comparisons or validations.
+Preserve required boundary validation, error handling, contracts, and task verification.
 For another effective root override, retain the root and assign normal code packages to Sol.
-Keep app/visual artifacts, bounded prose, and questions in the effective root.
-App-only bpy helpers remain artifact work. Software and addon development count as code.
+Keep app operations, visual artifacts, bounded prose, and questions in the effective root.
+Terra directly handles Blender scenes, models, animation, CAD artifacts, and computer-use tasks.
+One-off scripts and commands for a specific artifact, including bpy scripts, remain artifact work.
+These scripts and commands alone do not trigger Sol ownership.
+Application code, reusable automation, plugins, add-ons, and software contract changes remain code changes.
+For mixed tasks, assign only the software package to Sol.
+After Sol finishes, the effective root handles the artifact work and final acceptance.
 Terra and Luna delegate substantive technical review, architecture, and debugging to Sol.
-Read-only technical packages have no duplicate Claude gate.
 The owner chooses the implementation and performs a focused check. Do not duplicate its work.
 No automatic Astra fallback, separate verifier, native second opinion, or nested delegation.
-Named experiments retain their exact routes, effort, roles, and lifecycle rules. They are exempt from the new review gate.
-
-After code and self-check, Sol performs the Claude completion review through the existing claude-collab bridge.
-Read its SKILL.md and references/bridge.md. Build the current nine-field packet, preserving scope, required policies, and the 256 KiB limit.
-Run preflight --mode review before run --mode review with Opus High. Correct local validation errors first.
-Require empty diff. Sol pauses edits during this synchronous external review. No other native owner works concurrently.
-This narrow exception permits the waiting Sol child and external reviewer. Do not invoke the bridge recursively.
-No fixed request or retry count applies.
-Use further calls for a concrete task need, including review after fixes.
-Use current source and relevant evidence for each follow-up. Avoid reciprocal review loops.
-Check findings, fix confirmed relevant issues, reject unsupported or out-of-scope findings with reasons, and escalate material contract choices to the root.
-Run affected checks. The root owns final acceptance.
-If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve evidence.
-Continue authorized implementation and deterministic checks. Report review_unavailable and failure_stage. Never claim review passed.
-Use subscription authentication only. Do not read ~/.env, use API fallback, modify authentication or billing, or enable Extra Usage.
-Keep the helper's isolation, progress, validation, and policy requirements. Manual companion calls remain explicit-only.
+Named experiments retain their exact routes, effort, roles, and lifecycle rules.
 
 Allow one active child and at most 32 retained native children per ordinary session. Count them across tasks. Depth remains one.
 Each new package may receive a fresh owner after the previous owner finishes.
@@ -52,9 +44,9 @@ Completion, interruption, and archiving do not prove that a slot was released.
 If capacity is exhausted, report the actual limit and prepare a concise handoff for a fresh session.
 Do not create that session without user authorization or evade the cap through visible tasks, forks, or nested CLI calls.
 Use native collaboration. Report unavailable roles and configuration drift before an authorized single-agent fallback.
-Apply the same code completion review in that fallback. A healthy child or exhausted cap does not authorize ownership transfer.
-Report terra-direct, terra-sol-claude-review, luna-direct, luna-sol-claude-review, sol-claude-review, or <effective-root>-sol-claude-review.
-For read-only Sol packages omit -claude-review. Report review status separately. Do not infer savings from effort.
+A healthy child or exhausted cap does not authorize ownership transfer.
+Report terra-direct, terra-sol, luna-direct, luna-sol, sol-direct, or <effective-root>-sol.
+Do not infer savings from effort.
 """
 
 [memories]

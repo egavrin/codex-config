@@ -14,6 +14,12 @@ The language profile does not change permissions, task scope, or agent routing.
 Ponytail solution preferences do not replace the shared writing or engineering policy.
 @../.codex/ponytail-policy.md
 
+## Telegram text delivery
+
+When the user explicitly asks you to send text through Telegram, read `~/.codex/telegram-guide.md` before delivery.
+The guide covers credentials, destinations, safe requests, and delivery results.
+This reference does not authorize a message by itself.
+
 ## Graphify code discovery
 
 For architecture, dependency tracing, or substantial repository discovery, use the shared `graphify` skill when appropriate.

@@ -111,7 +111,7 @@ The [source lock](docs/slopo-source-lock.json) records the pinned revision, depe
 
 The normal default is `gpt-6.1-terra` with `high` reasoning and Standard service tier (`default`).
 Desktop and runtime model, reasoning, and tier overrides remain authoritative.
-All normal code changes go to Sol High and then the Claude completion review.
+All normal code changes go to Sol High with a focused self-check.
 The root integrates changes and owns acceptance.
 The configured ceiling is 32 open child threads, excluding the root, with a depth setting of one.
 The ordinary policy permits one active child at a time. Completed owners can remain idle.
@@ -141,33 +141,26 @@ do not make `spawn_agent` available in a session where that mechanism is absent.
 
 ## Orchestration model
 
-The normal profile is `PROFILE: TERRA_SOL_CLAUDE_REVIEW`.
+The normal profile is `PROFILE: TERRA_SOL`.
 Terra coordinates app work, visual artifacts, bounded prose, questions, scope, and acceptance.
 All normal code changes, including tiny edits, go to one fresh `sol_implementer_high` with GPT-6.1 Sol High on Standard tier.
 A Sol root implements directly and does not create another Sol agent.
 Other effective root overrides remain authoritative and assign normal code packages to Sol.
 A `bpy` helper for an app artifact remains app work. Software and addon development count as code.
-Substantive read-only technical work can use Sol without a duplicate Claude gate.
+Substantive read-only technical work goes to Sol.
 
-After code and self-check, Sol prepares the existing nine-field packet and runs the bridge preflight.
-Then, Sol requests a synchronous review-only Claude Opus High result through `claude-collab` and pauses edits.
-The result must have an empty diff. Sol checks findings, fixes confirmed relevant issues, rejects unsupported findings, and reruns affected checks.
-The root owns final acceptance.
-No fixed request or retry count applies.
-Use further calls for a concrete task need, including review after fixes.
-Use current source and relevant evidence for each follow-up. Avoid reciprocal review loops.
-If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve the evidence.
-Continue authorized implementation and deterministic checks with explicit `review_unavailable` and `failure_stage` disclosure.
-An unavailable review does not count as a pass.
-
-The named policy authorizes only this completion review. The skill keeps `allow_implicit_invocation: false`.
-Other companion requests remain explicit. Subscription-only authentication and existing bridge isolation remain required.
+After code and a focused self-check, Sol reports the completed package.
+The root inspects the diff and affected contracts, then runs proportionate deterministic acceptance checks.
+Do not request Claude automatically.
+Companion calls require an explicit Claude request or `$claude-collab` invocation.
+The skill keeps `allow_implicit_invocation: false`.
+Subscription-only authentication and existing bridge isolation remain required for manual requests.
 The bridge uses no API fallback and does not read `~/.env` or change authentication, billing, or Extra Usage.
 No automatic Astra fallback, native verifier, second native opinion, or nested delegation remains in the normal route.
-All named experiments and Astra role files remain preserved. Experiments are exempt from this gate unless the user changes the experiment.
+All named experiments and Astra role files remain preserved.
 
 The root returns at most one ordinary repair to the same owner.
-One native owner works at a time. The waiting Sol owner and synchronous external reviewer form the narrow concurrency exception.
+One native owner works at a time. Companion requests cannot overlap a native child.
 If native close or release is unavailable, report that limit and retain the completed owner idle within the 32-child cap.
 Completion, interruption, and archiving do not prove that a slot was released.
 A new session still requires the appropriate user request.
@@ -179,7 +172,7 @@ python3.12 tests/check_normal_policy.py
 ```
 
 The check validates saved policy and configuration. It does not call models or establish runtime adherence.
-Use a fresh session for native role activation and the real Sol-to-Claude-to-Sol workflow.
+Use a fresh session to load the revised native roles and routing instructions.
 
 ## Routing benchmark
 
@@ -636,10 +629,10 @@ hidden/system directories and plugin caches.
 | [codebase-design](codex/skills/codebase-design/SKILL.md) | Evaluate module interfaces, architectural seams, dependencies, and alternatives. |
 | [improve-codebase-architecture](codex/skills/improve-codebase-architecture/SKILL.md) | Find evidenced architecture improvements and present a visual report. |
 | [writing-for-agents](codex/skills/writing-for-agents/SKILL.md) | Improve skills, AGENTS.md, and linked agent instructions without dropping requirements. |
-| [claude-collab](codex/skills/claude-collab/SKILL.md) | Send explicit packages or the named normal policy completion review to Claude Opus High. Codex owns acceptance. |
+| [claude-collab](codex/skills/claude-collab/SKILL.md) | Send explicit packages to Claude Opus High. Codex owns acceptance. |
 
 The first four skills allow automatic selection and explicit invocation. Claude Collab keeps `allow_implicit_invocation: false`.
-The named policy authorizes only its completion review. Other calls require an explicit request. For example:
+Companion calls require an explicit request. For example:
 
 ```text
 Use $claude-collab and $codebase-design to get Claude's alternative view of the architecture.
@@ -654,8 +647,7 @@ python3 ~/.codex/skills/claude-collab/scripts/bridge.py sync-skills
 python3 ~/.codex/skills/claude-collab/scripts/bridge.py doctor
 ```
 
-The named normal policy authorizes the specific Sol completion review.
-Task size, quota, and native failure do not authorize other companion requests.
+Task size, quota, and native failure do not authorize companion requests.
 The following requirements apply to all authorized Claude requests.
 Claude Collab requires Python 3.9+, Git, a supported installed Claude Code CLI,
 and an existing `claude.ai` subscription login. It explicitly requests Opus High,
@@ -664,8 +656,7 @@ fresh restricted requests without tools, explicit skill/source packets, a
 No fixed request or retry count applies.
 Use further calls for a concrete task need, including review after fixes.
 Do not repeat a request while an authentication, quota, CLI, or inactivity failure still blocks it.
-Codex checks returned patches before applying and testing them. During the synchronous completion review, Sol pauses edits and waits.
-No other native owner works concurrently. Other companion requests cannot overlap a native child.
+Codex checks returned patches before applying and testing them. Companion requests cannot overlap a native child.
 Opt-in experimental routes keep their own rules. Live sanitized progress snapshots and summaries appear every
 30 seconds; heartbeats never renew model inactivity. Healthy streams have no
 default total wall-clock cap. Higher effort does not imply lower latency.

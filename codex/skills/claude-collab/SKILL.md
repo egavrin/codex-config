@@ -1,17 +1,15 @@
 ---
 name: claude-collab
-description: "Call a subscription-authenticated Claude Opus High companion for explicit requests or the named normal policy completion review. Supply bounded context and shared skills. Codex owns acceptance. Other automatic routing is excluded."
+description: "Call a subscription-authenticated Claude Opus High companion for explicit requests. Supply bounded context and shared skills. Codex owns acceptance. Automatic routing is excluded."
 ---
 
 # Claude Collab
 
-Use this skill for explicit Claude requests, `$claude-collab`, or the completion review authorized by `PROFILE: TERRA_SOL_CLAUDE_REVIEW`.
+Use this skill for explicit Claude requests or `$claude-collab`.
 Automatic skill selection remains disabled with `allow_implicit_invocation: false`.
-The named policy supplies standing authorization only for that review. It does not authorize automatic Claude implementation.
-Read the Claude completion review section in `~/.codex/AGENTS.md` when that policy applies.
-Named experiments remain exempt unless the user explicitly changes the experiment.
 Task size, Codex quota, and a native failure do not authorize a Claude request.
-Ordinary work follows the routes and completion gate in `AGENTS.md`.
+Ordinary work follows the native routes and deterministic acceptance in `AGENTS.md`.
+Named opt-in orchestration experiments remain authoritative.
 
 For an explicit request, use Claude Opus with High effort for a bounded implementation or review package.
 Codex owns scope, integration, patch application, tests, and final acceptance.
@@ -23,7 +21,6 @@ Named opt-in orchestration experiments remain authoritative.
 If Claude cannot complete the explicit request, stop it and report the concrete reason.
 Preserve completed evidence.
 If authorized work remains, use the applicable native route with root-owned acceptance.
-The completion reviewer may run synchronously while Sol pauses edits. No other native owner may work concurrently.
 High effort is a quality choice, not a claim of lower latency.
 Do not poll quota or invent subscription usage figures.
 
@@ -38,22 +35,10 @@ If authentication, quota, CLI, or inactivity stops the request, stop it and repo
 Do not repeat a request while its blocking condition remains. The helper never retries automatically.
 Avoid reciprocal review loops and calls without a concrete task need.
 
-Except for the named completion review, never run a Claude companion and a native child concurrently on the same task.
-For that exception, Sol pauses edits and waits synchronously. No native nesting or recursive bridge call is permitted.
+Never run a Claude companion and a native child concurrently on the same task.
+No native nesting or recursive bridge call is permitted.
 In Plan Mode,
 use only read-only review. Do not request implementation or apply a patch.
-
-## Normal completion review
-
-After code and focused self-check, Sol builds the current nine-field packet and runs preflight before the review request.
-Use review mode with Opus High and require an empty `diff`.
-Check findings against the code and task evidence.
-Fix confirmed relevant findings within scope. Reject unsupported or out-of-scope findings with reasons.
-Escalate material scope or contract decisions to the root. Rerun affected deterministic checks.
-The root owns final acceptance.
-If authentication, quota, CLI, or inactivity prevents review, stop that request and preserve evidence.
-Continue authorized implementation and checks with explicit `review_unavailable` and `failure_stage` disclosure.
-Never claim that an unavailable review passed. Correct local preflight errors before a model request.
 
 ## Prepare and invoke
 
