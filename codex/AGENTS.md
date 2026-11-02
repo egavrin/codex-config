@@ -23,7 +23,7 @@ The off mode does not disable existing instructions.
 Use the root model to understand the request, collect bounded evidence, define scope, integrate results, and perform acceptance.
 The assigned technical owner chooses the approach within its package and the applicable planned route.
 Follow the effective-root branch for ordinary work.
-Assign one bounded implementation or substantive read-only review package when that branch requires delegation.
+Assign each required bounded implementation or substantive read-only review package when that branch requires delegation.
 Exact experimental marker sections may define other role sequences.
 
 Optimize for completing the user's task with fewer root-model rollouts and less
@@ -110,12 +110,12 @@ Do not spawn agents from a child or use nested Codex.
 4. Reserve slots for the planner, each required Sol owner, and the reviewer.
 5. Start one fresh `astra_planner_high` with `gpt-6-astra`, `high`, `default`, and `fork_turns="none"`.
 6. Give the planner the Context Packet, applicable instructions, and material uncertainties.
-7. Require a read-only plan with bounded packages, affected interfaces, verification criteria, and unresolved decisions.
+7. Require a read-only plan with bounded packages, affected interfaces, package dependencies, verification criteria, and unresolved decisions.
 8. In Plan Mode, stop after the plan. Do not edit files or start implementation implicitly.
 9. Outside Plan Mode, continue authorized implementation without an extra approval step.
 10. Give each fresh `sol_implementer_high` only its relevant plan slice, evidence, constraints, and acceptance criteria.
 11. Require complete code and one lightweight focused check before Sol reports completion.
-12. Keep Sol idle while one fresh `astra_reviewer_high` reviews the completed changes.
+12. Keep each reviewed Sol owner idle while one fresh `astra_reviewer_high` reviews the completed changes.
 13. Use `gpt-6-astra`, `high`, `default`, and `fork_turns="none"` for the read-only reviewer.
 14. Give the reviewer the plan, completed diff, affected contracts, check evidence, and uncertainties.
 15. Require actionable findings with exact evidence, severity, unmet criteria, and residual risk.
@@ -150,13 +150,21 @@ Keep the reviewer idle and available for the focused recheck through acceptance.
 
 ### Native child lifecycle
 
-Allow one active child and at most 32 retained native children per ordinary session.
+Allow up to three active children and at most 32 retained native children per ordinary session.
+Count active children across tasks. Never start a fourth active child.
 Count retained children across tasks. The configured depth remains one.
+Run concurrent children only for independent packages with non-overlapping write scopes and no unresolved interface dependencies.
+Keep dependent packages and competing writes sequential.
+The root assigns each package to one owner and checks independence before concurrent dispatch.
 In Plan Mode, reserve only the planner slot.
-Each planned stage starts only after the previous active child finishes.
-Completed owners remain idle while another stage works.
+Start implementation only after its planner finishes.
+After the plan, independent implementation packages may run concurrently within the active-child limit.
+Start each reviewer only after all implementation under review finishes.
+Do not run a reviewer concurrently with implementation or repair of the changes under review.
+Keep each implementation owner idle during review and acceptance of its package.
+A review of an independent completed package may run alongside unrelated implementation within the same active-child limit.
 Count a retained planner, each Sol owner, and the reviewer against the same 32-child cap.
-Each new package may receive a fresh owner after the previous owner finishes.
+Each new independent package may receive a fresh owner within the active and retained limits.
 Retain the completed owner for root acceptance and its one ordinary repair.
 Use native close or release after acceptance when available.
 If unavailable, report the limitation and retain the completed owner idle within the cap.
@@ -581,12 +589,12 @@ All other Astra rows describe preserved experimental roles.
 The standalone agent files document intended restrictions but do not by
 themselves prove that a runtime tool or sandbox profile was applied. State a sandbox guarantee only after a check of the effective restriction. Otherwise, supply explicit model, reasoning, and behavioral constraints in the capsule.
 
-These tester and concurrent-package rules apply only to explicit experimental
+These tester rules apply only to explicit experimental
 profiles where those roles are permitted. Do not start a tester while the implementation
 it must test is still running. Wait for the relevant worker to finish, then
 give the tester the completed state and acceptance criteria. A tester must not
 poll, wait for, coordinate, or inspect the status of sibling agents. The default
-route never creates a tester. It permits one active child and at most 32 retained children per ordinary session.
+route never creates a tester. It permits up to three active children and at most 32 retained children per ordinary session.
 
 ## Delegated Route Entry
 
@@ -612,11 +620,13 @@ No automatic Astra implementation fallback is permitted. Preserve named experime
 
 ## Adaptive Delegation Budget
 
-This section applies only to explicit profiles with permission for multiple agents or waves. It does not override the normal route's one-active-child and 32-retained-child limits per ordinary session.
+This section applies to the normal route and explicit profiles that permit multiple agents or waves.
+It does not override the normal route's three-active-child and 32-retained-child limits per ordinary session.
+Named experiments retain their exact limits and lifecycle rules.
 Treat the number of subagents as an adaptive budget, not a target and not an
 absolute lifetime cap. A genuinely large task may use many agents across its lifetime. Each must own a distinct package or supply justified independent verification.
 
-- Start a Delegated task with at most one wave of one or two bounded agents.
+- Start a Delegated task with one wave of up to three agents for independent, non-overlapping packages within the applicable limits.
 - Integrate the completed wave before opening another dependent wave.
 - After four subagent sessions have completed for one root task, perform a
   delegation checkpoint before every additional wave. Identify open acceptance criteria and the distinct package for each new agent. Explain why an existing owner cannot complete it. Explain why delegation costs less or is more reliable than another root rollout.
@@ -733,8 +743,8 @@ the full root history.
 - Batch independent reads, searches, metadata checks, and other operations with
   known inputs.
 - In profiles where multiple agents are permitted, dispatch independent agents needed
-  for the same decision in one batch. The default route batches root reads but
-  follows its one-active-child model-aware branch.
+  for the same decision in one batch. The default route batches root reads and follows
+  its three-active-child model-aware branch for independent, non-overlapping packages.
 - Keep dependent work and overlapping mutations sequential.
 - Wait for the relevant batch, then synthesize its results once.
 - Open another batch only when new evidence materially changes the next task or

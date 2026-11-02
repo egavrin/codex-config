@@ -48,11 +48,21 @@ Outside Plan Mode, continue authorized implementation without an extra approval 
 No automatic Astra implementation fallback, separate tester, additional review agent, or nested delegation.
 Named experiments retain their exact routes, effort, roles, and lifecycle rules.
 
-Allow one active child and at most 32 retained native children per ordinary session. Count them across tasks. Depth remains one.
+Allow up to three active children and at most 32 retained native children per ordinary session.
+Count active children across tasks. Never start a fourth active child.
+Count retained children across tasks. Depth remains one.
+Run concurrent children only for independent packages with non-overlapping write scopes and no unresolved interface dependencies.
+Keep dependent packages and competing writes sequential.
+The root assigns each package to one owner and checks independence before concurrent dispatch.
 Preflight retained capacity before the planned route. Reserve the planner, each required Sol owner, and reviewer slots.
 In Plan Mode, reserve only the planner slot.
 Recheck capacity after the plan. If required slots are unavailable, stop before implementation and report the limit.
-Each stage starts only after the previous active child finishes. Completed owners remain idle.
+Start implementation only after its planner finishes.
+After the plan, independent implementation packages may run concurrently within the active-child limit.
+Start each reviewer only after all implementation under review finishes.
+Do not run a reviewer concurrently with implementation or repair of the changes under review.
+Keep each implementation owner idle during review and acceptance of its package.
+A review of an independent completed package may run alongside unrelated implementation within the same active-child limit.
 Keep the same Sol owner idle through review, acceptance, and at most one ordinary repair with exact evidence.
 After repair, request a focused recheck from the same reviewer. The root runs affected acceptance checks again.
 Use native close/release when available. Otherwise report the limitation and retain completed owners idle within the cap.

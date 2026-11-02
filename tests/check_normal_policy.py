@@ -12,9 +12,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MARKER = 'PROFILE: TERRA_ASTRA_SOL_REVIEW'
 ASTRA_ROLES = ('astra_planner_high', 'astra_reviewer_high')
+CONCURRENCY_CLAUSES = (
+    'Allow up to three active children and at most 32 retained native children per ordinary session.',
+    'Count active children across tasks. Never start a fourth active child.',
+    'Run concurrent children only for independent packages with non-overlapping write scopes and no unresolved interface dependencies.',
+    'Keep dependent packages and competing writes sequential.',
+    'Start implementation only after its planner finishes.',
+    'Start each reviewer only after all implementation under review finishes.',
+    'Do not run a reviewer concurrently with implementation or repair of the changes under review.',
+    'Keep each implementation owner idle during review and acceptance of its package.',
+)
 
 # Failure cases: missing stages, planning edits, implicit execution/approval,
 # nested dispatch, wrong roles, lost settings, capacity evasion, and false completion.
+# Concurrency failures: one-child restriction, fourth active child, overlapping
+# writes, unresolved dependencies, early implementation/review, and repair overlap.
 SCENARIOS = {
     'planned coding': ('root evidence -> Astra High plan -> Sol High implementation -> Astra High read-only review -> root acceptance',),
     'planning trigger': ('user requests a plan for code', 'material design decision', 'cross-component change', 'ordered implementation packages'),
@@ -33,6 +45,29 @@ def check_scenarios(routes):
     for scenario, phrases in SCENARIOS.items():
         for phrase in phrases:
             assert phrase in routes, (scenario, phrase)
+
+
+def check_concurrency(text):
+    for clause in CONCURRENCY_CLAUSES:
+        assert clause in text, clause
+    for stale in ('one active child', 'one-active-child', 'previous active child finishes',
+                  'after the previous owner finishes'):
+        assert stale not in text, stale
+
+
+def check_concurrency_regressions():
+    contract = '\n'.join(CONCURRENCY_CLAUSES)
+    check_concurrency(contract)
+    # The saved policy permits one, two, and three independent active packages.
+    assert 'up to three active children' in contract
+    invalid = [contract.replace('up to three', f'up to {limit}') for limit in ('one', 'four')]
+    invalid.extend(contract.replace(clause, '') for clause in CONCURRENCY_CLAUSES)
+    for changed in invalid:
+        try:
+            check_concurrency(changed)
+        except AssertionError:
+            continue
+        raise AssertionError('concurrency regression was not detected')
 
 
 def check_no_automatic_claude(text):
@@ -96,10 +131,14 @@ def check_tree(base):
     routes = section(policy, 'Routes')
     for phrase in ('All normal code changes, including tiny edits',
                    'Desktop and runtime overrides for model, reasoning, and service tier remain authoritative.',
-                   'Allow one active child and at most 32 retained native children per ordinary session.',
                    'Do not spawn Sol from Sol', 'No automatic Astra',
                    'Keep the implementation owner available and idle through acceptance.'):
         assert phrase in routes, phrase
+    check_concurrency(routes)
+    check_concurrency(config['developer_instructions'])
+    assert 'three-active-child model-aware branch' in section(policy, 'Batching and Root Rollout Control')
+    assert "normal route's three-active-child and 32-retained-child limits" in section(policy, 'Adaptive Delegation Budget')
+    assert 'It permits up to three active children and at most 32 retained children per ordinary session.' in section(policy, 'Runtime Routing Contract')
     for text in (routes, config['developer_instructions'], role['developer_instructions']):
         check_no_automatic_claude(text)
         assert 'Do not request Claude automatically.' in text
@@ -202,15 +241,21 @@ def main():
     parser.add_argument('--live', type=Path)
     parser.add_argument('--baseline', type=Path)
     args = parser.parse_args()
+    check_concurrency_regressions()
     check_awareness(args.live)
     check_no_automatic_claude((ROOT / 'README.md').read_text())
     check_claude_calls((ROOT / 'README.md').read_text())
     _, snapshot_policy = check_tree(ROOT / 'codex')
     if args.live:
-        _, live_policy = check_tree(args.live)
+        live_config, live_policy = check_tree(args.live)
         assert live_policy == snapshot_policy
+        assert live_config['developer_instructions'] == read_config(ROOT / 'codex/config.toml')['developer_instructions']
     readme = (ROOT / 'README.md').read_text()
     for phrase in (MARKER, 'astra_planner_high', 'astra_reviewer_high', 'Plan Mode', 'user-authorized fallback'):
+        assert phrase in readme, phrase
+    for phrase in ('up to three active children', 'Never start a fourth active child.',
+                   'independent packages', 'non-overlapping write scopes',
+                   'all implementation under review finishes', 'competing writes sequential'):
         assert phrase in readme, phrase
     if args.baseline:
         assert args.live, '--baseline requires --live'
