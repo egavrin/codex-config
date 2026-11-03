@@ -13,8 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 MARKER = 'PROFILE: TERRA_ASTRA_SOL_REVIEW'
 ASTRA_ROLES = ('astra_planner_high', 'astra_reviewer_high')
 CONCURRENCY_CLAUSES = (
-    'Allow up to three active children and at most 32 retained native children per ordinary session.',
-    'Count active children across tasks. Never start a fourth active child.',
+    'Allow up to six active children and at most 128 retained native children per ordinary session.',
+    'Count active children across tasks. Never start a seventh active child.',
     'Run concurrent children only for independent packages with non-overlapping write scopes and no unresolved interface dependencies.',
     'Keep dependent packages and competing writes sequential.',
     'Start implementation only after its planner finishes.',
@@ -25,7 +25,7 @@ CONCURRENCY_CLAUSES = (
 
 # Failure cases: missing stages, planning edits, implicit execution/approval,
 # nested dispatch, wrong roles, lost settings, capacity evasion, and false completion.
-# Concurrency failures: one-child restriction, fourth active child, overlapping
+# Concurrency failures: one-child restriction, seventh active child, overlapping
 # writes, unresolved dependencies, early implementation/review, and repair overlap.
 SCENARIOS = {
     'planned coding': ('root evidence -> Astra High plan -> Sol High implementation -> Astra High read-only review -> root acceptance',),
@@ -58,9 +58,10 @@ def check_concurrency(text):
 def check_concurrency_regressions():
     contract = '\n'.join(CONCURRENCY_CLAUSES)
     check_concurrency(contract)
-    # The saved policy permits one, two, and three independent active packages.
-    assert 'up to three active children' in contract
-    invalid = [contract.replace('up to three', f'up to {limit}') for limit in ('one', 'four')]
+    # The saved policy permits up to six independent active packages.
+    assert 'up to six active children' in contract
+    invalid = [contract.replace('up to six', f'up to {limit}') for limit in ('one', 'three', 'seven')]
+    invalid.append(contract.replace('128 retained', '32 retained'))
     invalid.extend(contract.replace(clause, '') for clause in CONCURRENCY_CLAUSES)
     for changed in invalid:
         try:
@@ -110,7 +111,7 @@ def check_tree(base):
     assert not re.search(r'default\s+Sol\s+High\s+route', policy), 'stale normal default reference'
     assert 'single-child model-aware branch' not in policy, 'ambiguous child lifecycle reference'
     agents = config['agents']
-    assert agents['max_concurrent_threads_per_session'] == 32 and agents['max_depth'] == 1
+    assert agents['max_concurrent_threads_per_session'] == 128 and agents['max_depth'] == 1
     assert (agents['default_subagent_model'], agents['default_subagent_reasoning_effort']) == ('gpt-6.1-sol', 'high')
     for name, value in agents.items():
         if isinstance(value, dict) and 'config_file' in value:
@@ -136,9 +137,11 @@ def check_tree(base):
         assert phrase in routes, phrase
     check_concurrency(routes)
     check_concurrency(config['developer_instructions'])
-    assert 'three-active-child model-aware branch' in section(policy, 'Batching and Root Rollout Control')
-    assert "normal route's three-active-child and 32-retained-child limits" in section(policy, 'Adaptive Delegation Budget')
-    assert 'It permits up to three active children and at most 32 retained children per ordinary session.' in section(policy, 'Runtime Routing Contract')
+    assert 'six-active-child model-aware branch' in section(policy, 'Batching and Root Rollout Control')
+    assert "normal route's six-active-child and 128-retained-child limits" in section(policy, 'Adaptive Delegation Budget')
+    assert 'one wave of up to six agents' in section(policy, 'Adaptive Delegation Budget')
+    assert 'It permits up to six active children and at most 128 retained children per ordinary session.' in section(policy, 'Runtime Routing Contract')
+    assert 'same 128-child cap' in routes
     for text in (routes, config['developer_instructions'], role['developer_instructions']):
         check_no_automatic_claude(text)
         assert 'Do not request Claude automatically.' in text
@@ -151,7 +154,7 @@ def check_tree(base):
     assert 'After planned implementation, request root-dispatched Astra High read-only review.' in role['developer_instructions']
     for route in ('terra-direct', 'terra-sol', 'luna-direct', 'luna-sol', 'sol-direct', '<effective-root>-sol', '<effective-root>-astra-sol-review'):
         assert route in routes and route in config['developer_instructions'], route
-    for phrase in ('astra_planner_high', 'astra_reviewer_high', 'Plan Mode', 'user-authorized fallback', '32 retained'):
+    for phrase in ('astra_planner_high', 'astra_reviewer_high', 'Plan Mode', 'user-authorized fallback', '128 retained'):
         assert phrase in config['developer_instructions'], phrase
     assert '| `astra_planner_high` | `gpt-6-astra` | `high` | `default` |' in policy
     assert '| `astra_reviewer_high` | `gpt-6-astra` | `high` | `default` |' in policy
@@ -174,7 +177,7 @@ def check_preservation(baseline, live):
         new = read_config(current / 'config.toml')
         def preserved(config):
             result = {k: v for k, v in config.items() if k != 'developer_instructions'}
-            result['agents'] = {k: v for k, v in result['agents'].items() if k not in ASTRA_ROLES}
+            result['agents'] = {k: v for k, v in result['agents'].items() if k not in (*ASTRA_ROLES, 'max_concurrent_threads_per_session')}
             return result
         assert preserved(old) == preserved(new), name
         for role_path in (baseline / name / 'agents').glob('*.toml'):
@@ -253,7 +256,8 @@ def main():
     readme = (ROOT / 'README.md').read_text()
     for phrase in (MARKER, 'astra_planner_high', 'astra_reviewer_high', 'Plan Mode', 'user-authorized fallback'):
         assert phrase in readme, phrase
-    for phrase in ('up to three active children', 'Never start a fourth active child.',
+    for phrase in ('up to six active children', 'Never start a seventh active child.',
+                   '128 open child threads', 'same 128-child cap',
                    'independent packages', 'non-overlapping write scopes',
                    'all implementation under review finishes', 'competing writes sequential'):
         assert phrase in readme, phrase

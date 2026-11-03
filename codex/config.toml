@@ -48,8 +48,8 @@ Outside Plan Mode, continue authorized implementation without an extra approval 
 No automatic Astra implementation fallback, separate tester, additional review agent, or nested delegation.
 Named experiments retain their exact routes, effort, roles, and lifecycle rules.
 
-Allow up to three active children and at most 32 retained native children per ordinary session.
-Count active children across tasks. Never start a fourth active child.
+Allow up to six active children and at most 128 retained native children per ordinary session.
+Count active children across tasks. Never start a seventh active child.
 Count retained children across tasks. Depth remains one.
 Run concurrent children only for independent packages with non-overlapping write scopes and no unresolved interface dependencies.
 Keep dependent packages and competing writes sequential.
@@ -91,7 +91,7 @@ goals = true
 
 [agents]
 enabled = true
-max_concurrent_threads_per_session = 32
+max_concurrent_threads_per_session = 128
 # V1 guard only: multi-agent V2 currently does not enforce this depth setting.
 max_depth = 1
 default_subagent_model = "gpt-6.1-sol"

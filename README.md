@@ -115,9 +115,10 @@ Desktop and runtime model, reasoning, and tier overrides remain authoritative.
 All normal code changes go to Sol High with a focused self-check.
 Planned code also uses Astra High planning and read-only review.
 The root integrates changes and owns acceptance.
-The configured ceiling is 32 open child threads, excluding the root, with a depth setting of one.
-The ordinary policy permits up to three active children for independent packages with non-overlapping write scopes.
-Completed owners can remain idle. Never start a fourth active child.
+The configured ceiling is 128 open child threads, excluding the root, with a depth setting of one.
+The ordinary policy permits up to six active children for independent packages with non-overlapping write scopes.
+Completed owners can remain idle. Never start a seventh active child.
+The active-child limit is an instruction. It does not prove runtime support for six concurrent children.
 Named experiments retain their own route and lifecycle rules.
 Approval remains `never`, and the sandbox remains `danger-full-access`.
 Memory extraction uses `gpt-6-luna`. Memory consolidation uses `gpt-6.1-terra`.
@@ -171,7 +172,7 @@ The root returns at most one ordinary repair to the same Sol owner, then request
 Astra planning and review do not authorize Astra implementation.
 Report a complete planned route as `<effective-root>-astra-sol-review`.
 
-Up to three active children may work on independent packages with non-overlapping write scopes and no unresolved interface dependencies.
+Up to six active children may work on independent packages with non-overlapping write scopes and no unresolved interface dependencies.
 The root assigns each package to one owner and checks independence before concurrent dispatch.
 Keep dependent packages and competing writes sequential.
 Start implementation only after its planner finishes.
@@ -180,8 +181,8 @@ Start each reviewer only after all implementation under review finishes.
 Do not run a reviewer concurrently with implementation or repair of the changes under review.
 Keep each implementation owner idle during review and acceptance of its package.
 A review of an independent completed package may run alongside unrelated implementation within the same active-child limit.
-Count active children across tasks. Never start a fourth active child.
-Preflight capacity for the planner, each required Sol owner, and the reviewer within the same 32-child cap.
+Count active children across tasks. Never start a seventh active child.
+Preflight capacity for the planner, each required Sol owner, and the reviewer within the same 128-child cap.
 In Plan Mode, reserve only the planner slot.
 If the plan requires more slots than available, stop before implementation and report the missing capacity.
 If native close or release is unavailable, report that limit and retain completed owners idle within the cap.

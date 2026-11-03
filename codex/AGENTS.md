@@ -150,8 +150,8 @@ Keep the reviewer idle and available for the focused recheck through acceptance.
 
 ### Native child lifecycle
 
-Allow up to three active children and at most 32 retained native children per ordinary session.
-Count active children across tasks. Never start a fourth active child.
+Allow up to six active children and at most 128 retained native children per ordinary session.
+Count active children across tasks. Never start a seventh active child.
 Count retained children across tasks. The configured depth remains one.
 Run concurrent children only for independent packages with non-overlapping write scopes and no unresolved interface dependencies.
 Keep dependent packages and competing writes sequential.
@@ -163,7 +163,7 @@ Start each reviewer only after all implementation under review finishes.
 Do not run a reviewer concurrently with implementation or repair of the changes under review.
 Keep each implementation owner idle during review and acceptance of its package.
 A review of an independent completed package may run alongside unrelated implementation within the same active-child limit.
-Count a retained planner, each Sol owner, and the reviewer against the same 32-child cap.
+Count a retained planner, each Sol owner, and the reviewer against the same 128-child cap.
 Each new independent package may receive a fresh owner within the active and retained limits.
 Retain the completed owner for root acceptance and its one ordinary repair.
 Use native close or release after acceptance when available.
@@ -594,7 +594,7 @@ profiles where those roles are permitted. Do not start a tester while the implem
 it must test is still running. Wait for the relevant worker to finish, then
 give the tester the completed state and acceptance criteria. A tester must not
 poll, wait for, coordinate, or inspect the status of sibling agents. The default
-route never creates a tester. It permits up to three active children and at most 32 retained children per ordinary session.
+route never creates a tester. It permits up to six active children and at most 128 retained children per ordinary session.
 
 ## Delegated Route Entry
 
@@ -621,12 +621,12 @@ No automatic Astra implementation fallback is permitted. Preserve named experime
 ## Adaptive Delegation Budget
 
 This section applies to the normal route and explicit profiles that permit multiple agents or waves.
-It does not override the normal route's three-active-child and 32-retained-child limits per ordinary session.
+It does not override the normal route's six-active-child and 128-retained-child limits per ordinary session.
 Named experiments retain their exact limits and lifecycle rules.
 Treat the number of subagents as an adaptive budget, not a target and not an
 absolute lifetime cap. A genuinely large task may use many agents across its lifetime. Each must own a distinct package or supply justified independent verification.
 
-- Start a Delegated task with one wave of up to three agents for independent, non-overlapping packages within the applicable limits.
+- Start a Delegated task with one wave of up to six agents for independent, non-overlapping packages within the applicable limits.
 - Integrate the completed wave before opening another dependent wave.
 - After four subagent sessions have completed for one root task, perform a
   delegation checkpoint before every additional wave. Identify open acceptance criteria and the distinct package for each new agent. Explain why an existing owner cannot complete it. Explain why delegation costs less or is more reliable than another root rollout.
@@ -744,7 +744,7 @@ the full root history.
   known inputs.
 - In profiles where multiple agents are permitted, dispatch independent agents needed
   for the same decision in one batch. The default route batches root reads and follows
-  its three-active-child model-aware branch for independent, non-overlapping packages.
+  its six-active-child model-aware branch for independent, non-overlapping packages.
 - Keep dependent work and overlapping mutations sequential.
 - Wait for the relevant batch, then synthesize its results once.
 - Open another batch only when new evidence materially changes the next task or
