@@ -129,18 +129,113 @@ def main():
                     assert snapshot(root / 'graphify-out') == initial
                 shutil.rmtree(nested)
             # Each earlier policy must be rejected without writes and rebuilt once.
-            for version in (1, 2):
+            for version in (1, 2, 3):
                 previous = json.loads(state.read_text())
                 previous['format'] = version
                 state.write_text(json.dumps(previous))
                 run(root, readonly=True, code=2, environ=environ)
                 assert json.loads(state.read_text())['format'] == version
                 run(root, environ=environ)
-                assert json.loads(state.read_text())['format'] == 3
+                assert json.loads(state.read_text())['format'] == 4
                 current = snapshot(root / 'graphify-out')
                 run(root, environ=environ)
                 assert snapshot(root / 'graphify-out') == current
             assert graph.is_file()
+
+        def git(root, *arguments, data=None):
+            return subprocess.check_output(['git', '-C', str(root), *arguments], input=data)
+
+        def commit_fixture(root, message):
+            git(root, '-c', 'user.name=Graphify Test', '-c', 'user.email=graphify@example.invalid',
+                'commit', '--allow-empty', '-qm', message)
+            return git(root, 'rev-parse', 'HEAD').strip().decode()
+
+        def submodule_policy(real_env):
+            root, origin = project('parent'), project('origin')
+            (origin / 'child.py').write_text('def initialized_child(): return 1\n')
+            git(origin, 'add', 'child.py')
+            first_id = commit_fixture(origin, 'Submodule fixture')
+            second_id = commit_fixture(origin, 'New submodule revision')
+            initialized = root / 'vendor' / 'initialized'
+            git(root, '-c', 'protocol.file.allow=always', 'submodule', 'add', '-q', str(origin),
+                str(initialized.relative_to(root)))
+
+            def declare(path, oid, stage=0):
+                entry = f'160000 {oid} {stage}\t'.encode() + os.fsencode(path) + b'\0'
+                git(root, 'update-index', '-z', '--index-info', data=entry)
+
+            literal = 'vendor/!mod [x]*?\\,\t\n'
+            undeclared = root / 'vendor/other.py'
+            undeclared.write_text('def parent_neighbor(): return 1\n')
+            (root / 'vendor/.graphifyignore').write_text('!*/\n!**/*.py\n')
+            for path in (literal, 'missing', 'empty'):
+                declare(path, first_id)
+            (root / 'empty').mkdir()
+            (root / literal).mkdir()
+            nested_source = root / literal / 'child.py'
+            nested_source.write_text('def literal_child(): return 1\n')
+            alias = root / 'alias.py'
+            alias.symlink_to(nested_source)
+            graph = root / 'graphify-out/graph.json'
+
+            run(root, environ=real_env)
+            assert all(symbol in graph.read_text() for symbol in ('alpha_alpha', 'parent_neighbor'))
+            assert all(symbol not in graph.read_text() for symbol in ('initialized_child', 'literal_child'))
+            original = snapshot(graph.parent)
+            nested_source.write_text('def changed_literal_child(): return 2\n')
+            git(initialized, 'checkout', '--detach', '-q', first_id)
+            (root / 'missing').mkdir()
+            run(root, readonly=True, environ=real_env)
+            run(root, environ=real_env)
+            assert snapshot(graph.parent) == original
+            run(initialized, environ=real_env)
+            assert 'initialized_child' in (initialized / 'graphify-out/graph.json').read_text()
+
+            # Git index object changes make a graph stale without changing checked-out sources.
+            declare(literal, second_id)
+            run(root, readonly=True, code=2, environ=real_env)
+            run(root, environ=real_env)
+            assert 'changed_literal_child' not in graph.read_text()
+            git(root, 'update-index', '--force-remove', '--', literal)
+            alias.unlink()
+            run(root, readonly=True, code=2, environ=real_env)
+            run(root, environ=real_env)
+            assert 'changed_literal_child' in graph.read_text()
+            declare(literal, first_id)
+            run(root, readonly=True, code=2, environ=real_env)
+            run(root, environ=real_env)
+            assert 'changed_literal_child' not in graph.read_text()
+
+            (root / 'vendor/Case').mkdir()
+            (root / 'vendor/Case/child.py').write_text('def upper_case_source(): return 1\n')
+            declare('vendor/case', first_id)
+            if (root / 'vendor/case').exists():
+                result = run(root, code=2, environ=real_env)
+                assert 'submodule' in result.stderr.lower()
+            else:
+                (root / 'vendor/case').mkdir()
+                (root / 'vendor/case/child.py').write_text('def lower_case_child(): return 1\n')
+                run(root, environ=real_env)
+                assert 'upper_case_source' in graph.read_text() and 'lower_case_child' not in graph.read_text()
+            git(root, 'update-index', '--force-remove', '--', 'vendor/case')
+
+            previous = graph.read_bytes()
+            (root / 'vendor/linked').symlink_to(root / 'vendor/Case', target_is_directory=True)
+            declare('vendor/linked', first_id)
+            assert 'submodule' in run(root, code=2, environ=real_env).stderr.lower()
+            git(root, 'update-index', '--force-remove', '--', 'vendor/linked')
+            (root / '.gitmodules').write_text('[submodule "ordinary"]\n\tpath = vendor/ordinary\n\turl = ./ordinary\n')
+            git(root, 'init', '-q', 'vendor/ordinary')
+            assert 'vendor/ordinary' in run(root, code=2, environ=real_env).stderr
+            shutil.rmtree(root / 'vendor/ordinary')
+            declare('conflict', first_id, stage=1)
+            declare('conflict', second_id, stage=2)
+            assert 'index' in run(root, readonly=True, code=2, environ=real_env).stderr.lower()
+            assert graph.read_bytes() == previous
+            index = root / '.git/index'
+            index.write_bytes(b'invalid index')
+            assert 'index' in run(root, code=2, environ=real_env).stderr.lower()
+            assert graph.read_bytes() == previous
 
         a, b = project('a'), project('b')
         run(a, readonly=True, code=2)
@@ -246,6 +341,7 @@ runpy.run_path(launcher, run_name='__main__')
         if options.real:
             real = project('real')
             real_env = dict(env, PATH=os.environ['PATH'])
+            submodule_policy(real_env)
             subprocess.run(['git', '-C', str(real), '-c', 'user.name=Graphify Test',
                             '-c', 'user.email=graphify@example.invalid', 'commit',
                             '--allow-empty', '-qm', 'Fixture'], check=True)
@@ -287,7 +383,7 @@ runpy.run_path(launcher, run_name='__main__')
     report = {'upstream_revision': '92741d162b2094ffc2fed58cfbd8ee823e9da62c',
               'launcher_sha256': hashlib.sha256(LAUNCHER.read_bytes()).hexdigest(),
               'test_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-              'invocation': sys.argv, 'fixtures': 'Two separate Git roots with alpha/beta functions, ignored.py and synthetic .env.',
+              'invocation': sys.argv, 'fixtures': 'Separate Git roots with alpha/beta functions, ignore rules, synthetic .env, worktrees, and submodules.',
               'result': 'PASS', 'runs': records}
     (evidence / 'workflow.json').write_text(json.dumps(report, indent=2) + '\n')
     print('PASS:', evidence / 'workflow.json')

@@ -33,6 +33,7 @@ Do not retry a failed extraction without new evidence or a corrected cause.
 - Follow the active agent-routing instructions. This skill does not dispatch agents or change delegation permissions.
 - Keep outputs local and untracked. The launcher adds Git local excludes without changing tracked ignore files.
 - Exclude `.claude/worktrees/` from the parent graph. Select a required worktree separately as the project root.
+- Exclude Git submodules declared in the parent index. Select an initialized submodule separately when the task needs its graph.
 - Never use a home directory, filesystem root, or directory that contains multiple projects as the target.
 - For a non-Git project, pass `--scoped` only after the task identifies that specific project directory.
 - Do not create `.graphify_version`. That marker permits upstream replacement of this adapted skill.

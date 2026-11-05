@@ -20,7 +20,15 @@ The public launcher needs these workflow checks before acceptance:
 - Added, changed, or deleted files below a `dist` directory trigger unnecessary extraction.
 - A `dist` exclusion hides a nested Git directory or linked-worktree file.
 - A nested-project fallback omits the project boundary or exposes Git marker contents.
-- State format 2 remains fresh after the fingerprint policy changes.
+- State format 3 remains fresh after the fingerprint policy changes.
+- Parent extraction visits a Git index entry with mode `160000` or includes its source through a symbolic link.
+- An ignore negation or a literal path with glob characters changes which submodule paths the scanner excludes.
+- A submodule path with a different filesystem spelling hides an unrelated directory or enters extraction.
+- Changes inside a submodule trigger parent extraction. Changes to its Git index entry leave the parent graph current.
+- The launcher trusts `.gitmodules` without a matching Git index entry.
+- An unreadable or conflicted Git index allows extraction or changes the previous graph.
+- Converting a source directory to a submodule leaves its symbols in the parent graph.
+- Removing a submodule declaration fails to restore ordinary source to the parent graph.
 - Local Git excludes replace user entries or change tracked ignore files.
 - An interrupted publication leaves a recoverable previous graph.
 

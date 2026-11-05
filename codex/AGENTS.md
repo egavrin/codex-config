@@ -75,7 +75,7 @@ Named opt-in experiments retain their exact routes, roles, effort, and lifecycle
 
 ### Direct and Delegated work
 
-All normal code changes, including tiny edits, require Sol ownership.
+All normal code changes, including tiny edits, start with Sol ownership.
 Do not request Claude automatically.
 Terra and Luna assign each code package to one fresh `sol_implementer_high` with `gpt-6.1-sol`, `high`, and `default`.
 A Sol root implements directly. Do not spawn Sol from Sol.
@@ -102,7 +102,7 @@ Architecture questions without planned code remain substantive read-only Sol wor
 The sequence is root evidence -> Astra High plan -> Sol High implementation -> Astra High read-only review -> root acceptance.
 Only the root dispatches the planner and reviewer.
 Sol sends planning or review requests to the root.
-Do not spawn agents from a child or use nested Codex.
+Use the **Astra implementation fallback** when its evidence gate applies.
 
 1. State the objective and observable acceptance criteria.
 2. Collect one bounded evidence pass and form the Context Packet.
@@ -120,19 +120,58 @@ Do not spawn agents from a child or use nested Codex.
 14. Give the reviewer the plan, completed diff, affected contracts, check evidence, and uncertainties.
 15. Require actionable findings with exact evidence, severity, unmet criteria, and residual risk.
 16. Check the findings against source and acceptance criteria before a repair or acceptance decision.
-17. Return at most one ordinary repair to the same Sol owner with exact expected-versus-observed evidence.
-18. Request a focused recheck from the same reviewer after that repair.
-19. Inspect the final diff and run proportionate deterministic acceptance checks in the root.
+17. Follow **Implementation and Repair Ownership** for acceptance checks and grouped repairs.
+18. Keep the same reviewer for focused rechecks after changes.
+19. Inspect the final diff and accept only when current evidence supports the required criteria.
 
 For a Sol root, the root performs the Sol implementation stage directly.
 The root still dispatches the planner and reviewer for planned code.
 A planner or reviewer must not edit production files or implement a repair.
 Return material scope, architecture, contract, security, migration, or ambiguous findings to the root for a decision.
-If a repair remains unresolved, report the unmet criterion without another automatic repair loop.
-No automatic Astra implementation fallback is permitted.
 Do not create a separate tester or another review agent.
 Preserve all experimental role files and named experiments.
 Extra High requires an explicit user request or a named experiment.
+
+### Astra implementation fallback
+
+Use this route only for authorized implementation outside Plan Mode when one of these conditions applies.
+
+- An evidence-backed Sol repair leaves the same acceptance criterion unmet.
+- A focused Sol attempt identifies a materially hard unresolved implementation problem. Explain why Astra is necessary.
+
+The root confirms the evidence before dispatch.
+For planned code, have the same reviewer recheck the failed repair before the root confirms it.
+Keep material scope, architecture, contract, security, migration, and ambiguous decisions with the root.
+In Plan Mode or read-only work, use the applicable read-only route.
+
+1. Assign at most one fresh `astra_fallback_high` per Sol package.
+2. Use `gpt-6-astra`, `high`, `default`, and `fork_turns="none"`.
+3. Include the unmet criterion, the focused Sol attempt or repair, and the expected and observed results in the failure packet.
+4. Include exact evidence, changed files, the smallest unresolved write scope, applicable constraints, and the focused check.
+5. If the work is planned, include the relevant plan slice and any findings that apply.
+6. Suspend Sol writes in that scope. Assign Astra sole ownership of the unresolved work.
+
+Sol can dispatch this role only if all of these conditions apply.
+
+- The active higher-priority instructions permit nested dispatch.
+- The native nested tools can dispatch the named role and support follow-up to the same Astra owner.
+- The root includes `Astra Fallback Slot: reserved` in the package capsule and confirms both caps allow dispatch.
+
+Count outstanding reservations against both caps until dispatch or release.
+If Sol cannot dispatch, send the failure packet and the exact limit to the root.
+The root dispatches the same bounded role if native tools, the role, permissions, and capacity allow it.
+A Sol root uses this root dispatch path when its own work meets the same gate.
+If neither dispatch path is available, report the unmet criterion and the exact limit.
+Use native collaboration only. Do not delegate deeper.
+
+Require one lightweight focused check from Astra before it reports the result.
+Keep the same Astra owner through repair and acceptance.
+If native follow-up requires the dispatch parent, use Sol to relay repairs.
+For planned code, reuse the same read-only reviewer for the fallback diff and later changes if review has started.
+If fallback precedes review, give the planned reviewer the completed combined diff.
+The root inspects the combined diff and follows **Implementation and Repair Ownership** for acceptance.
+Do not start another fallback for that package.
+Record whether Sol or the root dispatched Astra.
 
 ### Ownership and completion
 
@@ -145,14 +184,16 @@ The effective root owns integration and final acceptance.
 Inspect the diff and affected contracts. Run proportionate deterministic checks and material edge cases.
 Distinguish product defects from harness or environment limitations.
 Keep the implementation owner available and idle through acceptance.
-Send at most one ordinary repair to that same owner, with exact expected-versus-observed evidence.
-Keep the reviewer idle and available for the focused recheck through acceptance.
+Follow **Implementation and Repair Ownership** for repairs and rechecks.
+Keep the reviewer idle and available for focused rechecks through acceptance.
 
 ### Native child lifecycle
 
 Allow up to six active children and at most 128 retained native children per ordinary session.
 Count active children across tasks. Never start a seventh active child.
-Count retained children across tasks. The configured depth remains one.
+Count all descendants across tasks against the six-active and 128-retained limits.
+The only nested normal route is the Astra implementation fallback.
+The `max_depth = 2` setting is a V1 guard. Verify native capability separately for V2.
 Run concurrent children only for independent packages with non-overlapping write scopes and no unresolved interface dependencies.
 Keep dependent packages and competing writes sequential.
 The root assigns each package to one owner and checks independence before concurrent dispatch.
@@ -163,9 +204,9 @@ Start each reviewer only after all implementation under review finishes.
 Do not run a reviewer concurrently with implementation or repair of the changes under review.
 Keep each implementation owner idle during review and acceptance of its package.
 A review of an independent completed package may run alongside unrelated implementation within the same active-child limit.
-Count a retained planner, each Sol owner, and the reviewer against the same 128-child cap.
+Count each retained planner, Sol owner, reviewer, and Astra fallback owner against the same 128-child cap.
 Each new independent package may receive a fresh owner within the active and retained limits.
-Retain the completed owner for root acceptance and its one ordinary repair.
+Retain the current owner for root acceptance and evidence-backed repairs.
 Use native close or release after acceptance when available.
 If unavailable, report the limitation and retain the completed owner idle within the cap.
 An interrupt is not a close or release operation.
@@ -189,11 +230,14 @@ Report `effective_route = <root>-single-agent-fallback` only for failed intended
 For a planned fallback, also report the omitted stages and the actual replacement route.
 Exclude fallback sessions from valid full-route benchmarks.
 A healthy active child or the retained-child cap does not justify ownership transfer.
-Wait for the owner or use its permitted repair.
+Wait for the owner or send evidence-backed repairs under **Implementation and Repair Ownership**.
+Use **Astra implementation fallback** when its evidence gate applies. Keep every required planned stage.
 Report the actual root model, reasoning, and observable service tier separately.
 Report unplanned routes as `terra-direct`, `terra-sol`, `luna-direct`, `luna-sol`,
 `sol-direct`, or `<effective-root>-sol` for another root override.
 Report the completed planned route as `<effective-root>-astra-sol-review`.
+If Astra implements the fallback, append `+astra-fallback` to the actual route and report the dispatch parent.
+Report omitted required stages separately from the native Astra implementation fallback.
 Do not infer latency, quality, or quota savings from the reasoning level.
 
 ## Jev routing-adviser shadow experiment
@@ -527,7 +571,8 @@ default route, the effective root owns acceptance. In the
 Terra-Luna-Sol-Astra experiment, the dedicated Luna acceptance verifier owns
 that suite and reports its evidence to Terra.
 
-Only when a named experiment explicitly permits Astra escalation, the root sends Astra a delta packet. Include the unresolved acceptance criterion, relevant original packet facts, and Sol's concrete evidence. Include current changed paths and the smallest remaining ownership surface. Do not resend completed work or the original
+For the normal Astra implementation fallback, use the failure packet in **Astra implementation fallback**.
+When a named experiment permits Astra escalation, the root sends Astra a delta packet. Include the unresolved acceptance criterion, relevant original packet facts, and Sol's concrete evidence. Include current changed paths and the smallest remaining ownership surface. Do not resend completed work or the original
 packet wholesale.
 
 ## Sol research-slot policy
@@ -561,6 +606,7 @@ the configured values explicitly on every initial spawn:
 | `sol_implementer_high` | `gpt-6.1-sol` | `high` | `default` |
 | `astra_planner_high` | `gpt-6-astra` | `high` | `default` |
 | `astra_reviewer_high` | `gpt-6-astra` | `high` | `default` |
+| `astra_fallback_high` | `gpt-6-astra` | `high` | `default` |
 | `senior_executor_standard` | `gpt-6-sol` | `medium` | `default` |
 | `astra_executor_standard` | `gpt-6-astra` | `medium` | `default` |
 | `astra_executor_high` | `gpt-6-astra` | `high` | `default` |
@@ -584,6 +630,7 @@ or `explorer_repository` remains untyped unless the runtime applies the matching
 role profile. If typed roles are unavailable, use the table above as the effective routing contract. Include the role's behavioral constraints in the task capsule.
 
 The normal route registers `astra_planner_high` and `astra_reviewer_high` for read-only planned-code stages.
+It registers `astra_fallback_high` for the bounded implementation fallback. That fallback requires the named role.
 All other Astra rows describe preserved experimental roles.
 
 The standalone agent files document intended restrictions but do not by
@@ -611,12 +658,13 @@ Outside Plan Mode, continue authorized work without an extra approval step.
 5. Require code and a focused self-check before the owner reports completion.
 6. For planned code, dispatch the Astra High read-only review before root acceptance.
 7. Keep Sol idle and available during review and root acceptance.
-8. Return at most one ordinary repair with concrete evidence to that owner.
-9. After repair, request the focused recheck from the same reviewer for planned code.
+8. Follow **Implementation and Repair Ownership** for grouped repairs and acceptance checks.
+9. For planned code, keep the same reviewer for focused rechecks.
 10. Apply the native lifecycle rules before dispatch and after acceptance.
 
 A Sol root owns implementation directly and performs a focused self-check.
-No automatic Astra implementation fallback is permitted. Preserve named experiments and explicit user overrides.
+Use **Astra implementation fallback** when its evidence gate applies.
+Preserve named experiments and explicit user overrides.
 
 ## Adaptive Delegation Budget
 
@@ -654,9 +702,11 @@ Every initial capsule begins with a stable Task ID and uses the role-specific
 structure below.
 
 For normal `sol_implementer_high` delegation, use the Worker capsule and state `Research Slot: withheld`.
+Permit child delegation only under **Astra implementation fallback**. Include a slot reservation only when its conditions apply.
 For normal planned code, use read-only planner and reviewer capsules with the Context Packet and relevant stage evidence.
-Use Astra implementation delta capsules only when a named experiment explicitly permits them.
-State that the effective root owns integration and acceptance. Explicitly prohibit child delegation.
+For `astra_fallback_high`, use the Worker capsule and the failure packet. Prohibit child delegation in that capsule.
+Use experimental Astra delta capsules only when the named experiment permits them.
+State that the effective root owns integration and acceptance.
 Named experiments that use `senior_executor_standard` retain their Worker capsule and `Research Slot: withheld` requirements.
 
 ### Explorer capsule
@@ -707,7 +757,8 @@ State that the root owns dispatch, mode decisions, integration, and final accept
 Require actionable findings with exact evidence, severity, unmet criteria, and residual risk.
 Prohibit file edits, repairs, child delegation, and automatic Claude requests.
 State that the root checks findings, dispatches repairs, and owns final acceptance.
-For a focused recheck, provide only the repair diff, prior findings, and changed evidence.
+Identify the revision or diff under review.
+For a focused recheck, provide only the changed diff, affected findings, and changed evidence.
 
 ### Tester capsule
 
@@ -770,9 +821,23 @@ is available.
 
 ## Implementation and Repair Ownership
 
-In Delegated work, do not let the root silently duplicate a distinct owner's
-package. In the default route, the child owner receives at most one ordinary repair. The effective root supplies the failed criterion and exact expected-versus-observed evidence. For planned code, the root requests a focused recheck from the same Astra reviewer after repair.
-Then, the root runs the affected acceptance checks again.
+In Delegated work, keep one owner per write scope. In the normal route, the
+root owns this acceptance process for work by Sol or Astra.
+
+1. Inspect the diff and affected contracts. Check planned review findings against source and acceptance criteria.
+2. Run all feasible relevant checks before sending a repair group.
+3. Record each blocked check, its blocker, and the affected acceptance criteria.
+4. Record review findings and check results against the revision or diff they examine.
+5. Group confirmed in-scope failures by current owner. Include failed criteria, changed paths, and exact expected and observed results.
+6. Send each repair group to the current owner. Keep material decisions with the root.
+7. Invalidate evidence affected by changes to the code, inputs, or environment. Repeat affected checks after changes. For planned code, use the same Astra reviewer for a focused recheck.
+8. Send new in-scope failures to the current owner even after an earlier repair passes.
+
+If the same failure recurs without meaningful new evidence or a justified new approach, reassess before retrying.
+Resume that repair only with meaningful new evidence or a justified new approach.
+Use **Astra implementation fallback** when its evidence gate applies.
+Continue independent authorized work when a check or package is blocked.
+Report unmet criteria and blockers. Claim acceptance only when current evidence supports all required criteria.
 Do not add a tester.
 
 The remaining ownership guidance applies only to experimental profiles that
@@ -848,8 +913,7 @@ Before declaring a Delegated task complete, the root must:
 
 1. Make sure that package reports cover the requested scope.
 2. Resolve material conflicts and integrate results.
-3. Make sure that proportionate verification completed successfully or clearly
-   disclose what could not be run and why.
+3. Verify each required criterion on the final state. Report checks that could not run and the affected criteria.
 4. Make sure that no unrelated user work was overwritten.
 5. Report the outcome, material changes, verification, and remaining risk
    concisely.

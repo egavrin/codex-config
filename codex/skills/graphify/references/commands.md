@@ -35,7 +35,11 @@ A non-Git target also requires `--scoped`.
 The caller must identify a single project from the task before using that flag.
 The launcher excludes `.claude/worktrees/` directories from extraction and freshness checks.
 Those directories contain separate working copies. Index a required worktree as its own project root.
+Git index entries with mode `160000` define submodule boundaries, including empty or absent checkouts.
+The parent scan excludes the exact indexed paths and their contents. Ignore negations cannot include them.
+Index an initialized submodule separately when the task requires its graph.
 Other nested Git projects still cause a fallback that identifies their path relative to the selected root.
+An unreadable or conflicted Git index causes a fallback. An ambiguous submodule path also causes a fallback.
 The launcher rejects unsafe roots, output symbolic links, and tracked graph output.
 Graph and state reads reject symbolic links before opening them and enforce regular-file size limits.
 A non-Git parent without repository markers cannot be distinguished reliably from one large project.
@@ -49,15 +53,17 @@ A fallback requires ordinary source search, with the reported graph limitation p
 The graph stays in `<project>/graphify-out/`.
 The launcher records the exact root and a source-metadata fingerprint in `graphify-out/.local-state.json`.
 Metadata checks include file names, sizes, modification times, change times, and relevant external Git ignore files.
-State format 3 requires one rebuild of graphs from earlier fingerprint policies, including format 2.
-They do not read source content or credential files.
+The fingerprint includes indexed submodule paths and object IDs. It excludes changes inside a submodule checkout.
+State format 4 requires one rebuild of graphs from earlier fingerprint policies.
+The freshness checks do not read source content or credential files.
 Changes to ignored files can cause conservative refreshes.
 Symlink targets and common dependency directories do not enter the fingerprint.
 Files below any directory named `dist` within the project do not enter the fingerprint, consistent with the pinned scanner.
 The launcher still traverses those directories to detect nested Git projects, with the other skip rules unchanged.
 
 Builds copy the previous output to a temporary directory beside the project graph.
-The CLI updates that copy, using its automatic incremental behavior.
+The CLI usually updates that copy incrementally.
+When the submodule boundary paths change or an earlier state format is present, the launcher rebuilds the staged graph and manifest.
 There is no `--incremental` flag.
 After validation, the launcher replaces the output directory under an exclusive lock.
 A temporary `.graphify-local-backup/` retains the previous output during publication.
@@ -88,6 +94,7 @@ graphify explain SYMBOL
 
 Each subprocess has `GRAPHIFY_BACKEND=none`, `GRAPHIFY_NO_AUTO_REFRESH=1`, and `GRAPHIFY_QUERY_LOG_DISABLE=1`.
 Provider keys and inherited `GRAPHIFY_*` options do not enter the subprocess environment.
+Submodule exclusions require the pinned scanner. If its source differs, extraction falls back and preserves the previous graph.
 Do not bypass the launcher for task work.
 Raw query commands write a query stamp even when they do not change the graph.
 

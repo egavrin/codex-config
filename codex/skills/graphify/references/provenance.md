@@ -15,6 +15,9 @@ The source references below determine the adapted behavior:
 The local skill text, launcher, and workflow tests are original adaptations for this installation.
 They replace the upstream agent workflow with bounded local AST extraction and guarded graph reads.
 The local launcher excludes Claude worktree copies from each parent graph and its freshness checks.
+The launcher also excludes paths with Git index mode `160000` from the parent graph.
+It checks the pinned CLI and detector source hashes before it applies exact submodule exclusions inside the guard.
+The launcher supplies `PYTHONHASHSEED=0` so the pinned CLI does not restart outside the guard.
 They do not copy automatic model selection, parallel agent dispatch, external hooks, or MCP activation.
 The shared skill remains eligible for implicit invocation in Codex and normal model invocation in Claude.
 

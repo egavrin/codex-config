@@ -37,6 +37,7 @@ The dependency inventory records this installation. It is not a dependency lock 
 Read the [skill](../codex/skills/graphify/SKILL.md) and [command reference](../codex/skills/graphify/references/commands.md) before task use.
 The launcher provides `ensure`, `query`, `path`, and `explain`.
 It stores each project graph in `graphify-out/`.
+Parent graphs exclude Git submodule paths declared in the index. An initialized submodule can have its own graph.
 It adds Git local excludes and preserves tracked ignore files.
 Shared queries and exclusive updates use nonblocking OS locks.
 A busy graph causes ordinary source search without a retry loop.
@@ -98,6 +99,9 @@ Existing state format 1 requires a graph update before reuse.
 Black-box regression checks cover linked worktrees, nested Git markers, excluded source changes, and separate worktree indexing.
 Film Studio's actual root and freshness scan also pass. Acceptance did not build a Film Studio graph.
 The fix evidence stays under `~/.codex/verification/graphify-worktree-fix-20261026`.
+
+State format 4 includes Git submodule paths and object IDs in the freshness check.
+Graphs from earlier formats require a rebuild. The command reference describes submodule behavior and fallback conditions.
 
 Graph relationships can omit dynamic calls, unsupported syntax, and generated behavior.
 Source code and runtime checks remain authoritative.

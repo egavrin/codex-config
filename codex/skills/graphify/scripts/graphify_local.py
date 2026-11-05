@@ -16,11 +16,17 @@ import tempfile
 
 OUT = 'graphify-out'
 STATE = '.local-state.json'
+STATE_FORMAT = 4
 BACKUP = '.graphify-local-backup'
 SKIP = {'.git', '.hg', '.svn', 'node_modules', '.venv', 'venv', '__pycache__', OUT, BACKUP}
 SENSITIVE = re.compile(r'(^\.env|^\.envrc|^\.netrc$|^\.npmrc$|^\.pypirc$|^\.pgpass$|^\.git-credentials$|^\.boto$|^id_(rsa|dsa|ecdsa|ed25519)|\.(pem|key|p12|pfx|crt|cert|der|p8)$|credentials|secrets?|service.account)', re.I)
 PRIVATE_DIRS = {'.ssh', '.aws', '.gnupg', '.gcloud', '.secrets', 'secrets', 'credentials'}
 EXCLUDES = ['.env*', '**/.env*', '.envrc*', '**/.envrc*', '*.pem', '*.key', '*.p12', '*.pfx', '*.crt', '*.cert', '*.der', '*.p8', '*credentials*', '**/*credentials*', '*secret*', '**/*secret*', '*service_account*', '**/*service_account*', '.ssh/', '.aws/', '.gnupg/', '.gcloud/', '.claude/worktrees/', '**/.claude/worktrees/', 'graphify-out/', '.graphify-local-*']
+SCANNER_HASHES = {
+    'graphify.__main__': '64781829b2b7e9f0df326f0a33fc88cf540a4a30b2c6b103b3e44e78702de08a',
+    'graphify.cli': '4120138b25cab0a0439721cf6d4fa571b78067073613e4b9f917f7f0754a3464',
+    'graphify.detect': '86d44989ba8b7a73512def723acc510217cd5cdf5573d5ca3791c3d82eb70074',
+}
 
 
 class Fallback(Exception):
@@ -38,9 +44,9 @@ def environment():
     return env
 
 
-def git(root, *args):
+def git(root, *args, text=True):
     return subprocess.run(['git', '-C', str(root), *args], env=environment(),
-                          text=True, capture_output=True, check=False)
+                          text=text, capture_output=True, check=False)
 
 
 def validate_root(value, scoped):
@@ -62,26 +68,68 @@ def validate_root(value, scoped):
     return root, result.returncode == 0
 
 
-def fingerprint(root):
+def read_gitlinks(root):
+    result = git(root, 'ls-files', '--stage', '-z', text=False)
+    if result.returncode or (result.stdout and not result.stdout.endswith(b'\0')):
+        raise Fallback('Cannot read the Git index to establish submodule boundaries.')
+    links = {}
+    directory_names = {}
+    for entry in result.stdout.split(b'\0')[:-1]:
+        metadata, separator, raw_path = entry.partition(b'\t')
+        fields = metadata.split()
+        if not separator or len(fields) != 3 or not raw_path:
+            raise Fallback('Invalid Git index entry.')
+        mode, oid, stage = fields
+        if stage != b'0':
+            raise Fallback('The Git index has unmerged entries. Resolve them before using the graph.')
+        if mode != b'160000':
+            continue
+        if not re.fullmatch(rb'(?:[0-9a-f]{40}|[0-9a-f]{64})', oid):
+            raise Fallback('Invalid submodule object ID in the Git index.')
+        relative = os.fsdecode(raw_path)
+        parts = relative.split('/')
+        if any(part in ('', '.', '..') for part in parts) or relative in links:
+            raise Fallback('Invalid submodule path in the Git index.')
+        if parts[0] in (OUT, BACKUP):
+            raise Fallback('Graph output is tracked. Resolve its ownership before extraction.')
+        current = root
+        for part in parts:
+            child = current / part
+            try:
+                info = child.lstat()
+            except FileNotFoundError:
+                break  # An uninitialized submodule can have no directory.
+            if current not in directory_names:
+                directory_names[current] = set(os.listdir(current))
+            if part not in directory_names[current] or not stat.S_ISDIR(info.st_mode):
+                raise Fallback(f'Cannot establish an exact submodule boundary at {relative!r}.')
+            current = child
+        links[relative] = oid.decode('ascii')
+    return links
+
+
+def source_state(root, links):
     """Read source metadata only. No source content or credentials enter this check."""
     entries = {}
     for directory, names, files in os.walk(root, followlinks=False):
         current = Path(directory)
+        relative = current.relative_to(root)
         if current != root and '.git' in names + files:
-            raise Fallback(f'Nested Git project found at {str(current.relative_to(root))!r}. Select that project root.')
+            raise Fallback(f'Nested Git project found at {str(relative)!r}. Select that project root.')
         names[:] = sorted(n for n in names if n not in SKIP and n.lower() not in PRIVATE_DIRS
                           and not (n == 'worktrees' and current.name == '.claude')
+                          and (not links or str(relative / n) not in links)
                           and not n.startswith('.graphify-local-') and not (current / n).is_symlink())
         # The pinned scanner omits dist content, but nested project boundaries still need detection.
-        if 'dist' in current.relative_to(root).parts:
+        if 'dist' in relative.parts:
             continue
         for name in sorted(files):
             path = current / name
-            if SENSITIVE.search(name) or path.is_symlink():
+            if (links and str(relative / name) in links) or SENSITIVE.search(name) or path.is_symlink():
                 continue
             info = path.stat()
             if stat.S_ISREG(info.st_mode):
-                entries[str(path.relative_to(root))] = [info.st_size, info.st_mtime_ns, info.st_ctime_ns]
+                entries[str(relative / name)] = [info.st_size, info.st_mtime_ns, info.st_ctime_ns]
     # Ignore rules outside the source tree can change the indexed file set.
     for key, command in (('exclude', ('rev-parse', '--git-path', 'info/exclude')),
                          ('global-exclude', ('config', '--path', '--get', 'core.excludesFile'))):
@@ -93,7 +141,9 @@ def fingerprint(root):
             if path.is_file():
                 info = path.stat()
                 entries['@' + key] = [info.st_size, info.st_mtime_ns, info.st_ctime_ns]
-    return hashlib.sha256(json.dumps(entries, sort_keys=True).encode()).hexdigest()
+    return {'root': str(root), 'format': STATE_FORMAT,
+            'fingerprint': hashlib.sha256(json.dumps([entries, links], sort_keys=True).encode()).hexdigest(),
+            'gitlink_paths': hashlib.sha256(json.dumps(sorted(links)).encode()).hexdigest()}
 
 
 def read_json(path, limit):
@@ -169,12 +219,35 @@ def locked(root, readonly, exclusive):
 # The installed CLI is Python. Its audit hook blocks query writes and network use.
 # This is an in-process guard for the pinned CLI, not an OS sandbox for arbitrary code.
 GUARD = r'''
-import os, pathlib, re, runpy, sys
-cli, writable, pattern = sys.argv[1:4]
-sys.argv = [cli] + sys.argv[4:]
+import hashlib, importlib.util, json, os, pathlib, re, runpy, sys
+cli, writable, pattern, boundary_config = sys.argv[1:5]
+sys.argv = [cli] + sys.argv[5:]
 allowed = pathlib.Path(writable).resolve() if writable else None
 sensitive = re.compile(pattern, re.I)
+root = pathlib.Path.cwd()
+paths, scanner_hashes = json.loads(boundary_config)
+gitlinks = {root / path for path in paths}
+def identity(path):
+    try:
+        info = path.lstat()
+        return info.st_dev, info.st_ino
+    except FileNotFoundError:
+        return None
+gitlink_ids = {key for path in gitlinks if (key := identity(path)) is not None}
+def in_gitlink(path):
+    return path in gitlinks or not gitlinks.isdisjoint(path.parents)
+def linked_to_gitlink(path):
+    if not path.is_symlink():
+        return False
+    try:
+        target = path.resolve()
+        return (in_gitlink(target) or identity(target) in gitlink_ids
+                or any(identity(parent) in gitlink_ids for parent in target.parents))
+    except (OSError, RuntimeError):
+        return True
 def audit(event, args):
+    if event == 'os.exec':
+        raise PermissionError('Replacing the guarded process is disabled')
     if event.startswith('socket.') and event not in ('socket.__new__', 'socket.gethostname'):
         raise PermissionError('Network access is disabled')
     if event == 'subprocess.Popen':
@@ -187,20 +260,43 @@ def audit(event, args):
             target = pathlib.Path(os.fsdecode(path)).absolute()
             if any(p.lower() in {'.ssh', '.aws', '.gnupg', '.gcloud', '.secrets', 'secrets', 'credentials'} for p in target.parts) or sensitive.search(target.name):
                 raise PermissionError('Credential reads are disabled')
+            if gitlinks and target.is_relative_to(root) and (in_gitlink(target) or linked_to_gitlink(target)):
+                raise PermissionError('Submodule reads are disabled')
             writing = flags & (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC | os.O_APPEND)
             if writing and (allowed is None or not target.resolve().is_relative_to(allowed)):
                 raise PermissionError('Writes outside staging are disabled')
+    if event == 'os.scandir' and gitlinks and isinstance(args[0], (str, bytes)):
+        target = pathlib.Path(os.fsdecode(args[0])).absolute()
+        if in_gitlink(target) or linked_to_gitlink(target):
+            raise PermissionError('Submodule scans are disabled')
     if event in {'os.mkdir', 'os.remove', 'os.rmdir', 'os.rename', 'os.link', 'os.symlink', 'os.chmod', 'os.utime', 'os.truncate'}:
         paths = args[:2] if event in {'os.rename', 'os.link', 'os.symlink'} else args[:1]
         for path in paths:
             if not isinstance(path, (str, bytes)) or allowed is None or not pathlib.Path(os.fsdecode(path)).resolve().is_relative_to(allowed):
                 raise PermissionError('Filesystem changes outside staging are disabled')
 sys.addaudithook(audit)
-runpy.run_path(cli, run_name='__main__')
+if gitlinks:
+    for module, expected in scanner_hashes.items():
+        spec = importlib.util.find_spec(module)
+        if spec is None or not spec.origin or hashlib.sha256(pathlib.Path(spec.origin).read_bytes()).hexdigest() != expected:
+            raise RuntimeError('Submodule exclusion requires the pinned Graphify scanner.')
+    from graphify import detect
+    from graphify.__main__ import main
+    original_noise_dir = detect._is_noise_dir
+    original_scan_ignored = detect._is_scan_ignored
+    def noise_dir(name, parent=None):
+        return (parent is not None and in_gitlink(parent / name)) or original_noise_dir(name, parent)
+    def scan_ignored(path, *args, **kwargs):
+        return in_gitlink(path) or linked_to_gitlink(path) or original_scan_ignored(path, *args, **kwargs)
+    detect._is_noise_dir = noise_dir
+    detect._is_scan_ignored = scan_ignored
+    main()
+else:
+    runpy.run_path(cli, run_name='__main__')
 '''
 
 
-def cli_run(root, arguments, writable=None):
+def cli_run(root, arguments, writable=None, gitlinks=()):
     executable = shutil.which('graphify')
     if not executable:
         raise Fallback('Graphify is not installed. Use normal source search.')
@@ -210,8 +306,11 @@ def cli_run(root, arguments, writable=None):
     interpreter = shebang[2:] if shebang.startswith('#!') else ''
     if not Path(interpreter).is_file() or 'python' not in Path(interpreter).name:
         raise Fallback('Graphify requires its installed Python entry point.')
+    # The pinned CLI would otherwise re-execute outside the guard to set this seed.
+    env = dict(environment(), PYTHONHASHSEED='0')
     result = subprocess.run([interpreter, '-B', '-c', GUARD, executable, str(writable or ''),
-                             SENSITIVE.pattern, *arguments], cwd=root, env=environment(),
+                             SENSITIVE.pattern, json.dumps([list(gitlinks), SCANNER_HASHES]),
+                             *arguments], cwd=root, env=env,
                             text=True, capture_output=True)
     if result.returncode:
         # Error output can contain repository text. Keep it inert and bounded.
@@ -238,17 +337,23 @@ def exclude_outputs(root):
             handle.write(('\n' if old and not old.endswith('\n') else '') + '\n'.join(missing) + '\n')
 
 
-def fresh(root, digest):
-    load_graph(root / OUT / 'graph.json')
+def load_state(root):
     try:
         saved = read_json(root / OUT / STATE, 64 * 1024)
     except (OSError, ValueError) as exc:
         raise Fallback('Graph freshness is unknown. Run ensure when writes are permitted.') from exc
-    if saved != {'root': str(root), 'fingerprint': digest, 'format': 3}:
+    if not isinstance(saved, dict):
+        raise Fallback('Graph freshness is unknown. Run ensure when writes are permitted.')
+    return saved
+
+
+def fresh(root, current):
+    load_graph(root / OUT / 'graph.json')
+    if load_state(root) != current:
         raise Fallback('Graph is stale. Run ensure when writes are permitted.')
 
 
-def ensure(root, is_git, digest):
+def ensure(root, is_git, links, current):
     output, backup = root / OUT, root / BACKUP
     if backup.exists():
         if output.exists():
@@ -257,14 +362,14 @@ def ensure(root, is_git, digest):
         else:
             backup.rename(output)
     try:
-        fresh(root, digest)
+        fresh(root, current)
         print('Graph is current: ' + str(output / 'graph.json'))
         return
     except Fallback:
         pass
     if is_git:
         exclude_outputs(root)
-    before = fingerprint(root)
+    before = source_state(root, links)
     stage = Path(tempfile.mkdtemp(prefix='.graphify-local-stage-', dir=root))
     try:
         staged = stage / OUT
@@ -274,15 +379,24 @@ def ensure(root, is_git, digest):
                 raise Fallback('Existing graph output contains symbolic links.')
             load_graph(output / 'graph.json')
             shutil.copytree(output, staged)
+            try:
+                previous = load_state(root)
+            except Fallback:
+                previous = {}
+            if (previous.get('format') != STATE_FORMAT
+                    or previous.get('gitlink_paths') != before['gitlink_paths']):
+                # An old graph or manifest can retain sources across a boundary change.
+                (staged / 'graph.json').unlink()
+                (staged / 'manifest.json').unlink(missing_ok=True)
         arguments = ['extract', str(root), '--code-only', '--no-cluster', '--no-dedup', '--out', str(stage)]
         for pattern in EXCLUDES:
             arguments += ['--exclude', pattern]
-        report = cli_run(root, arguments, stage)
+        report = cli_run(root, arguments, stage, links)
         load_graph(staged / 'graph.json')
-        after = fingerprint(root)
+        after = source_state(root, read_gitlinks(root) if is_git else {})
         if before != after:
             raise Fallback('Sources changed during extraction. Previous graph is preserved.')
-        (staged / STATE).write_text(json.dumps({'root': str(root), 'fingerprint': after, 'format': 3}) + '\n')
+        (staged / STATE).write_text(json.dumps(after) + '\n')
         if output.exists():
             output.rename(backup)
         try:
@@ -314,11 +428,12 @@ def main():
     try:
         root, is_git = validate_root(args.root, args.scoped)
         with locked(root, args.read_only, args.action == 'ensure' and not args.read_only):
-            digest = fingerprint(root)
+            links = read_gitlinks(root) if is_git else {}
+            current = source_state(root, links)
             if args.action == 'ensure' and not args.read_only:
-                ensure(root, is_git, digest)
+                ensure(root, is_git, links, current)
             else:
-                fresh(root, digest)
+                fresh(root, current)
                 if args.action == 'ensure':
                     print('Graph is current: ' + str(root / OUT / 'graph.json'))
                 else:

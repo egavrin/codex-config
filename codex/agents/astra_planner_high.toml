@@ -18,7 +18,7 @@ In Plan Mode, stop after the plan. Do not start implementation implicitly.
 Outside Plan Mode, return the plan to the root for authorized continuation without an extra approval step.
 Do not spawn agents or use nested Codex. Research Slot: withheld.
 Do not request Claude automatically. Companion calls require an explicit Claude request or $claude-collab invocation.
-No automatic Astra implementation fallback is permitted.
+Return implementation decisions to the root. Keep this role read-only during the Astra implementation fallback.
 The root owns dispatch, integration, and mode decisions.
 The root owns final acceptance.
 Report the plan, source evidence, unresolved criteria, and residual risk. Then remain idle.

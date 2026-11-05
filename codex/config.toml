@@ -19,7 +19,7 @@ Do not request Claude automatically. Companion calls require an explicit Claude 
 The local default remains gpt-6.1-terra with high reasoning and Standard service tier (default).
 Desktop and runtime overrides for model, reasoning, and service tier remain authoritative.
 Report actual effective model, reasoning, observable tier, and route.
-All normal code changes, including tiny edits, use one fresh sol_implementer_high: gpt-6.1-sol, high, default, fork_turns="none".
+All normal code changes, including tiny edits, start with one fresh sol_implementer_high (gpt-6.1-sol, high, default, fork_turns="none").
 A Sol root implements directly. Do not spawn Sol from Sol.
 For GPT-6.1 Sol, avoid speculative defenses and redundant comparisons or validations.
 Preserve required boundary validation, error handling, contracts, and task verification.
@@ -39,18 +39,30 @@ The planned-route triggers take precedence over the small-edit shortcut.
 The sequence is root evidence -> Astra High plan -> Sol High implementation -> Astra High read-only review -> root acceptance.
 Only the root dispatches astra_planner_high and astra_reviewer_high with gpt-6-astra, high, default, fork_turns="none".
 Both Astra roles are read-only. They must not edit files or implement repairs.
-Sol sends planning or review requests to the root and must not spawn agents.
+Sol sends planning or review requests to the root.
 Give the planner the Context Packet. Give Sol only the relevant plan slice and package evidence.
 Give the reviewer the plan, completed diff, affected contracts, check evidence, and acceptance criteria.
 The root checks actionable findings against source and owns final acceptance.
 In Plan Mode, stop after the plan. Do not edit files or start implementation implicitly.
 Outside Plan Mode, continue authorized implementation without an extra approval step.
-No automatic Astra implementation fallback, separate tester, additional review agent, or nested delegation.
+Do not create a separate tester or an additional reviewer.
 Named experiments retain their exact routes, effort, roles, and lifecycle rules.
+
+Use AGENTS.md's Astra implementation fallback only for authorized implementation outside Plan Mode.
+Confirm evidence of a failed Sol repair or a focused Sol attempt that identifies a materially hard unresolved implementation problem.
+Use at most one fresh astra_fallback_high per Sol package (gpt-6-astra, high, default, fork_turns="none").
+Limit the fallback to the smallest unresolved write scope. Keep material scope, contract, and security decisions with the root.
+Sol may dispatch Astra only if active higher-priority instructions, native nested tools, and the named role allow it.
+Require a package-specific Astra Fallback Slot: reserved from the root. Count reservations against both caps.
+Suspend Sol writes in the transferred scope. Prohibit deeper delegation.
+If Sol cannot dispatch, require the failure packet and exact limit. The root dispatches the same role if allowed.
+If neither path is available, report the unmet criterion and the limit.
+Keep the same Astra owner for evidence-backed repairs. Reuse the same planned reviewer.
+The root owns acceptance and reports the actual dispatch parent and any omitted stages.
 
 Allow up to six active children and at most 128 retained native children per ordinary session.
 Count active children across tasks. Never start a seventh active child.
-Count retained children across tasks. Depth remains one.
+Count all descendants across tasks against both caps. The max_depth setting is a V1 guard.
 Run concurrent children only for independent packages with non-overlapping write scopes and no unresolved interface dependencies.
 Keep dependent packages and competing writes sequential.
 The root assigns each package to one owner and checks independence before concurrent dispatch.
@@ -63,18 +75,24 @@ Start each reviewer only after all implementation under review finishes.
 Do not run a reviewer concurrently with implementation or repair of the changes under review.
 Keep each implementation owner idle during review and acceptance of its package.
 A review of an independent completed package may run alongside unrelated implementation within the same active-child limit.
-Keep the same Sol owner idle through review, acceptance, and at most one ordinary repair with exact evidence.
-After repair, request a focused recheck from the same reviewer. The root runs affected acceptance checks again.
+Keep the current owner available through review, acceptance, and evidence-backed repairs.
+Run all feasible relevant checks before sending grouped failures to the current owner. Record blocked checks and affected criteria.
+Record findings and results against the revision or diff. Invalidate evidence affected by changes to code, inputs, or environment.
+Repeat affected checks and reuse the same planned reviewer for focused rechecks after changes.
+Send new in-scope failures to the current owner even if an earlier repair passed.
+If a failure recurs without meaningful new evidence or a justified new approach, reassess before retrying.
+Continue independent authorized work during a blocker. Report unmet criteria and blockers. Require current evidence for acceptance.
 Use native close/release when available. Otherwise report the limitation and retain completed owners idle within the cap.
 Completion, interruption, and archiving do not prove that a slot was released.
 If capacity is exhausted, report the actual limit and prepare a concise handoff for a fresh session.
 Do not create that session without user authorization or evade the cap through visible tasks, forks, or nested CLI calls.
 Use native collaboration. Report unavailable roles, stages, and configuration drift honestly.
-For planned work, continue only with a user-authorized fallback. Do not claim the full route completed after an omitted stage.
+If a required planned stage is unavailable, continue only with a user-authorized fallback. Disclose any omitted stage.
 For unplanned work, report failed intended delegation before an authorized single-agent fallback.
 A healthy child or exhausted cap does not authorize ownership transfer.
 Report terra-direct, terra-sol, luna-direct, luna-sol, sol-direct, or <effective-root>-sol for unplanned work.
 Report <effective-root>-astra-sol-review only after the complete planned route.
+Append +astra-fallback to the actual route if Astra implements the fallback.
 Report <root>-single-agent-fallback only for failed intended delegation, with omitted stages and the actual replacement route.
 Do not infer savings from effort.
 """
@@ -92,8 +110,8 @@ goals = true
 [agents]
 enabled = true
 max_concurrent_threads_per_session = 128
-# V1 guard only: multi-agent V2 currently does not enforce this depth setting.
-max_depth = 1
+# V1 guard only. Verify native nested capability separately for V2.
+max_depth = 2
 default_subagent_model = "gpt-6.1-sol"
 default_subagent_reasoning_effort = "high"
 
@@ -104,6 +122,10 @@ nickname_candidates = ["Astra High Planner"]
 [agents.astra_reviewer_high]
 config_file = "agents/astra_reviewer_high.toml"
 nickname_candidates = ["Astra High Reviewer"]
+
+[agents.astra_fallback_high]
+config_file = "agents/astra_fallback_high.toml"
+nickname_candidates = ["Astra High Fallback"]
 
 [agents.sol_implementer_high]
 config_file = "agents/sol_implementer_high.toml"

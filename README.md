@@ -82,8 +82,8 @@ The [source lock](docs/slopo-source-lock.json) records the pinned revision, depe
 - `codex/config.toml` — model, MCP, plugin, trusted-project, application, and
   multi-agent settings.
 - `codex/AGENTS.md` — the global guide for normal model-aware routing, Context Packets, root acceptance, and named opt-in experiments.
-- `codex/agents/` — the normal `sol_implementer_high` role and preserved experimental roles.
-  Base configuration registers the read-only `astra_planner_high` and `astra_reviewer_high` roles for planned code.
+- `codex/agents/` — normal roles and preserved experimental roles.
+  The base configuration registers `sol_implementer_high`, the read-only `astra_planner_high` and `astra_reviewer_high`, and `astra_fallback_high` for bounded implementation.
   Dedicated experimental roles remain available for each named experiment.
 - `codex/astra-sol-research.config.toml` — an opt-in CLI overlay for the
   experimental Astra Extra High and Sol-primary research route.
@@ -112,10 +112,11 @@ The [source lock](docs/slopo-source-lock.json) records the pinned revision, depe
 
 The normal default is `gpt-6.1-terra` with `high` reasoning and Standard service tier (`default`).
 Desktop and runtime model, reasoning, and tier overrides remain authoritative.
-All normal code changes go to Sol High with a focused self-check.
+All normal code changes start with Sol High and a focused self-check.
 Planned code also uses Astra High planning and read-only review.
 The root integrates changes and owns acceptance.
-The configured ceiling is 128 open child threads, excluding the root, with a depth setting of one.
+The configured ceiling is 128 open child threads, excluding the root.
+The depth setting of two is a V1 guard. Nested dispatch remains unverified in V2.
 The ordinary policy permits up to six active children for independent packages with non-overlapping write scopes.
 Completed owners can remain idle. Never start a seventh active child.
 The active-child limit is an instruction. It does not prove runtime support for six concurrent children.
@@ -147,7 +148,7 @@ do not make `spawn_agent` available in a session where that mechanism is absent.
 
 The normal profile is `PROFILE: TERRA_ASTRA_SOL_REVIEW`.
 Terra coordinates app work, visual artifacts, bounded prose, questions, scope, and acceptance.
-All normal code changes, including tiny edits, use `sol_implementer_high` with GPT-6.1 Sol High on Standard tier.
+All normal code changes, including tiny edits, start with `sol_implementer_high` on GPT-6.1 Sol High and Standard tier.
 A Sol root implements directly and does not create another Sol agent.
 Other effective root overrides remain authoritative.
 A `bpy` helper for an app artifact remains app work. Software and add-on development count as code.
@@ -162,15 +163,40 @@ Planned code uses this sequence:
 4. `astra_reviewer_high` reviews the plan, completed diff, affected contracts, and check evidence without edits.
 5. The root checks the findings and runs proportionate deterministic acceptance checks.
 
-Both Astra roles use `gpt-6-astra`, `high`, and `default` with fresh contexts.
+The planning and review roles use `gpt-6-astra`, `high`, and `default` with fresh contexts.
 Use this route for a user-requested code plan, a material design decision, a cross-component change, or ordered implementation packages.
 The planned-route triggers take precedence over the small-edit shortcut.
 In Plan Mode, stop after the plan without edits or implicit implementation.
 Outside Plan Mode, continue authorized implementation without an extra approval step.
-Only the root dispatches agents. Sol sends planning or review requests to the root.
-The root returns at most one ordinary repair to the same Sol owner, then requests a focused recheck from the same reviewer.
-Astra planning and review do not authorize Astra implementation.
+Only the root dispatches the planner and reviewer. Sol sends planning or review requests to the root.
 Report a complete planned route as `<effective-root>-astra-sol-review`.
+
+The root runs all feasible relevant checks before sending grouped failures to the current owner.
+It records blocked checks and ties findings and results to the revision or diff examined.
+After a change, it repeats affected checks and uses the same reviewer for planned code.
+New in-scope failures return to the current owner even after an earlier repair passes.
+The root reassesses repeated failures when no meaningful new evidence or justified new approach exists.
+It continues independent authorized work and reports remaining blockers and unmet criteria.
+
+Use the [Astra implementation fallback](codex/AGENTS.md#astra-implementation-fallback) if an evidence-backed Sol repair leaves the same criterion unmet.
+The fallback also applies if a focused Sol attempt identifies a materially hard unresolved implementation problem and the root confirms the evidence.
+One fresh `astra_fallback_high` on GPT-6 Astra High and Standard tier owns the smallest unresolved write scope.
+The failure packet gives the unmet criterion, attempt or repair, exact evidence, write scope, constraints, and focused check.
+Sol suspends writes in that scope. Material scope, contract, and security decisions stay with the root.
+The fallback applies to authorized implementation outside Plan Mode. The planning and review roles remain read-only.
+
+Sol can dispatch this fallback if active higher-priority instructions and native tools permit it.
+The named role and follow-up to the same owner must be available. The root must reserve a slot for the package.
+If Sol cannot dispatch, it sends the failure packet and the exact limit to the root.
+The root dispatches the same role if its tools, permissions, and capacity allow it.
+A Sol root uses this path when its own work meets the same gate.
+If neither path is available, the root reports the unmet criterion and the exact limit.
+
+Astra runs a focused check and stays available for evidence-backed repairs.
+For planned code, the planned reviewer checks the fallback diff and rechecks affected findings after repairs.
+The root checks the combined diff and runs acceptance checks.
+If Astra implements the fallback, append `+astra-fallback` to the actual route and report whether Sol or the root dispatched Astra.
+Report any omitted required stage separately.
 
 Up to six active children may work on independent packages with non-overlapping write scopes and no unresolved interface dependencies.
 The root assigns each package to one owner and checks independence before concurrent dispatch.
@@ -182,6 +208,7 @@ Do not run a reviewer concurrently with implementation or repair of the changes 
 Keep each implementation owner idle during review and acceptance of its package.
 A review of an independent completed package may run alongside unrelated implementation within the same active-child limit.
 Count active children across tasks. Never start a seventh active child.
+Count all descendants and outstanding fallback reservations against both session limits. The Astra fallback is the only nested normal route.
 Preflight capacity for the planner, each required Sol owner, and the reviewer within the same 128-child cap.
 In Plan Mode, reserve only the planner slot.
 If the plan requires more slots than available, stop before implementation and report the missing capacity.
@@ -189,7 +216,7 @@ If native close or release is unavailable, report that limit and retain complete
 Completion, interruption, and archiving do not prove that a slot was released.
 Do not evade capacity through another session, visible task, fork, or nested CLI.
 Report each unavailable stage and the actual completed route.
-For planned work, continue only with a user-authorized fallback and disclose every omitted stage.
+If a required planned stage is unavailable, continue only with a user-authorized fallback and disclose every omitted stage.
 Do not claim the full planned route completed when a required stage was unavailable.
 Fresh sessions must load the new roles before the root can dispatch them.
 Saved configuration and static checks alone do not prove runtime dispatch or sandbox enforcement.
@@ -200,7 +227,7 @@ The skill keeps `allow_implicit_invocation: false`.
 Subscription-only authentication and existing bridge isolation remain required for manual requests.
 The bridge uses no API fallback and does not read `~/.env` or change authentication, billing, or Extra Usage.
 Companion requests cannot overlap a native child.
-No automatic Astra implementation fallback, separate tester, additional reviewer, or nested delegation is permitted.
+The normal route permits one level of nested dispatch for the Astra implementation fallback. It prohibits deeper delegation, a separate tester, and an additional reviewer.
 All named experiments and experimental Astra role files remain preserved.
 
 ## Routing benchmark
