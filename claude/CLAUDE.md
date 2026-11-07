@@ -27,6 +27,12 @@ Read `~/.codex/skills/graphify/SKILL.md` before its first use.
 For a small edit at a known location, use focused source searches directly.
 Graphify does not change routing, permissions, or Plan Mode.
 
+## Untangle before agent merges
+
+Before an agent performs a merge, follow `~/.codex/skills/untangle-codebase/SKILL.md`.
+Complete its pre-merge review and resolve blocking findings before merging.
+This rule does not authorize a merge or change manual Git workflows.
+
 ## Mandatory Slopo commit review
 
 Before creating or amending any Git commit, follow `~/.codex/skills/slopo-review/SKILL.md`.

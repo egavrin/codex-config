@@ -889,6 +889,11 @@ tests cannot reliably cover or diagnose a failure. Each E2E run must produce a v
 
 Include saved evidence, such as logs, traces, or screenshots, when applicable. Report the artifact's location.
 
+After test runs, remove temporary files and virtual disks that the task created when they are no longer in use.
+Stop only temporary emulators created for the task before removing their files.
+Keep required test evidence, requested artifacts, reusable project assets, and files used by other runs.
+If ownership is unclear or cleanup fails, preserve the files and report the limitation.
+
 If isolated testing is necessary, first record all identifiable ways that the scoped system could fail. Encode those cases in isolated tests before production code. Then implement against those tests.
 
 In the default route, the effective root owns verification and acceptance. Inspect the diff and affected contracts. Run proportionate deterministic checks and material edge cases. Distinguish product defects from harness or environment limitations. Use the required Astra High review for planned code. Do not create a tester or an additional model-review child.
@@ -950,12 +955,24 @@ Sanitized child authentication must pass a check before each request.
 OAuth selection cannot disable account overages already enabled by the user.
 Codex alone reviews, applies, tests, and accepts returned patches.
 
+## State machine review
+
+For code changes, screen affected behavior for stateful lifecycles.
+When the changes can affect a lifecycle, follow `~/.codex/skills/state-machine-review/SKILL.md`.
+Apply the skill within the task scope and the active mode and routing rules.
+
 ## Graphify code discovery
 
 For architecture, dependency tracing, or substantial repository discovery, use the shared `graphify` skill when appropriate.
 Read `~/.codex/skills/graphify/SKILL.md` before its first use.
 For a small edit at a known location, use focused source searches directly.
 Graphify does not change routing, permissions, or Plan Mode.
+
+## Untangle before agent merges
+
+Before an agent performs a merge, follow `~/.codex/skills/untangle-codebase/SKILL.md`.
+Complete its pre-merge review and resolve blocking findings before merging.
+This rule does not authorize a merge or change manual Git workflows.
 
 ## Mandatory Slopo commit review
 

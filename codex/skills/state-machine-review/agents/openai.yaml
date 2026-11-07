@@ -1,0 +1,7 @@
+interface:
+  display_name: "State Machine Review"
+  short_description: "Find defects in stateful code changes"
+  default_prompt: "Use $state-machine-review to inspect these changes for state transition defects."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Untangle Codebase"
+  short_description: "Remove evidenced structural code clutter"
+  default_prompt: "Use $untangle-codebase to find and simplify structural friction in the requested scope."
+
+policy:
+  allow_implicit_invocation: true
