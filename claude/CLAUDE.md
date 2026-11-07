@@ -29,8 +29,16 @@ Graphify does not change routing, permissions, or Plan Mode.
 
 ## Untangle before agent merges
 
-Before an agent performs a merge, follow `~/.codex/skills/untangle-codebase/SKILL.md`.
-Complete its pre-merge review and resolve blocking findings before merging.
+Before an agent performs a merge, review the proposed changes for actionable structural clutter.
+Compare the source with the actual target branch merge base and inspect relevant connected code.
+For a remote merge, verify the current remote source and target revisions.
+Do not block on similarity, size, style, or deliberate duplication alone.
+Explain material deliberate duplication and false positives.
+Resolve evidenced findings within scope, or stop and report the unresolved issue.
+If the review cannot be completed, stop and report the missing evidence.
+Record the reviewed source and target revisions, checks, and finding dispositions.
+Immediately before merging, verify both revisions and repeat affected checks if either changed.
+Do not require a whole-repository refactor for this review.
 This rule does not authorize a merge or change manual Git workflows.
 
 ## Mandatory Slopo commit review
