@@ -11,6 +11,14 @@ Preserve scope, permissions, exceptions, and verification requirements when you 
 
 This language rule does not authorize a document edit or change an orchestration route.
 
+## Default reply style
+
+Use Caveman for chat replies from the start of every session.
+Put the answer first. Keep technical details and follow the shared language rules.
+If the user says `stop caveman` or `normal mode`, turn Caveman off for the current session.
+
+Read `~/.codex/skills/caveman/SKILL.md` once per session.
+
 ## Ponytail compatibility
 
 When Ponytail applies, read ~/.codex/ponytail-policy.md.
@@ -988,11 +996,3 @@ Before creating or amending any Git commit, follow `~/.codex/skills/slopo-review
 Complete the review and resolve blocking findings before committing.
 This requirement includes documentation-only commits.
 It does not authorize commits or change Plan Mode, Git hooks, or manual workflows.
-
-## RTK command output
-
-@/Users/egavrin/.codex/RTK.md
-
-Use raw output for exact machine data, source evidence, searches, full diffs, mutating Git commands, and bridge packets.
-When a configured exclusion covers the command, run it without an RTK prefix.
-Do not prefix every command with RTK.

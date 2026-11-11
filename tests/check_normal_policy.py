@@ -290,28 +290,12 @@ def check_preservation(baseline, live):
     assert section((baseline / 'README.md').read_text(), 'Restore') == section((ROOT / 'README.md').read_text(), 'Restore')
 
 
-def check_awareness(live):
-    codex = (ROOT / 'codex/RTK.md').read_text()
-    claude = (ROOT / 'claude/RTK.md').read_text()
-    marker = '<!-- rtk-owned: written by `rtk init --codex`, removed by `rtk init --codex --uninstall` -->'
-    assert codex.startswith(marker + '\n\n')
-    assert codex.removeprefix(marker + '\n\n') == claude
-    for text in (codex, claude):
-        for phrase in ('Filtered summaries can omit details.', 'complete acceptance evidence',
-                       'Configured exclusions keep selected commands raw.',
-                       'material diagnostic details', 'exit codes',
-                       '10 MiB', '200 entries', '30 days', 'subscription charges',
-                       'Do not prefix every command', 'Local adaptation', 'OSS 1.1.0'):
-            assert phrase in text, phrase
-        for stale in ('keeping every signal', 'Treat it as the complete result', 'only when its result is unusable'):
-            assert stale not in text, stale
+def check_claude_instructions(live):
     personal = (ROOT / 'claude/CLAUDE.md').read_text()
-    for reference in ('@RTK.md', '@../.codex/ponytail-policy.md',
+    for reference in ('@../.codex/ponytail-policy.md',
                       '@../.codex/skills/writing-for-agents/references/controlled-english.md'):
         assert reference in personal, reference
     if live:
-        assert (live / 'RTK.md').read_text() == codex
-        assert (live.parent / '.claude/RTK.md').read_text() == claude
         assert (live.parent / '.claude/CLAUDE.md').read_text() == personal
 
 
@@ -321,7 +305,7 @@ def main():
     parser.add_argument('--baseline', type=Path)
     args = parser.parse_args()
     check_concurrency_regressions()
-    check_awareness(args.live)
+    check_claude_instructions(args.live)
     check_no_automatic_claude((ROOT / 'README.md').read_text())
     check_claude_calls((ROOT / 'README.md').read_text())
     _, snapshot_policy = check_tree(ROOT / 'codex')

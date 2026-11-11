@@ -1,7 +1,7 @@
 # Codex config
 
 Personal Codex configuration for `egavrin`. This repository contains a macOS
-configuration snapshot. Routing, memory models, RTK, and Claude instructions were updated on
+configuration snapshot. Routing, memory models, and Claude instructions were updated on
 October 30, 2026. Unrelated machine settings retain their existing snapshot.
 
 ## Shared writing profile
@@ -29,9 +29,9 @@ Claude imports the same files through [personal instructions](claude/CLAUDE.md).
 Every companion request includes the profile, rule map, and terms.
 The complete bundle must fit the existing 256 KiB packet limit.
 
-The snapshot contains 20 user skills across two discovery roots:
+The snapshot contains 25 user skills across two discovery roots:
 
-- `codex/skills/` contains twelve user skills, including the Film Studio snapshot.
+- `codex/skills/` contains 17 user skills, including the Film Studio snapshot.
 - `agents/skills/` contains eight Runpod skills.
 - `claude/CLAUDE.md` contains personal Claude instructions.
 
@@ -103,11 +103,12 @@ The [source lock](docs/slopo-source-lock.json) records the pinned revision, depe
 - `codex/rules/` — local command-execution rules.
 - `codex/skills/` — selected user skills: `gh-address-comments`, `gh-fix-ci`,
   `hatch-pet`, `repo-modernizer`, `code-simplifier`, `codebase-design`,
-  `improve-codebase-architecture`, `writing-for-agents`, `claude-collab`, `graphify`, `slopo-review`, and `film-studio-workflow`,
+  `improve-codebase-architecture`, `writing-for-agents`, `claude-collab`, `graphify`,
+  `slopo-review`, `state-machine-review`, `untangle-codebase`, `film-studio-workflow`,
+  `caveman`, `ultracave`, and `megacave`,
   including their scripts, resources, provenance, and bundled licenses where present.
 - `agents/skills/` — eight Runpod skills from the existing `~/.agents/skills` discovery root.
-- `claude/` — personal instructions with shared profile imports and adapted RTK awareness.
-- `codex/RTK.md` and `integrations/rtk/` — adapted awareness, pinned configuration, hook fragments, license, and provenance.
+- `claude/` — personal instructions with shared profile imports.
 - `docs/controlled-english-verification.md` — migration checks, limitations, and reproduction commands.
 
 The normal default is `gpt-6.1-terra` with `high` reasoning and Standard service tier (`default`).
@@ -734,33 +735,24 @@ machine-specific Claude symlinks are excluded from Git. Restart the relevant age
 if a new session does not discover the installed skills. See the skill references
 for source revisions, licenses, packet format, and acceptance rules.
 
-## RTK
+## Caveman skills
 
-[`integrations/rtk/`](integrations/rtk/README.md) records the pinned RTK OSS 1.1.0 integration, license, provenance, configuration, and managed hook fragments.
-The upstream hooks support Codex and ordinary Claude sessions. Restricted companion calls retain their existing hook isolation.
-Telemetry is disabled. High awareness does not instruct agents to prefix every command.
-The local exclusion list preserves raw source evidence, diffs, structured output, Git writes, and bridge packets.
-Use raw output whenever exact machine data is required.
-Native Codex hook trust remains a separate review action. No trust database or bypass belongs in this snapshot.
-The snapshot contains no RTK binary or private database.
-`verification.json` preserves prior installation and workflow evidence. It does not record this snapshot update's checks.
+The snapshot includes the three voice skills from [Caveman v4.1.0](https://github.com/JuliusBrussee/caveman/tree/1e91f1306d602d4ca23618701b1185575ae1869b/skills).
+The global Codex and Claude Code instructions select Caveman at the start of each session.
+Use `$caveman`, `$ultracave`, or `$megacave` in Codex.
+Use `/caveman`, `/ultracave`, or `/megacave` in Claude Code.
+Say `stop caveman` or `normal mode` to turn it off for the current session.
 
 ## Restore personal Claude instructions
 
-`claude/CLAUDE.md` contains the personal writing, Ponytail, Graphify, Slopo, and RTK instructions.
-`claude/RTK.md` contains the local selective-output adaptation for RTK OSS 1.1.0.
-These files match the live instructions and contain no credentials or runtime artifacts.
+`claude/CLAUDE.md` contains the personal writing, Ponytail, Graphify, and Slopo instructions.
+This file matches the live instructions.
 
-Before restoration, back up existing `~/.claude/CLAUDE.md` and `~/.claude/RTK.md` files.
+Before restoration, back up the existing `~/.claude/CLAUDE.md` file.
 Compare the saved instructions with existing files, then merge the requested sections and imports.
 Preserve unrelated personal instructions. Do not replace the complete Claude settings file.
-Merge only the RTK hook fragment into existing settings, as described in [the RTK instructions](integrations/rtk/README.md).
 Install the referenced shared skills and `~/.codex/ponytail-policy.md` before activation.
 The relative imports resolve under the live `~/.claude` directory after restoration.
-
-Upstream RTK init can replace the awareness documents.
-After init, restore `codex/RTK.md` and `claude/RTK.md` to their respective live directories, then validate the adaptation.
-Preserve the Codex ownership marker. Complete native hook trust review separately.
 
 ## Restore
 
@@ -855,7 +847,8 @@ cp "$codex_source/terra-luna-sol-astra.config.toml" codex/terra-luna-sol-astra.c
 for codex_part in agents rules skills/gh-address-comments skills/gh-fix-ci \
   skills/hatch-pet skills/repo-modernizer skills/code-simplifier \
   skills/codebase-design skills/improve-codebase-architecture \
-  skills/writing-for-agents skills/claude-collab skills/film-studio-workflow; do
+  skills/writing-for-agents skills/claude-collab skills/film-studio-workflow \
+  skills/caveman skills/ultracave skills/megacave; do
   mkdir -p "codex/$codex_part"
   rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' --exclude='.git' --exclude='.state' \
     "$codex_source/$codex_part/" "codex/$codex_part/"
@@ -864,14 +857,9 @@ mkdir -p agents/skills claude
 rsync -av --exclude='__pycache__' --exclude='*.pyc' --exclude='.DS_Store' \
   "$HOME/.agents/skills/" agents/skills/
 cp "$HOME/.claude/CLAUDE.md" claude/CLAUDE.md
-cp "$HOME/.claude/RTK.md" claude/RTK.md
-cp "$codex_source/RTK.md" codex/RTK.md
 git diff --stat
 git diff
 ```
-
-After an RTK awareness or Claude instruction update, refresh the corresponding hashes in `integrations/rtk/provenance.json`.
-Compare the recorded hashes with the snapshot files before committing.
 
 These commands do not propagate deletions from the active configuration into
 the snapshot. Apply intended deletions manually. Before committing, inspect the

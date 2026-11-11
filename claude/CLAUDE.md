@@ -9,6 +9,15 @@ The language profile does not change permissions, task scope, or agent routing.
 @../.codex/skills/writing-for-agents/references/controlled-english.md
 @../.codex/skills/writing-for-agents/references/software-terms.md
 
+## Default reply style
+
+Use Caveman for chat replies from the start of every session.
+Put the answer first. Keep technical details and follow the shared language rules.
+If the user says `stop caveman` or `normal mode`, turn Caveman off for the current session.
+
+
+@../.codex/skills/caveman/SKILL.md
+
 # Ponytail compatibility
 
 Ponytail solution preferences do not replace the shared writing or engineering policy.
@@ -47,5 +56,3 @@ Before creating or amending any Git commit, follow `~/.codex/skills/slopo-review
 Complete the review and resolve blocking findings before committing.
 This requirement includes documentation-only commits.
 It does not authorize commits or change Plan Mode, Git hooks, or manual workflows.
-
-@RTK.md
